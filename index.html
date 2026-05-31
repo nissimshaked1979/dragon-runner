@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dragon Runner</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div class="player-strip" aria-label="פרטי שחקן">
+          <label class="field compact">
+            <span>שחקן</span>
+            <input id="playerName" autocomplete="off" />
+          </label>
+          <button id="savePlayerBtn" class="icon-button" type="button" title="שמירה" aria-label="שמירה">✓</button>
+          <button id="renameCurrentBtn" class="rename-button" type="button">שנה שם</button>
+        </div>
+      </header>
+
+      <main>
+        <section class="stage-band" aria-label="משחק">
+          <div class="hud">
+            <div class="hud-metric">
+              <span>ניקוד ריצה</span>
+              <strong id="scoreValue">0</strong>
+            </div>
+            <div class="hud-metric">
+              <span>שיא משחק</span>
+              <strong id="bestValue">0</strong>
+            </div>
+            <div class="hud-metric">
+              <span>נקודות חנות</span>
+              <strong id="pointsValue">0</strong>
+            </div>
+            <div class="hud-actions">
+              <button id="playBtn" class="round-button" type="button" title="התחלה" aria-label="התחלה">▶</button>
+              <button id="pauseBtn" class="round-button" type="button" title="עצירה" aria-label="עצירה">Ⅱ</button>
+            </div>
+          </div>
+
+          <div class="canvas-wrap">
+            <canvas id="gameCanvas" width="960" height="360" aria-label="Dragon Runner"></canvas>
+            <div id="gameStatus" class="game-status">מוכן לריצה</div>
+          </div>
+        </section>
+
+        <section class="workspace">
+          <section class="panel leaderboard-panel" aria-labelledby="leaderboardTitle">
+            <div class="panel-head">
+              <h2 id="leaderboardTitle">לוח שיאים</h2>
+              <span id="leaderboardCount">0</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>מקום</th>
+                    <th>שם</th>
+                    <th>שיא משחק</th>
+                    <th>נקודות חנות</th>
+                    <th>סקין</th>
+                    <th>דיווח</th>
+                  </tr>
+                </thead>
+                <tbody id="leaderboardBody"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="panel shop-launch-panel" aria-label="חנות סקינים">
+            <button id="openShopBtn" class="shop-launch-button" type="button" aria-haspopup="dialog">
+              <span>חנות סקינים</span>
+            </button>
+          </section>
+
+          <section id="adminPanel" class="panel admin-panel hidden" aria-labelledby="adminTitle">
+            <div class="panel-head">
+              <h2 id="adminTitle">אדמין</h2>
+              <span id="adminState">נעול</span>
+            </div>
+
+            <div id="adminLogin" class="admin-box">
+              <label class="field">
+                <span>קוד</span>
+                <input id="adminPin" type="password" autocomplete="off" />
+              </label>
+              <button id="adminLoginBtn" class="primary-action" type="button">כניסה</button>
+            </div>
+
+            <div id="adminTools" class="admin-tools hidden">
+              <label class="field">
+                <span>שם שחקן / כפול</span>
+                <input id="adminPlayer" autocomplete="off" placeholder="השם שרוצים לשנות" />
+              </label>
+              <label class="field">
+                <span>שם חדש / שם לשמור</span>
+                <input id="adminNewName" autocomplete="off" placeholder="השם החדש" />
+              </label>
+              <button id="renamePlayerBtn" class="secondary-action" type="button">שנה שם</button>
+              <button id="mergePlayerBtn" class="ghost-action" type="button">מזג שחקן כפול</button>
+
+              <label class="field">
+                <span>נקודות חנות</span>
+                <input id="adminPoints" type="number" min="-9999" max="99999" step="1" value="100" />
+              </label>
+              <button id="addPointsBtn" class="primary-action" type="button">עדכן נקודות חנות</button>
+              <button id="subtractPointsBtn" class="danger-action" type="button">הורד נקודות חנות</button>
+
+              <label class="field">
+                <span>שינוי שיא משחק</span>
+                <input id="adminBest" type="number" min="-999999" max="999999" step="1" value="100" />
+              </label>
+              <button id="raiseBestBtn" class="secondary-action" type="button">עדכן שיא משחק</button>
+              <button id="subtractBestBtn" class="danger-action" type="button">הורד שיא משחק</button>
+
+              <label class="field">
+                <span>סקין</span>
+                <select id="adminSkin"></select>
+              </label>
+              <button id="applyAdminSkinBtn" class="secondary-action" type="button">החלף סקין</button>
+              <button id="removeAdminSkinBtn" class="danger-action" type="button">הסר סקין מהשחקן</button>
+              <div class="report-summary-box">
+                <span>דיווחים על שחקנים</span>
+                <div id="playerReportSummary" class="report-summary">אין דיווחים</div>
+              </div>
+              <button id="adminLogoutBtn" class="ghost-action" type="button">יציאה</button>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <div id="shopModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="shopTitle">
+      <section class="shop-modal-window" aria-labelledby="shopTitle">
+        <div class="panel-head">
+          <h2 id="shopTitle">חנות סקינים</h2>
+          <div class="modal-head-actions">
+            <span id="activeSkinName">קלאסי</span>
+            <button id="closeShopBtn" class="close-shop-button" type="button" title="סגירה" aria-label="סגירה">×</button>
+          </div>
+        </div>
+
+        <div class="color-tools">
+          <span>צבע הסקין הפעיל</span>
+          <div id="baseColorSwatches" class="swatches" aria-label="צבע הסקין הפעיל"></div>
+        </div>
+
+        <div id="skinGrid" class="skin-grid"></div>
+      </section>
+    </div>
+
+    <script src="./game.js"></script>
+  </body>
+</html>
