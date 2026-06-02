@@ -8,7 +8,9 @@ const SKINS = [
   {
     id: "classic",
     name: "דרקון קלאסי",
+    englishName: "Classic Dragon",
     tier: "חינם",
+    englishTier: "Free",
     cost: 0,
     motif: "dragon",
     palette: {
@@ -23,7 +25,9 @@ const SKINS = [
   {
     id: "rabbit",
     name: "ארנב",
+    englishName: "Rabbit",
     tier: "מתחיל",
+    englishTier: "Beginner",
     cost: 500,
     motif: "rabbit",
     palette: {
@@ -38,7 +42,9 @@ const SKINS = [
   {
     id: "cat",
     name: "חתול",
+    englishName: "Cat",
     tier: "מתקדם",
+    englishTier: "Advanced",
     cost: 1500,
     motif: "cat",
     palette: {
@@ -53,7 +59,9 @@ const SKINS = [
   {
     id: "fox",
     name: "שועל",
+    englishName: "Fox",
     tier: "נדיר",
+    englishTier: "Rare",
     cost: 3000,
     motif: "fox",
     palette: {
@@ -68,7 +76,9 @@ const SKINS = [
   {
     id: "turtle",
     name: "צב",
+    englishName: "Turtle",
     tier: "אפי",
+    englishTier: "Epic",
     cost: 5000,
     motif: "turtle",
     palette: {
@@ -83,7 +93,9 @@ const SKINS = [
   {
     id: "parrot",
     name: "תוכי",
+    englishName: "Parrot",
     tier: "אגדי",
+    englishTier: "Legendary",
     cost: 7500,
     motif: "parrot",
     palette: {
@@ -98,7 +110,9 @@ const SKINS = [
   {
     id: "penguin",
     name: "פינגווין",
+    englishName: "Penguin",
     tier: "מיוחד",
+    englishTier: "Special",
     cost: 10000,
     motif: "penguin",
     palette: {
@@ -113,7 +127,9 @@ const SKINS = [
   {
     id: "wolf",
     name: "זאב",
+    englishName: "Wolf",
     tier: "עילית",
+    englishTier: "Elite",
     cost: 13000,
     motif: "wolf",
     palette: {
@@ -128,7 +144,9 @@ const SKINS = [
   {
     id: "tiger",
     name: "נמר",
+    englishName: "Tiger",
     tier: "טורף",
+    englishTier: "Predator",
     cost: 16000,
     motif: "tiger",
     palette: {
@@ -143,7 +161,9 @@ const SKINS = [
   {
     id: "horse",
     name: "סוס",
+    englishName: "Horse",
     tier: "מהיר",
+    englishTier: "Fast",
     cost: 19000,
     motif: "horse",
     palette: {
@@ -158,7 +178,9 @@ const SKINS = [
   {
     id: "elephant",
     name: "פיל",
+    englishName: "Elephant",
     tier: "כבד",
+    englishTier: "Heavy",
     cost: 22000,
     motif: "elephant",
     palette: {
@@ -173,7 +195,9 @@ const SKINS = [
   {
     id: "agama",
     name: "חרדון",
+    englishName: "Agama",
     tier: "הכי יקר",
+    englishTier: "Most Expensive",
     cost: 30000,
     motif: "agama",
     palette: {
@@ -351,7 +375,7 @@ function saveState() {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch {
-    setStatus("שמירה מקומית לא זמינה", true, true);
+    setStatus("שמירה מקומית לא זמינה", true, true, "Local save unavailable");
   }
 }
 
@@ -451,9 +475,14 @@ function activePalette(player = getCurrentPlayer()) {
   return paletteForSkin(player, getSkinById(player.skinId));
 }
 
-function setStatus(text, visible = true, autoHide = false) {
+function setStatus(text, visible = true, autoHide = false, englishText = "") {
   clearTimeout(statusTimer);
-  elements.gameStatus.textContent = text;
+  elements.gameStatus.innerHTML = "";
+  if (englishText) {
+    elements.gameStatus.innerHTML = bilingualHtml(text, englishText);
+  } else {
+    elements.gameStatus.textContent = text;
+  }
   elements.gameStatus.classList.toggle("visible", Boolean(visible && text));
   if (autoHide) {
     statusTimer = window.setTimeout(() => {
@@ -470,10 +499,10 @@ function renderAll() {
   elements.scoreValue.textContent = Math.floor(game.score).toString();
   elements.bestValue.textContent = player.best.toString();
   elements.pointsValue.textContent = player.points.toString();
-  elements.activeSkinName.textContent = getSkinById(player.skinId).name;
+  elements.activeSkinName.innerHTML = skinNameHtml(getSkinById(player.skinId));
   elements.leaderboardCount.textContent = Object.keys(state.players).length.toString();
   elements.jumpSoundToggle.checked = state.jumpSoundEnabled;
-  elements.jumpSoundState.textContent = state.jumpSoundEnabled ? "פעיל" : "כבוי";
+  elements.jumpSoundState.innerHTML = state.jumpSoundEnabled ? bilingualHtml("פעיל", "On") : bilingualHtml("כבוי", "Off");
   elements.adminPanel.classList.toggle("hidden", !(state.admin || adminPanelVisible));
   elements.adminState.textContent = state.admin ? "פעיל" : "נעול";
   elements.adminLogin.classList.toggle("hidden", state.admin);
@@ -496,7 +525,7 @@ function renderLeaderboard() {
   });
 
   if (!players.length) {
-    elements.leaderboardBody.innerHTML = '<tr><td colspan="6">אין שחקנים עדיין</td></tr>';
+    elements.leaderboardBody.innerHTML = `<tr><td colspan="6">${bilingualHtml("אין שחקנים עדיין", "No players yet")}</td></tr>`;
     return;
   }
 
@@ -509,8 +538,8 @@ function renderLeaderboard() {
           <td>${escapeHtml(player.name)}</td>
           <td>${player.best}</td>
           <td>${player.points}</td>
-          <td>${escapeHtml(getSkinById(player.skinId).name)}</td>
-          <td><button class="player-report-action" data-report-player="${escapeHtml(player.name)}" type="button">דווח</button></td>
+          <td>${skinNameHtml(getSkinById(player.skinId))}</td>
+          <td><button class="player-report-action" data-report-player="${escapeHtml(player.name)}" type="button">${bilingualHtml("דווח", "Report")}</button></td>
         </tr>
       `;
     })
@@ -526,13 +555,13 @@ function reportPlayer(targetName) {
   const target = normalizeName(targetName);
 
   if (!state.players[target]) {
-    setStatus("השחקן לא נמצא", true, true);
+    setStatus("השחקן לא נמצא", true, true, "Player not found");
     return;
   }
   state.playerReports = state.playerReports || [];
   const alreadyReported = state.playerReports.some((report) => report.from === reporter && report.to === target);
   if (alreadyReported) {
-    setStatus(`כבר דיווחת על ${target}`, true, true);
+    setStatus(`כבר דיווחת על ${target}`, true, true, `Already reported ${target}`);
     return;
   }
 
@@ -544,7 +573,7 @@ function reportPlayer(targetName) {
   state.playerReports = state.playerReports.slice(-50);
   saveState();
   renderPlayerReportSummary();
-  setStatus(`דיווח נשלח על ${target}`, true, true);
+  setStatus(`דיווח נשלח על ${target}`, true, true, `Report sent for ${target}`);
 }
 
 function renderPlayerReportSummary() {
@@ -584,7 +613,7 @@ function renderColorSwatches() {
       }
       saveState();
       renderAll();
-      setStatus("צבע הסקין עודכן", true, true);
+      setStatus("צבע הסקין עודכן", true, true, "Skin color updated");
     });
   });
 }
@@ -598,22 +627,26 @@ function renderSkins() {
     const missing = Math.max(0, skin.cost - player.points);
     const buttonClass = active ? "active" : owned || state.admin ? "owned" : canBuy ? "" : "locked";
     const label = active
-      ? "פעיל"
+      ? { he: "פעיל", en: "Active" }
       : owned || state.admin
-        ? "בחר"
+        ? { he: "בחר", en: "Choose" }
         : canBuy
-          ? "רכוש"
-          : `${missing} חסר`;
+          ? { he: "רכוש", en: "Buy" }
+          : { he: `${missing} חסר`, en: `${missing} missing` };
+    const cost = skinCostText(skin);
+    const tierAndCost = skin.cost === 0 && skin.tier === "חינם"
+      ? cost
+      : { he: `${skin.tier} · ${cost.he}`, en: `${skin.englishTier} · ${cost.en}` };
     const previewPalette = paletteForSkin(player, skin);
 
     return `
       <article class="skin-card">
         <div class="skin-preview" aria-hidden="true">${creaturePreviewSvg(previewPalette, skin.motif)}</div>
         <div class="skin-meta">
-          <strong>${escapeHtml(skin.name)}</strong>
-          <span>${escapeHtml(skin.tier)} · ${skin.cost === 0 ? "חינם" : `${skin.cost} נקודות חנות`}</span>
+          <strong>${skinNameHtml(skin)}</strong>
+          <span>${bilingualHtml(tierAndCost.he, tierAndCost.en)}</span>
         </div>
-        <button class="${buttonClass}" data-skin="${skin.id}" type="button" ${canBuy ? "" : "disabled"}>${label}</button>
+        <button class="${buttonClass}" data-skin="${skin.id}" type="button" ${canBuy ? "" : "disabled"}>${bilingualHtml(label.he, label.en)}</button>
       </article>
     `;
   }).join("");
@@ -696,7 +729,7 @@ function buyOrEquipSkin(skinId) {
 
   if (!owned && !state.admin) {
     if (player.points < skin.cost) {
-      setStatus("אין מספיק נקודות חנות", true, true);
+      setStatus("אין מספיק נקודות חנות", true, true, "Not enough shop points");
       return;
     }
     player.points -= skin.cost;
@@ -710,7 +743,7 @@ function buyOrEquipSkin(skinId) {
   player.skinId = skin.id;
   saveState();
   renderAll();
-  setStatus("סקין הוחלף", true, true);
+  setStatus("סקין הוחלף", true, true, "Skin changed");
 }
 
 function renderAdminSkinOptions() {
@@ -888,10 +921,24 @@ function escapeHtml(value) {
     .replace(/'/g, "&#039;");
 }
 
+function bilingualHtml(hebrew, english) {
+  return `<span class="bilingual-label"><span>${escapeHtml(hebrew)}</span><span class="label-en">${escapeHtml(english)}</span></span>`;
+}
+
+function skinNameHtml(skin) {
+  return bilingualHtml(skin.name, skin.englishName || skin.name);
+}
+
+function skinCostText(skin) {
+  return skin.cost === 0
+    ? { he: "חינם", en: "Free" }
+    : { he: `${skin.cost} נקודות חנות`, en: `${skin.cost} shop points` };
+}
+
 function savePlayerName() {
   const name = normalizeName(elements.playerName.value);
   if (name === state.currentPlayer) {
-    setStatus("זה כבר השם הנוכחי", true, true);
+    setStatus("זה כבר השם הנוכחי", true, true, "This is already the current name");
     return;
   }
   renamePlayer(state.currentPlayer, name);
@@ -975,11 +1022,11 @@ function subtractAdminPoints() {
 
 function renamePlayer(oldName, newName) {
   if (oldName === newName) {
-    setStatus("זה כבר השם הנוכחי", true, true);
+    setStatus("זה כבר השם הנוכחי", true, true, "This is already the current name");
     return false;
   }
   if (!state.players[oldName]) {
-    setStatus("השחקן לא נמצא", true, true);
+    setStatus("השחקן לא נמצא", true, true, "Player not found");
     return false;
   }
   if (state.players[newName]) {
@@ -1000,7 +1047,7 @@ function renamePlayer(oldName, newName) {
     }
     saveState();
     renderAll();
-    setStatus("השמות אוחדו לשחקן אחד", true, true);
+    setStatus("השמות אוחדו לשחקן אחד", true, true, "Names merged into one player");
     return true;
   }
 
@@ -1014,7 +1061,7 @@ function renamePlayer(oldName, newName) {
   }
   saveState();
   renderAll();
-  setStatus("שם השחקן עודכן", true, true);
+  setStatus("שם השחקן עודכן", true, true, "Player name updated");
   return true;
 }
 
@@ -1182,7 +1229,7 @@ function togglePause() {
   game.paused = !game.paused;
   if (game.paused) {
     cancelAnimationFrame(rafId);
-    setStatus("עצירה", true);
+    setStatus("עצירה", true, false, "Paused");
   } else {
     setStatus("", false);
     lastTime = performance.now();
@@ -1263,9 +1310,15 @@ function endGame() {
   renderAll();
   elements.scoreValue.textContent = "0";
   const status = score > previousBest
-    ? `שיא משחק חדש: ${score} · +${earned} נקודות חנות`
-    : `סיום: ${score} · +${earned} נקודות חנות`;
-  setStatus(status, true);
+    ? {
+        he: `שיא משחק חדש: ${score} · +${earned} נקודות חנות`,
+        en: `New best run: ${score} · +${earned} shop points`,
+      }
+    : {
+        he: `סיום: ${score} · +${earned} נקודות חנות`,
+        en: `Game over: ${score} · +${earned} shop points`,
+      };
+  setStatus(status.he, true, false, status.en);
 }
 
 function spawnObstacle() {
@@ -2257,4 +2310,4 @@ applyPlayerMerges();
 renderAll();
 resizeCanvas();
 resetGame();
-setStatus("מוכן לריצה", true);
+setStatus("מוכן לריצה", true, false, "Ready to run");

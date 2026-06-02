@@ -84,6 +84,19 @@ p {
   margin: 0;
 }
 
+.bilingual-label {
+  display: inline-grid;
+  gap: 2px;
+  line-height: 1.12;
+}
+
+.bilingual-label .label-en {
+  direction: ltr;
+  color: var(--muted);
+  font-size: 0.72em;
+  font-weight: 800;
+}
+
 h1 {
   font-size: clamp(1.45rem, 2.4vw, 2.1rem);
   line-height: 1.05;
@@ -109,8 +122,8 @@ h1 {
   gap: 6px;
 }
 
-.field span,
-.color-tools span {
+.field > span,
+.color-tools > span {
   color: var(--muted);
   font-size: 0.82rem;
   font-weight: 700;
@@ -344,7 +357,8 @@ h1 {
   letter-spacing: 0;
 }
 
-.panel-head span {
+.panel-head > span,
+.modal-head-actions > span {
   display: inline-flex;
   align-items: center;
   min-height: 28px;
@@ -354,6 +368,15 @@ h1 {
   padding: 4px 9px;
   font-size: 0.82rem;
   font-weight: 800;
+}
+
+.hud .bilingual-label .label-en,
+.shop-launch-button .bilingual-label .label-en {
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.shop-launch-button .bilingual-label .label-en {
+  color: #587267;
 }
 
 .modal-backdrop {
@@ -613,7 +636,7 @@ tbody tr.current {
 }
 
 .skin-meta strong,
-.skin-meta span {
+.skin-meta > span {
   overflow-wrap: anywhere;
 }
 
@@ -621,9 +644,18 @@ tbody tr.current {
   font-size: 0.94rem;
 }
 
-.skin-meta span {
+.skin-meta > span {
   color: var(--muted);
   font-size: 0.82rem;
+}
+
+.skin-card button .bilingual-label .label-en,
+.player-report-action .bilingual-label .label-en {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.skin-card button.active .bilingual-label .label-en {
+  color: #573b00;
 }
 
 .skin-card button,

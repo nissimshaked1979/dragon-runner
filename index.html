@@ -11,11 +11,11 @@
       <header class="topbar">
         <div class="player-strip" aria-label="פרטי שחקן">
           <label class="field compact">
-            <span>שחקן</span>
+            <span class="bilingual-label"><span>שחקן</span><span class="label-en">Player</span></span>
             <input id="playerName" autocomplete="off" />
           </label>
           <button id="savePlayerBtn" class="icon-button" type="button" title="שמירה" aria-label="שמירה">✓</button>
-          <button id="renameCurrentBtn" class="rename-button" type="button">שנה שם</button>
+          <button id="renameCurrentBtn" class="rename-button" type="button"><span class="bilingual-label"><span>שנה שם</span><span class="label-en">Rename</span></span></button>
           <button id="openSettingsBtn" class="icon-button settings-button" type="button" title="הגדרות" aria-label="הגדרות" aria-haspopup="dialog">⚙</button>
         </div>
       </header>
@@ -24,15 +24,15 @@
         <section class="stage-band" aria-label="משחק">
           <div class="hud">
             <div class="hud-metric">
-              <span>ניקוד ריצה</span>
+              <span class="bilingual-label"><span>ניקוד ריצה</span><span class="label-en">Run Score</span></span>
               <strong id="scoreValue">0</strong>
             </div>
             <div class="hud-metric">
-              <span>שיא משחק</span>
+              <span class="bilingual-label"><span>שיא משחק</span><span class="label-en">Best Run</span></span>
               <strong id="bestValue">0</strong>
             </div>
             <div class="hud-metric">
-              <span>נקודות חנות</span>
+              <span class="bilingual-label"><span>נקודות חנות</span><span class="label-en">Shop Points</span></span>
               <strong id="pointsValue">0</strong>
             </div>
             <div class="hud-actions">
@@ -43,26 +43,26 @@
 
           <div class="canvas-wrap">
             <canvas id="gameCanvas" width="960" height="360" aria-label="Dragon Runner"></canvas>
-            <div id="gameStatus" class="game-status">מוכן לריצה</div>
+            <div id="gameStatus" class="game-status"><span class="bilingual-label"><span>מוכן לריצה</span><span class="label-en">Ready to run</span></span></div>
           </div>
         </section>
 
         <section class="workspace">
           <section class="panel leaderboard-panel" aria-labelledby="leaderboardTitle">
             <div class="panel-head">
-              <h2 id="leaderboardTitle">לוח שיאים</h2>
+              <h2 id="leaderboardTitle"><span class="bilingual-label"><span>לוח שיאים</span><span class="label-en">Leaderboard</span></span></h2>
               <span id="leaderboardCount">0</span>
             </div>
             <div class="table-wrap">
               <table>
                 <thead>
                   <tr>
-                    <th>מקום</th>
-                    <th>שם</th>
-                    <th>שיא משחק</th>
-                    <th>נקודות חנות</th>
-                    <th>סקין</th>
-                    <th>דיווח</th>
+                    <th><span class="bilingual-label"><span>מקום</span><span class="label-en">Rank</span></span></th>
+                    <th><span class="bilingual-label"><span>שם</span><span class="label-en">Name</span></span></th>
+                    <th><span class="bilingual-label"><span>שיא משחק</span><span class="label-en">Best Run</span></span></th>
+                    <th><span class="bilingual-label"><span>נקודות חנות</span><span class="label-en">Shop Points</span></span></th>
+                    <th><span class="bilingual-label"><span>סקין</span><span class="label-en">Skin</span></span></th>
+                    <th><span class="bilingual-label"><span>דיווח</span><span class="label-en">Report</span></span></th>
                   </tr>
                 </thead>
                 <tbody id="leaderboardBody"></tbody>
@@ -72,7 +72,7 @@
 
           <section class="panel shop-launch-panel" aria-label="חנות סקינים">
             <button id="openShopBtn" class="shop-launch-button" type="button" aria-haspopup="dialog">
-              <span>חנות סקינים</span>
+              <span class="bilingual-label"><span>חנות סקינים</span><span class="label-en">Skin Shop</span></span>
             </button>
           </section>
 
@@ -136,15 +136,15 @@
     <div id="shopModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="shopTitle">
       <section class="shop-modal-window" aria-labelledby="shopTitle">
         <div class="panel-head">
-          <h2 id="shopTitle">חנות סקינים</h2>
+          <h2 id="shopTitle"><span class="bilingual-label"><span>חנות סקינים</span><span class="label-en">Skin Shop</span></span></h2>
           <div class="modal-head-actions">
-            <span id="activeSkinName">קלאסי</span>
+            <span id="activeSkinName"><span class="bilingual-label"><span>קלאסי</span><span class="label-en">Classic</span></span></span>
             <button id="closeShopBtn" class="close-shop-button" type="button" title="סגירה" aria-label="סגירה">×</button>
           </div>
         </div>
 
         <div class="color-tools">
-          <span>צבע הסקין הפעיל</span>
+          <span class="bilingual-label"><span>צבע הסקין הפעיל</span><span class="label-en">Active Skin Color</span></span>
           <div id="baseColorSwatches" class="swatches" aria-label="צבע הסקין הפעיל"></div>
         </div>
 
@@ -155,16 +155,16 @@
     <div id="settingsModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
       <section class="shop-modal-window settings-modal-window" aria-labelledby="settingsTitle">
         <div class="panel-head">
-          <h2 id="settingsTitle">הגדרות</h2>
+          <h2 id="settingsTitle"><span class="bilingual-label"><span>הגדרות</span><span class="label-en">Settings</span></span></h2>
           <div class="modal-head-actions">
-            <span id="jumpSoundState">פעיל</span>
+            <span id="jumpSoundState"><span class="bilingual-label"><span>פעיל</span><span class="label-en">On</span></span></span>
             <button id="closeSettingsBtn" class="close-shop-button" type="button" title="סגירה" aria-label="סגירה">×</button>
           </div>
         </div>
 
         <div class="settings-body">
           <label class="setting-row" for="jumpSoundToggle">
-            <span>דינג בקפיצה</span>
+            <span class="bilingual-label"><span>דינג בקפיצה</span><span class="label-en">Jump Ding</span></span>
             <span class="switch-control">
               <input id="jumpSoundToggle" type="checkbox" />
               <span aria-hidden="true"></span>
