@@ -250,6 +250,7 @@ let lastTime = 0;
 let spawnTimer = 0;
 let view = { width: 960, height: 360, dpr: 1 };
 let adminRevealTimeout = 0;
+let jumpAudioContext = null;
 const heldAdminRevealKeys = new Set();
 
 const game = {
@@ -1104,11 +1105,45 @@ function jumpOrStart() {
   jumpDragon();
 }
 
+function getJumpAudioContext() {
+  const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextCtor) return null;
+  if (!jumpAudioContext) {
+    jumpAudioContext = new AudioContextCtor();
+  }
+  return jumpAudioContext;
+}
+
+function playJumpDing() {
+  const audioContext = getJumpAudioContext();
+  if (!audioContext) return;
+  if (audioContext.state === "suspended") {
+    audioContext.resume();
+  }
+
+  const now = audioContext.currentTime;
+  const oscillator = audioContext.createOscillator();
+  const gain = audioContext.createGain();
+
+  oscillator.type = "sine";
+  oscillator.frequency.setValueAtTime(1046.5, now);
+  oscillator.frequency.exponentialRampToValueAtTime(1568, now + 0.08);
+  gain.gain.setValueAtTime(0.0001, now);
+  gain.gain.exponentialRampToValueAtTime(0.16, now + 0.01);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+
+  oscillator.connect(gain);
+  gain.connect(audioContext.destination);
+  oscillator.start(now);
+  oscillator.stop(now + 0.2);
+}
+
 function jumpDragon() {
   const dragon = game.dragon;
   if (!dragon.onGround || game.paused) return;
   dragon.vy = -15.8;
   dragon.onGround = false;
+  playJumpDing();
 }
 
 function togglePause() {
