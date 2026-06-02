@@ -519,6 +519,12 @@ function reportPlayer(targetName) {
     return;
   }
   state.playerReports = state.playerReports || [];
+  const alreadyReported = state.playerReports.some((report) => report.from === reporter && report.to === target);
+  if (alreadyReported) {
+    setStatus(`כבר דיווחת על ${target}`, true, true);
+    return;
+  }
+
   state.playerReports.push({
     from: reporter,
     to: target,
@@ -2083,7 +2089,6 @@ function cancelAdminRevealHold() {
   if (!adminRevealTimeout) return;
   clearTimeout(adminRevealTimeout);
   adminRevealTimeout = 0;
-  setStatus("פתיחת אדמין בוטלה", true, true);
 }
 
 function revealAdminPanel() {
@@ -2091,7 +2096,6 @@ function revealAdminPanel() {
   heldAdminRevealKeys.clear();
   adminPanelVisible = true;
   renderAll();
-  setStatus("אדמין נפתח", true, true);
   elements.adminPin.focus();
 }
 
@@ -2101,7 +2105,6 @@ function handleAdminRevealKeydown(event) {
   event.preventDefault();
   heldAdminRevealKeys.add(event.code);
   if (hasAdminRevealCombo() && !adminRevealTimeout) {
-    setStatus("המשך להחזיק F1A2", true);
     adminRevealTimeout = window.setTimeout(revealAdminPanel, ADMIN_REVEAL_HOLD_MS);
   }
   return true;
@@ -2149,6 +2152,7 @@ document.addEventListener("keydown", (event) => {
     if (event.code === "Escape") closeShop();
     return;
   }
+
   if (handleAdminRevealKeydown(event)) return;
 
   if (event.code === "Space" || event.code === "ArrowUp") {
