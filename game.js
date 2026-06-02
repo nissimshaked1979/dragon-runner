@@ -409,6 +409,11 @@ const elements = {
   openLeaderboardBtn: document.querySelector("#openLeaderboardBtn"),
   leaderboardModal: document.querySelector("#leaderboardModal"),
   closeLeaderboardBtn: document.querySelector("#closeLeaderboardBtn"),
+  openCreatorMessageBtn: document.querySelector("#openCreatorMessageBtn"),
+  creatorMessageModal: document.querySelector("#creatorMessageModal"),
+  closeCreatorMessageBtn: document.querySelector("#closeCreatorMessageBtn"),
+  creatorMessageText: document.querySelector("#creatorMessageText"),
+  sendCreatorMessageBtn: document.querySelector("#sendCreatorMessageBtn"),
   activeSkinName: document.querySelector("#activeSkinName"),
   baseColorSwatches: document.querySelector("#baseColorSwatches"),
   skinGrid: document.querySelector("#skinGrid"),
@@ -440,6 +445,7 @@ const elements = {
   applyAdminSkinBtn: document.querySelector("#applyAdminSkinBtn"),
   removeAdminSkinBtn: document.querySelector("#removeAdminSkinBtn"),
   playerReportSummary: document.querySelector("#playerReportSummary"),
+  creatorMessageSummary: document.querySelector("#creatorMessageSummary"),
   adminLogoutBtn: document.querySelector("#adminLogoutBtn"),
 };
 
@@ -484,6 +490,7 @@ function loadState() {
     jumpSoundEnabled: true,
     players: {},
     playerReports: [],
+    creatorMessages: [],
   };
 
   try {
@@ -496,6 +503,7 @@ function loadState() {
       jumpSoundEnabled: parsed.jumpSoundEnabled !== false,
       players: parsed.players && typeof parsed.players === "object" ? parsed.players : {},
       playerReports: Array.isArray(parsed.playerReports) ? parsed.playerReports : [],
+      creatorMessages: Array.isArray(parsed.creatorMessages) ? parsed.creatorMessages : [],
     };
     return withDefaultPlayer(merged);
   } catch {
@@ -539,6 +547,18 @@ function withDefaultPlayer(nextState) {
           at: typeof report.at === "string" ? report.at : "",
         }))
         .filter((report) => report.from && report.to)
+        .slice(-50)
+    : [];
+
+  nextState.creatorMessages = Array.isArray(nextState.creatorMessages)
+    ? nextState.creatorMessages
+        .filter((message) => message && typeof message === "object")
+        .map((message) => ({
+          from: normalizeName(message.from || ""),
+          text: String(message.text || "").trim().slice(0, 500),
+          at: typeof message.at === "string" ? message.at : "",
+        }))
+        .filter((message) => message.from && message.text)
         .slice(-50)
     : [];
 
@@ -693,6 +713,7 @@ function renderAll() {
   renderSkins();
   renderAdminSkinOptions();
   renderPlayerReportSummary();
+  renderCreatorMessageSummary();
   draw();
 }
 
@@ -762,14 +783,68 @@ function renderPlayerReportSummary() {
   }
 
   elements.playerReportSummary.innerHTML = reports
+    .map((report, index) => ({ ...report, index }))
     .slice(-12)
     .reverse()
     .map((report) => {
       const date = report.at ? new Date(report.at).toLocaleString("he-IL") : "";
       const time = date ? `<span>${escapeHtml(date)}</span>` : "";
-      return `<div><strong>${escapeHtml(report.from)}</strong> דיווח על <strong>${escapeHtml(report.to)}</strong>${time}</div>`;
+      return `
+        <div class="report-summary-item">
+          <button class="report-delete-action" data-delete-report="${report.index}" type="button" title="מחיקה" aria-label="מחיקת דיווח">×</button>
+          <div><strong>${escapeHtml(report.from)}</strong> דיווח על <strong>${escapeHtml(report.to)}</strong>${time}</div>
+        </div>
+      `;
     })
     .join("");
+
+  elements.playerReportSummary.querySelectorAll("[data-delete-report]").forEach((button) => {
+    button.addEventListener("click", () => deletePlayerReport(Number(button.dataset.deleteReport)));
+  });
+}
+
+function renderCreatorMessageSummary() {
+  const messages = state.creatorMessages || [];
+  if (!messages.length) {
+    elements.creatorMessageSummary.innerHTML = "אין הודעות";
+    return;
+  }
+
+  elements.creatorMessageSummary.innerHTML = messages
+    .map((message, index) => ({ ...message, index }))
+    .slice(-12)
+    .reverse()
+    .map((message) => {
+      const date = message.at ? new Date(message.at).toLocaleString("he-IL") : "";
+      const time = date ? `<span>${escapeHtml(date)}</span>` : "";
+      return `
+        <div class="report-summary-item">
+          <button class="report-delete-action" data-delete-message="${message.index}" type="button" title="מחיקה" aria-label="מחיקת הודעה">×</button>
+          <div><strong>${escapeHtml(message.from)}</strong>: ${escapeHtml(message.text)}${time}</div>
+        </div>
+      `;
+    })
+    .join("");
+
+  elements.creatorMessageSummary.querySelectorAll("[data-delete-message]").forEach((button) => {
+    button.addEventListener("click", () => deleteCreatorMessage(Number(button.dataset.deleteMessage)));
+  });
+}
+
+function deletePlayerReport(index) {
+  if (!Number.isInteger(index) || !state.playerReports[index]) return;
+  state.playerReports.splice(index, 1);
+  saveState();
+  renderPlayerReportSummary();
+  setStatus("הדיווח נמחק", true, true, "Report deleted");
+}
+
+function deleteCreatorMessage(index) {
+  if (!Number.isInteger(index) || !state.creatorMessages[index]) return;
+  state.creatorMessages.splice(index, 1);
+  saveState();
+  renderCreatorMessageSummary();
+  setStatus("ההודעה נמחקה", true, true, "Message deleted");
 }
 
 function renderColorSwatches() {
@@ -1324,6 +1399,38 @@ function openLeaderboard() {
 function closeLeaderboard() {
   elements.leaderboardModal.classList.add("hidden");
   elements.openLeaderboardBtn.focus();
+}
+
+function openCreatorMessage() {
+  elements.creatorMessageModal.classList.remove("hidden");
+  elements.creatorMessageText.focus();
+}
+
+function closeCreatorMessage() {
+  elements.creatorMessageModal.classList.add("hidden");
+  elements.openCreatorMessageBtn.focus();
+}
+
+function sendCreatorMessage() {
+  const text = elements.creatorMessageText.value.trim().replace(/\s+/g, " ").slice(0, 500);
+  if (!text) {
+    setStatus("כתבו הודעה לפני השליחה", true, true, "Write a message before sending");
+    elements.creatorMessageText.focus();
+    return;
+  }
+
+  state.creatorMessages = state.creatorMessages || [];
+  state.creatorMessages.push({
+    from: getCurrentPlayer().name,
+    text,
+    at: new Date().toISOString(),
+  });
+  state.creatorMessages = state.creatorMessages.slice(-50);
+  elements.creatorMessageText.value = "";
+  saveState();
+  renderAll();
+  closeCreatorMessage();
+  setStatus("ההודעה נשלחה ליוצר", true, true, "Message sent to the creator");
 }
 
 function openSettings() {
@@ -3304,6 +3411,17 @@ elements.closeLeaderboardBtn.addEventListener("click", closeLeaderboard);
 elements.leaderboardModal.addEventListener("click", (event) => {
   if (event.target === elements.leaderboardModal) closeLeaderboard();
 });
+elements.openCreatorMessageBtn.addEventListener("click", openCreatorMessage);
+elements.closeCreatorMessageBtn.addEventListener("click", closeCreatorMessage);
+elements.creatorMessageModal.addEventListener("click", (event) => {
+  if (event.target === elements.creatorMessageModal) closeCreatorMessage();
+});
+elements.sendCreatorMessageBtn.addEventListener("click", sendCreatorMessage);
+elements.creatorMessageText.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
+    sendCreatorMessage();
+  }
+});
 elements.openSettingsBtn.addEventListener("click", openSettings);
 elements.closeSettingsBtn.addEventListener("click", closeSettings);
 elements.settingsModal.addEventListener("click", (event) => {
@@ -3342,6 +3460,13 @@ document.addEventListener("keydown", (event) => {
     if (event.code === "Escape") {
       event.preventDefault();
       closeLeaderboard();
+    }
+    return;
+  }
+  if (!elements.creatorMessageModal.classList.contains("hidden")) {
+    if (event.code === "Escape") {
+      event.preventDefault();
+      closeCreatorMessage();
     }
     return;
   }

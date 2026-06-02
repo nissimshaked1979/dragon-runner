@@ -400,6 +400,12 @@ h1 {
   max-height: min(520px, calc(100vh - 36px));
 }
 
+.creator-message-window {
+  width: min(620px, calc(100% - 18px));
+  min-height: auto;
+  max-height: min(640px, calc(100vh - 36px));
+}
+
 .leaderboard-modal-window {
   min-height: auto;
   max-height: min(760px, calc(100vh - 36px));
@@ -443,6 +449,21 @@ h1 {
   display: grid;
   gap: 12px;
   padding: 16px;
+}
+
+.creator-message-body {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+}
+
+.creator-message-copy {
+  border: 1px solid #dce3df;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 12px 14px;
+  font-weight: 850;
+  line-height: 1.45;
 }
 
 .setting-row {
@@ -731,6 +752,33 @@ tbody tr.current {
   color: var(--ink);
   font-size: 0.88rem;
   line-height: 1.35;
+}
+
+.report-summary-item {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  align-items: start;
+  gap: 8px;
+  border: 1px solid #edf1ef;
+  border-radius: 8px;
+  padding: 6px;
+}
+
+.report-delete-action {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 7px;
+  background: #e60000;
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 950;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.report-delete-action:hover {
+  background: #111111;
 }
 
 .report-summary span {

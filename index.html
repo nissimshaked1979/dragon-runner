@@ -22,6 +22,9 @@
           <button id="openLeaderboardBtn" class="topbar-action" type="button" aria-haspopup="dialog">
             <span class="bilingual-label"><span>לוח שיאים</span><span class="label-en">Leaderboard</span></span>
           </button>
+          <button id="openCreatorMessageBtn" class="topbar-action" type="button" aria-haspopup="dialog">
+            <span class="bilingual-label"><span>דברו עם היוצר</span><span class="label-en">Contact Creator</span></span>
+          </button>
           <button id="openSettingsBtn" class="icon-button settings-button" type="button" title="הגדרות" aria-label="הגדרות" aria-haspopup="dialog">⚙</button>
         </div>
       </header>
@@ -104,6 +107,10 @@
                 <span>דיווחים על שחקנים</span>
                 <div id="playerReportSummary" class="report-summary">אין דיווחים</div>
               </div>
+              <div class="report-summary-box">
+                <span>הודעות ליוצר</span>
+                <div id="creatorMessageSummary" class="report-summary">אין הודעות</div>
+              </div>
               <button id="adminLogoutBtn" class="ghost-action" type="button">יציאה</button>
             </div>
           </section>
@@ -153,6 +160,34 @@
             </thead>
             <tbody id="leaderboardBody"></tbody>
           </table>
+        </div>
+      </section>
+    </div>
+
+    <div id="creatorMessageModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="creatorMessageTitle">
+      <section class="shop-modal-window creator-message-window" aria-labelledby="creatorMessageTitle">
+        <div class="panel-head">
+          <h2 id="creatorMessageTitle"><span class="bilingual-label"><span>דברו עם היוצר</span><span class="label-en">Contact Creator</span></span></h2>
+          <div class="modal-head-actions">
+            <span><span class="bilingual-label"><span>הודעה חדשה</span><span class="label-en">New Message</span></span></span>
+            <button id="closeCreatorMessageBtn" class="close-shop-button" type="button" title="סגירה" aria-label="סגירה">×</button>
+          </div>
+        </div>
+
+        <div class="creator-message-body">
+          <p class="creator-message-copy">
+            <span class="bilingual-label">
+              <span>רוצים לדבר עם היוצר של המשחק? כאן תוכלו לבקש בקשות, לומר מה להוסיף, להוריד ולשפר.</span>
+              <span class="label-en">Want to talk to the game creator? Here you can request changes and say what to add, remove, or improve.</span>
+            </span>
+          </p>
+          <label class="field">
+            <span class="bilingual-label"><span>ההודעה שלכם</span><span class="label-en">Your Message</span></span>
+            <textarea id="creatorMessageText" maxlength="500" placeholder="כתבו כאן בקשה או רעיון"></textarea>
+          </label>
+          <button id="sendCreatorMessageBtn" class="primary-action" type="button">
+            <span class="bilingual-label"><span>שלח הודעה</span><span class="label-en">Send Message</span></span>
+          </button>
         </div>
       </section>
     </div>
