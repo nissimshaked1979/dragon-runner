@@ -217,6 +217,11 @@ const elements = {
   openShopBtn: document.querySelector("#openShopBtn"),
   shopModal: document.querySelector("#shopModal"),
   closeShopBtn: document.querySelector("#closeShopBtn"),
+  openSettingsBtn: document.querySelector("#openSettingsBtn"),
+  settingsModal: document.querySelector("#settingsModal"),
+  closeSettingsBtn: document.querySelector("#closeSettingsBtn"),
+  jumpSoundToggle: document.querySelector("#jumpSoundToggle"),
+  jumpSoundState: document.querySelector("#jumpSoundState"),
   adminPanel: document.querySelector("#adminPanel"),
   adminState: document.querySelector("#adminState"),
   adminLogin: document.querySelector("#adminLogin"),
@@ -278,6 +283,7 @@ function loadState() {
   const fallback = {
     currentPlayer: "שחקן",
     admin: false,
+    jumpSoundEnabled: true,
     players: {},
     playerReports: [],
   };
@@ -289,6 +295,7 @@ function loadState() {
     const merged = {
       currentPlayer: normalizeName(parsed.currentPlayer || "שחקן"),
       admin: Boolean(parsed.admin),
+      jumpSoundEnabled: parsed.jumpSoundEnabled !== false,
       players: parsed.players && typeof parsed.players === "object" ? parsed.players : {},
       playerReports: Array.isArray(parsed.playerReports) ? parsed.playerReports : [],
     };
@@ -301,6 +308,7 @@ function loadState() {
 function withDefaultPlayer(nextState) {
   const name = normalizeName(nextState.currentPlayer || "שחקן");
   nextState.currentPlayer = name;
+  nextState.jumpSoundEnabled = nextState.jumpSoundEnabled !== false;
   if (!nextState.players[name]) {
     nextState.players[name] = createPlayer(name);
   }
@@ -464,6 +472,8 @@ function renderAll() {
   elements.pointsValue.textContent = player.points.toString();
   elements.activeSkinName.textContent = getSkinById(player.skinId).name;
   elements.leaderboardCount.textContent = Object.keys(state.players).length.toString();
+  elements.jumpSoundToggle.checked = state.jumpSoundEnabled;
+  elements.jumpSoundState.textContent = state.jumpSoundEnabled ? "פעיל" : "כבוי";
   elements.adminPanel.classList.toggle("hidden", !(state.admin || adminPanelVisible));
   elements.adminState.textContent = state.admin ? "פעיל" : "נעול";
   elements.adminLogin.classList.toggle("hidden", state.admin);
@@ -897,6 +907,26 @@ function closeShop() {
   elements.openShopBtn.focus();
 }
 
+function openSettings() {
+  renderAll();
+  elements.settingsModal.classList.remove("hidden");
+  elements.closeSettingsBtn.focus();
+}
+
+function closeSettings() {
+  elements.settingsModal.classList.add("hidden");
+  elements.openSettingsBtn.focus();
+}
+
+function setJumpSoundEnabled(enabled) {
+  state.jumpSoundEnabled = Boolean(enabled);
+  if (!state.jumpSoundEnabled && jumpAudioContext && jumpAudioContext.state === "running") {
+    jumpAudioContext.suspend();
+  }
+  saveState();
+  renderAll();
+}
+
 function handleAdminLogin() {
   if (elements.adminPin.value.trim() === ADMIN_PIN) {
     state.admin = true;
@@ -1115,6 +1145,7 @@ function getJumpAudioContext() {
 }
 
 function playJumpDing() {
+  if (!state.jumpSoundEnabled) return;
   const audioContext = getJumpAudioContext();
   if (!audioContext) return;
   if (audioContext.state === "suspended") {
@@ -2163,6 +2194,14 @@ elements.closeShopBtn.addEventListener("click", closeShop);
 elements.shopModal.addEventListener("click", (event) => {
   if (event.target === elements.shopModal) closeShop();
 });
+elements.openSettingsBtn.addEventListener("click", openSettings);
+elements.closeSettingsBtn.addEventListener("click", closeSettings);
+elements.settingsModal.addEventListener("click", (event) => {
+  if (event.target === elements.settingsModal) closeSettings();
+});
+elements.jumpSoundToggle.addEventListener("change", () => {
+  setJumpSoundEnabled(elements.jumpSoundToggle.checked);
+});
 elements.playBtn.addEventListener("click", jumpOrStart);
 elements.pauseBtn.addEventListener("click", togglePause);
 elements.canvas.addEventListener("pointerdown", jumpOrStart);
@@ -2182,11 +2221,21 @@ elements.adminLogoutBtn.addEventListener("click", logoutAdmin);
 
 window.addEventListener("resize", resizeCanvas);
 document.addEventListener("keydown", (event) => {
-  if (isTypingTarget(event.target)) return;
   if (!elements.shopModal.classList.contains("hidden")) {
-    if (event.code === "Escape") closeShop();
+    if (event.code === "Escape") {
+      event.preventDefault();
+      closeShop();
+    }
     return;
   }
+  if (!elements.settingsModal.classList.contains("hidden")) {
+    if (event.code === "Escape") {
+      event.preventDefault();
+      closeSettings();
+    }
+    return;
+  }
+  if (isTypingTarget(event.target)) return;
 
   if (handleAdminRevealKeydown(event)) return;
 

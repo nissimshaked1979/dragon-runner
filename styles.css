@@ -191,12 +191,17 @@ h1 {
 
 .icon-button:hover,
 .rename-button:hover,
+.settings-button:hover,
 .round-button:hover,
 .primary-action:hover,
 .secondary-action:hover,
 .danger-action:hover,
 .ghost-action:hover {
   transform: translateY(-1px);
+}
+
+.settings-button {
+  font-size: 1.1rem;
 }
 
 .admin-switch.active {
@@ -375,6 +380,12 @@ h1 {
   box-shadow: 0 24px 70px rgba(15, 23, 42, 0.32);
 }
 
+.settings-modal-window {
+  width: min(540px, calc(100% - 18px));
+  min-height: auto;
+  max-height: min(520px, calc(100vh - 36px));
+}
+
 .shop-modal-window > .panel-head {
   position: sticky;
   top: 0;
@@ -407,6 +418,76 @@ h1 {
 .close-shop-button:hover {
   transform: translateY(-1px);
   background: #e60000;
+}
+
+.settings-body {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 70px;
+  border: 1px solid #dce3df;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 12px 14px;
+  font-weight: 900;
+}
+
+.switch-control {
+  position: relative;
+  display: inline-grid;
+  width: 58px;
+  height: 34px;
+  flex: 0 0 auto;
+}
+
+.switch-control input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.switch-control span {
+  border: 2px solid #1d2732;
+  border-radius: 999px;
+  background: #cbd5e1;
+  transition:
+    background 140ms ease,
+    border-color 140ms ease;
+}
+
+.switch-control span::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  inset-inline-start: 6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(25, 32, 42, 0.24);
+  transition: transform 140ms ease;
+}
+
+.switch-control input:checked + span {
+  border-color: #10664a;
+  background: var(--green);
+}
+
+.switch-control input:checked + span::after {
+  transform: translateX(-24px);
+}
+
+.switch-control input:focus-visible + span {
+  box-shadow: 0 0 0 3px rgba(14, 116, 144, 0.18);
 }
 
 .table-wrap {
