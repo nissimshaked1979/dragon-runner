@@ -218,11 +218,11 @@ const SKINS = [
     cost: 180000,
     motif: "trend-tralalero",
     palette: {
-      body: "#38bdf8",
-      dark: "#075985",
+      body: "#60a5fa",
+      dark: "#1f2937",
       wing: "#f8fafc",
       belly: "#dbeafe",
-      horn: "#ef4444",
+      horn: "#2563eb",
       eye: "#020617",
     },
   },
@@ -270,9 +270,9 @@ const SKINS = [
     motif: "trend-bombardino",
     palette: {
       body: "#84cc16",
-      dark: "#365314",
-      wing: "#fb923c",
-      belly: "#fef3c7",
+      dark: "#14532d",
+      wing: "#94a3b8",
+      belly: "#f8fafc",
       horn: "#ef4444",
       eye: "#020617",
     },
@@ -281,8 +281,8 @@ const SKINS = [
     id: "trend-tung",
     name: "טונג טונג סהור",
     englishName: "Tung Tung Sahur",
-    tier: "טרנד תופים",
-    englishTier: "Drum Trend",
+    tier: "טרנד עץ",
+    englishTier: "Wood Trend",
     cost: 245000,
     motif: "trend-tung",
     palette: {
@@ -320,11 +320,11 @@ const SKINS = [
     cost: 275000,
     motif: "trend-lirili",
     palette: {
-      body: "#fb7185",
-      dark: "#9f1239",
-      wing: "#a7f3d0",
-      belly: "#fff1f2",
-      horn: "#facc15",
+      body: "#22c55e",
+      dark: "#166534",
+      wing: "#94a3b8",
+      belly: "#fef3c7",
+      horn: "#d97706",
       eye: "#111827",
     },
   },
@@ -347,19 +347,19 @@ const SKINS = [
   },
   {
     id: "trend-brbr",
-    name: "ברר ברר פטפין",
+    name: "ברר ברר פטפים",
     englishName: "Brr Brr Patapim",
-    tier: "טרנד קרח",
-    englishTier: "Ice Trend",
+    tier: "טרנד יער",
+    englishTier: "Forest Trend",
     cost: 305000,
     motif: "trend-brbr",
     palette: {
-      body: "#67e8f9",
-      dark: "#0e7490",
-      wing: "#e0f2fe",
-      belly: "#f8fafc",
-      horn: "#22d3ee",
-      eye: "#0f172a",
+      body: "#7c4a2d",
+      dark: "#3f2412",
+      wing: "#15803d",
+      belly: "#fbbf24",
+      horn: "#a3e635",
+      eye: "#111827",
     },
   },
   {
@@ -371,11 +371,11 @@ const SKINS = [
     cost: 320000,
     motif: "trend-trippi",
     palette: {
-      body: "#14b8a6",
-      dark: "#115e59",
-      wing: "#f0abfc",
-      belly: "#ccfbf1",
-      horn: "#fde047",
+      body: "#f59e0b",
+      dark: "#9a3412",
+      wing: "#38bdf8",
+      belly: "#fffbeb",
+      horn: "#f0abfc",
       eye: "#111827",
     },
   },
@@ -1090,26 +1090,36 @@ function trendPreviewSvg(palette, motif) {
 
   if (motif === "trend-tralalero") {
     return svg(`
-      <path d="M16 45 C35 18 86 18 111 42 C83 62 43 64 16 45 Z" fill="${palette.body}" />
-      <path d="M54 23 L66 4 L72 29 Z" fill="${palette.dark}" />
-      <path d="M94 42 L122 38 L98 52 Z" fill="${palette.belly}" />
-      <circle cx="94" cy="34" r="3" fill="${palette.eye}" />
-      <rect x="36" y="58" width="23" height="9" rx="4" fill="${palette.horn}" />
-      <rect x="70" y="58" width="23" height="9" rx="4" fill="${palette.horn}" />
-      <path d="M18 44 C8 38 8 32 19 29" stroke="${palette.dark}" stroke-width="5" fill="none" stroke-linecap="round" />
+      <path d="M18 40 C36 16 86 16 112 37 C83 58 42 60 18 40 Z" fill="${palette.body}" />
+      <path d="M45 40 C62 51 88 49 108 38 C86 61 45 61 18 40 Z" fill="${palette.belly}" opacity="0.95" />
+      <path d="M55 24 L67 4 L73 29 Z" fill="${palette.dark}" />
+      <path d="M19 39 L4 29 L9 49 Z" fill="${palette.dark}" />
+      <path d="M92 36 L123 34 L96 47 Z" fill="${palette.belly}" />
+      <path d="M68 38 L72 60 M52 42 L51 61 M84 39 L91 60" stroke="${palette.dark}" stroke-width="6" stroke-linecap="round" />
+      <rect x="42" y="60" width="22" height="9" rx="5" fill="${palette.horn}" />
+      <rect x="65" y="60" width="22" height="9" rx="5" fill="${palette.horn}" />
+      <rect x="87" y="60" width="22" height="9" rx="5" fill="${palette.horn}" />
+      <path d="M47 64 H58 M70 64 H82 M92 64 H104" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
+      <circle cx="91" cy="31" r="3" fill="${palette.eye}" />
+      <path d="M35 34 H47 M36 39 H48 M39 44 H50" stroke="${palette.dark}" stroke-width="2" opacity="0.45" />
     `);
   }
 
   if (motif === "trend-ballerina") {
     return svg(`
-      <ellipse cx="63" cy="39" rx="24" ry="23" fill="${palette.body}" />
-      <path d="M39 47 C51 35 79 35 94 47 L82 61 L50 61 Z" fill="${palette.wing}" />
-      <rect x="47" y="18" width="42" height="31" rx="9" fill="${palette.body}" />
-      <path d="M49 18 H86 C83 8 55 8 49 18 Z" fill="${palette.belly}" />
-      <circle cx="72" cy="28" r="3" fill="${palette.eye}" />
-      <path d="M50 62 C44 69 36 68 35 63 C42 61 47 60 50 62 Z" fill="${palette.horn}" />
-      <path d="M82 62 C90 69 98 67 97 62 C89 61 85 60 82 62 Z" fill="${palette.horn}" />
-      <path d="M88 27 C108 26 108 43 89 42" stroke="${palette.dark}" stroke-width="5" fill="none" stroke-linecap="round" />
+      <path d="M55 21 H86 V42 C86 49 55 49 55 42 Z" fill="${palette.belly}" />
+      <ellipse cx="70" cy="21" rx="16" ry="7" fill="#ffffff" />
+      <ellipse cx="70" cy="20" rx="12" ry="4" fill="${palette.body}" opacity="0.82" />
+      <path d="M85 27 C105 26 105 43 86 42" stroke="${palette.belly}" stroke-width="6" fill="none" stroke-linecap="round" />
+      <circle cx="65" cy="31" r="2.2" fill="${palette.eye}" />
+      <circle cx="76" cy="31" r="2.2" fill="${palette.eye}" />
+      <path d="M65 37 Q70 40 76 37" stroke="${palette.dark}" stroke-width="2" fill="none" />
+      <path d="M70 45 L77 53 L63 53 Z" fill="${palette.body}" />
+      <path d="M39 53 C51 40 90 40 102 53 L87 63 L52 63 Z" fill="${palette.wing}" />
+      <path d="M62 53 L53 68 M78 53 L91 68" stroke="${palette.dark}" stroke-width="4" stroke-linecap="round" />
+      <path d="M52 68 C44 70 38 68 38 64 C45 63 50 64 52 68 Z" fill="${palette.horn}" />
+      <path d="M91 68 C100 70 106 67 105 63 C98 63 93 64 91 68 Z" fill="${palette.horn}" />
+      <path d="M46 48 L24 35 M94 48 L119 35" stroke="${palette.wing}" stroke-width="5" stroke-linecap="round" />
     `);
   }
 
@@ -1125,94 +1135,114 @@ function trendPreviewSvg(palette, motif) {
 
   if (motif === "trend-bombardino") {
     return svg(`
-      <ellipse cx="58" cy="45" rx="41" ry="16" fill="${palette.body}" />
-      <path d="M89 37 L113 32 L117 44 L92 50 Z" fill="${palette.body}" />
-      <path d="M34 39 L16 29 L24 49 Z" fill="${palette.dark}" />
-      <path d="M58 25 L74 13 L83 31 Z" fill="${palette.wing}" />
-      <path d="M94 42 H121" stroke="${palette.belly}" stroke-width="5" stroke-linecap="round" />
+      <ellipse cx="58" cy="42" rx="39" ry="15" fill="${palette.wing}" />
+      <path d="M24 42 L7 30 L9 52 Z" fill="${palette.dark}" />
+      <path d="M48 28 L78 10 L88 30 Z" fill="${palette.belly}" />
+      <path d="M46 54 L77 67 L86 51 Z" fill="${palette.belly}" />
+      <path d="M83 34 L112 30 L124 40 L112 50 L83 48 Z" fill="${palette.body}" />
+      <path d="M91 40 H121" stroke="${palette.dark}" stroke-width="4" stroke-linecap="round" />
+      <path d="M96 46 L103 50 L110 46 L117 50" stroke="#ffffff" stroke-width="2" fill="none" />
       <circle cx="101" cy="35" r="3" fill="${palette.eye}" />
-      <rect x="37" y="58" width="13" height="9" rx="4" fill="${palette.dark}" />
-      <rect x="70" y="58" width="13" height="9" rx="4" fill="${palette.dark}" />
-      <circle cx="49" cy="45" r="4" fill="${palette.dark}" />
-      <circle cx="61" cy="45" r="4" fill="${palette.dark}" />
+      <path d="M34 35 H46 M36 43 H49 M39 50 H51" stroke="${palette.dark}" stroke-width="2" opacity="0.55" />
+      <path d="M57 58 L55 70 M75 56 L80 69" stroke="${palette.horn}" stroke-width="5" stroke-linecap="round" />
+      <circle cx="24" cy="42" r="7" fill="${palette.dark}" opacity="0.4" />
     `);
   }
 
   if (motif === "trend-tung") {
     return svg(`
-      <rect x="33" y="25" width="59" height="36" rx="12" fill="${palette.body}" />
-      <ellipse cx="62" cy="25" rx="29" ry="10" fill="${palette.belly}" />
-      <ellipse cx="62" cy="61" rx="29" ry="8" fill="${palette.dark}" />
-      <path d="M35 31 L18 15 M84 31 L106 12" stroke="${palette.horn}" stroke-width="6" stroke-linecap="round" />
-      <circle cx="16" cy="13" r="6" fill="${palette.wing}" />
-      <circle cx="108" cy="10" r="6" fill="${palette.wing}" />
-      <circle cx="72" cy="39" r="3" fill="${palette.eye}" />
-      <path d="M41 45 H84" stroke="${palette.dark}" stroke-width="4" stroke-dasharray="6 5" />
+      <rect x="45" y="12" width="34" height="48" rx="13" fill="${palette.body}" />
+      <ellipse cx="62" cy="13" rx="17" ry="7" fill="${palette.belly}" />
+      <ellipse cx="62" cy="60" rx="17" ry="7" fill="${palette.dark}" />
+      <path d="M52 24 H72 M51 36 H73 M54 48 H70" stroke="${palette.dark}" stroke-width="2" opacity="0.45" />
+      <circle cx="57" cy="31" r="2.5" fill="${palette.eye}" />
+      <circle cx="68" cy="31" r="2.5" fill="${palette.eye}" />
+      <path d="M56 40 Q62 44 69 40" stroke="${palette.dark}" stroke-width="2" fill="none" />
+      <path d="M44 35 L25 48 M80 35 L98 25" stroke="${palette.dark}" stroke-width="6" stroke-linecap="round" />
+      <path d="M93 9 L105 7 L103 40 L92 41 Z" fill="${palette.horn}" />
+      <path d="M92 15 H105 M92 30 H104" stroke="${palette.dark}" stroke-width="2" opacity="0.45" />
+      <path d="M52 59 L43 69 M72 59 L82 69" stroke="${palette.dark}" stroke-width="5" stroke-linecap="round" />
     `);
   }
 
   if (motif === "trend-cappuccino") {
     return svg(`
-      <rect x="38" y="27" width="52" height="35" rx="9" fill="${palette.body}" />
-      <path d="M42 27 H86 C82 14 48 14 42 27 Z" fill="${palette.belly}" />
-      <path d="M32 31 C17 40 25 56 39 50" stroke="${palette.dark}" stroke-width="7" fill="none" stroke-linecap="round" />
-      <path d="M49 34 H83 V50 H49 Z" fill="${palette.dark}" opacity="0.9" />
-      <circle cx="70" cy="42" r="3" fill="${palette.eye}" />
-      <path d="M84 25 L106 13 L96 33 Z" fill="${palette.horn}" />
-      <path d="M88 51 L113 62" stroke="${palette.wing}" stroke-width="5" stroke-linecap="round" />
+      <path d="M47 19 H82 V44 C82 51 47 51 47 44 Z" fill="${palette.belly}" />
+      <ellipse cx="64" cy="19" rx="18" ry="7" fill="#ffffff" />
+      <ellipse cx="64" cy="18" rx="13" ry="4" fill="${palette.body}" />
+      <path d="M81 27 C99 27 99 43 82 42" stroke="${palette.belly}" stroke-width="6" fill="none" stroke-linecap="round" />
+      <path d="M51 31 H78 V40 H51 Z" fill="${palette.dark}" />
+      <circle cx="60" cy="35" r="2.3" fill="${palette.eye}" />
+      <circle cx="70" cy="35" r="2.3" fill="${palette.eye}" />
+      <path d="M49 45 L42 59 L86 59 L80 45 Z" fill="${palette.wing}" />
+      <path d="M42 49 L20 36 M86 49 L111 36" stroke="${palette.horn}" stroke-width="5" stroke-linecap="round" />
+      <path d="M18 34 L31 33 L23 43 Z M108 34 L121 33 L113 43 Z" fill="${palette.belly}" />
     `);
   }
 
   if (motif === "trend-lirili") {
     return svg(`
-      <ellipse cx="58" cy="45" rx="33" ry="18" fill="${palette.body}" />
-      <circle cx="91" cy="34" r="17" fill="${palette.body}" />
-      <path d="M81 23 C75 6 84 3 91 21 Z" fill="${palette.horn}" />
-      <path d="M98 23 C103 5 112 7 106 25 Z" fill="${palette.horn}" />
-      <path d="M30 44 C12 22 4 58 29 56" stroke="${palette.wing}" stroke-width="8" fill="none" stroke-linecap="round" />
-      <circle cx="96" cy="32" r="3" fill="${palette.eye}" />
-      <circle cx="47" cy="30" r="5" fill="${palette.belly}" />
-      <circle cx="60" cy="53" r="5" fill="${palette.belly}" />
-      <path d="M99 44 L118 43 L101 51 Z" fill="${palette.belly}" />
+      <rect x="39" y="22" width="33" height="36" rx="13" fill="${palette.body}" />
+      <path d="M45 19 V10 M55 21 V7 M66 21 V11" stroke="${palette.horn}" stroke-width="4" stroke-linecap="round" />
+      <ellipse cx="82" cy="35" rx="18" ry="16" fill="${palette.wing}" />
+      <path d="M96 39 C118 41 112 61 94 53" stroke="${palette.wing}" stroke-width="9" fill="none" stroke-linecap="round" />
+      <ellipse cx="69" cy="36" rx="10" ry="13" fill="${palette.wing}" opacity="0.9" />
+      <circle cx="86" cy="31" r="3" fill="${palette.eye}" />
+      <path d="M44 58 L39 68 M66 58 L72 68" stroke="${palette.dark}" stroke-width="5" stroke-linecap="round" />
+      <ellipse cx="38" cy="68" rx="10" ry="4" fill="${palette.horn}" />
+      <ellipse cx="73" cy="68" rx="10" ry="4" fill="${palette.horn}" />
+      <path d="M32 48 L13 41 L22 55 Z" fill="${palette.body}" />
+      <circle cx="50" cy="34" r="2" fill="${palette.belly}" />
+      <circle cx="61" cy="44" r="2" fill="${palette.belly}" />
     `);
   }
 
   if (motif === "trend-bobrito") {
     return svg(`
-      <rect x="30" y="25" width="68" height="36" rx="18" fill="${palette.body}" />
-      <path d="M37 31 C49 16 76 16 91 32" fill="${palette.belly}" />
-      <path d="M43 39 H91 V50 H43 Z" fill="${palette.dark}" />
-      <circle cx="59" cy="45" r="3" fill="${palette.eye}" />
-      <circle cx="78" cy="45" r="3" fill="${palette.eye}" />
-      <path d="M27 45 L6 35 L17 56 Z" fill="${palette.wing}" />
-      <path d="M96 43 L119 34 L108 56 Z" fill="${palette.horn}" />
-      <rect x="45" y="58" width="12" height="8" rx="4" fill="${palette.dark}" />
-      <rect x="76" y="58" width="12" height="8" rx="4" fill="${palette.dark}" />
+      <rect x="31" y="25" width="65" height="36" rx="18" fill="${palette.body}" />
+      <path d="M36 31 C48 17 78 17 91 31 Z" fill="${palette.belly}" />
+      <path d="M42 39 H88 V50 H42 Z" fill="${palette.dark}" />
+      <circle cx="56" cy="45" r="3" fill="${palette.eye}" />
+      <circle cx="74" cy="45" r="3" fill="${palette.eye}" />
+      <path d="M40 27 L51 12 L63 26 Z" fill="${palette.horn}" />
+      <path d="M69 26 L82 12 L90 29 Z" fill="${palette.horn}" />
+      <path d="M31 48 C9 39 4 55 22 62 C17 53 22 48 31 48 Z" fill="${palette.wing}" />
+      <path d="M94 45 L119 35 L108 57 Z" fill="${palette.dark}" />
+      <rect x="43" y="58" width="13" height="9" rx="4" fill="${palette.dark}" />
+      <rect x="75" y="58" width="13" height="9" rx="4" fill="${palette.dark}" />
+      <path d="M47 52 Q64 57 83 52" stroke="${palette.belly}" stroke-width="2" fill="none" />
     `);
   }
 
   if (motif === "trend-brbr") {
     return svg(`
-      <ellipse cx="60" cy="47" rx="34" ry="17" fill="${palette.body}" />
-      <path d="M88 37 L105 23 L116 39 L99 50 Z" fill="${palette.body}" />
-      <path d="M35 30 L45 7 L53 32 L63 5 L70 34 L80 12 L86 38" fill="${palette.wing}" />
-      <path d="M22 46 L4 39 L13 55 Z" fill="${palette.dark}" />
-      <circle cx="101" cy="34" r="3" fill="${palette.eye}" />
-      <path d="M95 45 L120 45" stroke="${palette.belly}" stroke-width="4" stroke-linecap="round" />
-      <circle cx="42" cy="48" r="4" fill="${palette.belly}" />
-      <circle cx="57" cy="42" r="4" fill="${palette.belly}" />
+      <rect x="45" y="20" width="35" height="42" rx="13" fill="${palette.body}" />
+      <ellipse cx="62" cy="18" rx="21" ry="9" fill="${palette.wing}" />
+      <path d="M47 24 C52 9 74 9 80 24" fill="${palette.wing}" />
+      <circle cx="62" cy="34" r="15" fill="${palette.dark}" />
+      <ellipse cx="62" cy="39" rx="9" ry="7" fill="${palette.belly}" />
+      <circle cx="56" cy="31" r="2.5" fill="${palette.eye}" />
+      <circle cx="68" cy="31" r="2.5" fill="${palette.eye}" />
+      <ellipse cx="62" cy="38" rx="3.5" ry="5" fill="#f8fafc" />
+      <path d="M45 39 L22 47 M80 39 L105 48" stroke="${palette.wing}" stroke-width="8" stroke-linecap="round" />
+      <path d="M50 58 L39 68 M73 58 L84 68" stroke="${palette.dark}" stroke-width="6" stroke-linecap="round" />
+      <ellipse cx="37" cy="68" rx="13" ry="5" fill="${palette.belly}" />
+      <ellipse cx="86" cy="68" rx="13" ry="5" fill="${palette.belly}" />
+      <path d="M50 9 H75 L70 18 H55 Z" fill="${palette.belly}" />
     `);
   }
 
   if (motif === "trend-trippi") {
     return svg(`
-      <ellipse cx="57" cy="45" rx="35" ry="18" fill="${palette.body}" />
+      <ellipse cx="59" cy="45" rx="34" ry="17" fill="${palette.body}" />
+      <path d="M21 45 L3 29 L7 60 Z" fill="${palette.wing}" />
+      <path d="M31 33 C45 18 72 20 81 43 C64 41 51 49 41 61 Z" fill="${palette.wing}" />
       <circle cx="92" cy="34" r="17" fill="${palette.body}" />
-      <path d="M42 34 C51 17 73 18 83 41 C66 39 54 48 44 61 Z" fill="${palette.wing}" />
-      <path d="M35 22 L21 5 M41 22 L43 3 M48 24 L65 6" stroke="${palette.horn}" stroke-width="5" stroke-linecap="round" />
-      <path d="M31 44 C6 30 5 64 31 56" fill="${palette.dark}" />
+      <path d="M80 24 L86 8 L94 25 Z" fill="${palette.dark}" />
+      <path d="M99 25 L110 10 L108 30 Z" fill="${palette.dark}" />
+      <path d="M99 43 L121 42 L102 51 Z" fill="${palette.belly}" />
       <circle cx="98" cy="32" r="3" fill="${palette.eye}" />
-      <path d="M101 42 L119 40 L103 50 Z" fill="${palette.belly}" />
+      <path d="M36 41 L24 36 M37 47 L23 50" stroke="${palette.dark}" stroke-width="2" />
       <rect x="43" y="58" width="11" height="9" rx="4" fill="${palette.dark}" />
       <rect x="74" y="58" width="11" height="9" rx="4" fill="${palette.dark}" />
     `);
@@ -2344,62 +2374,125 @@ function drawTrendCreature(motif, palette, t, legA, legB) {
   if (motif === "trend-tralalero") {
     ctx.fillStyle = palette.body;
     ctx.beginPath();
-    ctx.ellipse(42, 43, 40, 17, 0, 0, Math.PI * 2);
+    ctx.ellipse(42, 41, 40, 17, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = palette.belly;
+    ctx.beginPath();
+    ctx.moveTo(17, 41);
+    ctx.bezierCurveTo(38, 56, 80, 57, 101, 39);
+    ctx.bezierCurveTo(78, 58, 41, 60, 17, 41);
     ctx.fill();
     ctx.fillStyle = palette.dark;
     ctx.beginPath();
-    ctx.moveTo(35, 25);
-    ctx.lineTo(48, 4);
-    ctx.lineTo(54, 31);
+    ctx.moveTo(33, 25);
+    ctx.lineTo(47, 4);
+    ctx.lineTo(53, 30);
+    ctx.closePath();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(16, 40);
+    ctx.lineTo(-4, 29);
+    ctx.lineTo(1, 50);
     ctx.closePath();
     ctx.fill();
     ctx.fillStyle = palette.belly;
     ctx.beginPath();
-    ctx.moveTo(70, 42);
-    ctx.lineTo(101, 37);
-    ctx.lineTo(76, 52);
+    ctx.moveTo(71, 39);
+    ctx.lineTo(105, 36);
+    ctx.lineTo(77, 49);
     ctx.closePath();
     ctx.fill();
-    drawEye(73, 34);
-    ctx.fillStyle = palette.horn;
-    ctx.beginPath();
-    ctx.roundRect(16, 60, 24, 8, 4);
-    ctx.roundRect(53, 60, 24, 8, 4);
-    ctx.fill();
-    return true;
-  }
-
-  if (motif === "trend-ballerina") {
-    ctx.fillStyle = palette.body;
-    ctx.beginPath();
-    ctx.roundRect(30, 21, 42, 34, 9);
-    ctx.fill();
-    ctx.fillStyle = palette.belly;
-    ctx.beginPath();
-    ctx.moveTo(33, 22);
-    ctx.bezierCurveTo(38, 8, 65, 8, 70, 22);
-    ctx.closePath();
-    ctx.fill();
-    ctx.fillStyle = palette.wing;
-    ctx.beginPath();
-    ctx.moveTo(18, 49);
-    ctx.bezierCurveTo(35, 35, 71, 35, 88, 49);
-    ctx.lineTo(75, 62);
-    ctx.lineTo(32, 62);
-    ctx.closePath();
-    ctx.fill();
+    drawEye(73, 31);
     ctx.strokeStyle = palette.dark;
     ctx.lineWidth = 5;
     ctx.lineCap = "round";
     ctx.beginPath();
-    ctx.moveTo(73, 30);
-    ctx.bezierCurveTo(101, 27, 98, 48, 75, 44);
+    ctx.moveTo(27, 51);
+    ctx.lineTo(24 + legA, 63);
+    ctx.moveTo(45, 52);
+    ctx.lineTo(45, 66);
+    ctx.moveTo(63, 50);
+    ctx.lineTo(64 + legB, 63);
     ctx.stroke();
-    drawEye(58, 31);
     ctx.fillStyle = palette.horn;
     ctx.beginPath();
-    ctx.ellipse(25 + Math.sin(t) * 2, 67, 10, 4, -0.2, 0, Math.PI * 2);
-    ctx.ellipse(76 + Math.cos(t) * 2, 67, 10, 4, 0.2, 0, Math.PI * 2);
+    ctx.roundRect(14 + legA, 63, 24, 8, 4);
+    ctx.roundRect(34, 66, 24, 8, 4);
+    ctx.roundRect(54 + legB, 63, 24, 8, 4);
+    ctx.fill();
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(19 + legA, 67);
+    ctx.lineTo(31 + legA, 67);
+    ctx.moveTo(39, 70);
+    ctx.lineTo(51, 70);
+    ctx.moveTo(59 + legB, 67);
+    ctx.lineTo(72 + legB, 67);
+    ctx.stroke();
+    return true;
+  }
+
+  if (motif === "trend-ballerina") {
+    ctx.fillStyle = palette.belly;
+    ctx.beginPath();
+    ctx.roundRect(34, 18, 35, 26, 7);
+    ctx.fill();
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.ellipse(51, 18, 17, 7, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = palette.belly;
+    ctx.beginPath();
+    ctx.ellipse(51, 17, 12, 4, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = palette.belly;
+    ctx.lineWidth = 6;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(68, 27);
+    ctx.bezierCurveTo(88, 26, 88, 43, 69, 42);
+    ctx.stroke();
+    drawEye(46, 30);
+    drawEye(57, 30);
+    ctx.strokeStyle = palette.dark;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(46, 36);
+    ctx.quadraticCurveTo(52, 39, 58, 36);
+    ctx.stroke();
+    ctx.fillStyle = palette.body;
+    ctx.beginPath();
+    ctx.moveTo(51, 44);
+    ctx.lineTo(58, 52);
+    ctx.lineTo(44, 52);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = palette.wing;
+    ctx.beginPath();
+    ctx.moveTo(17, 52);
+    ctx.bezierCurveTo(34, 39, 78, 39, 96, 52);
+    ctx.lineTo(80, 63);
+    ctx.lineTo(32, 63);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = palette.dark;
+    ctx.lineWidth = 4;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(30, 49);
+    ctx.lineTo(7, 37);
+    ctx.moveTo(72, 49);
+    ctx.lineTo(96, 37);
+    ctx.moveTo(45, 53);
+    ctx.lineTo(35 + legA, 68);
+    ctx.moveTo(58, 53);
+    ctx.lineTo(73 + legB, 68);
+    ctx.stroke();
+    ctx.fillStyle = palette.horn;
+    ctx.beginPath();
+    ctx.ellipse(34 + legA, 68, 10, 4, -0.2, 0, Math.PI * 2);
+    ctx.ellipse(75 + legB, 68, 10, 4, 0.2, 0, Math.PI * 2);
     ctx.fill();
     return true;
   }
@@ -2435,100 +2528,173 @@ function drawTrendCreature(motif, palette, t, legA, legB) {
   }
 
   if (motif === "trend-bombardino") {
-    ctx.fillStyle = palette.body;
+    ctx.fillStyle = palette.wing;
     ctx.beginPath();
-    ctx.ellipse(38, 44, 39, 16, 0, 0, Math.PI * 2);
+    ctx.ellipse(38, 42, 39, 15, 0, 0, Math.PI * 2);
     ctx.fill();
+    ctx.fillStyle = palette.belly;
     ctx.beginPath();
-    ctx.moveTo(69, 37);
-    ctx.lineTo(96, 32);
-    ctx.lineTo(100, 45);
+    ctx.moveTo(28, 30);
+    ctx.lineTo(60, 10);
+    ctx.lineTo(72, 31);
+    ctx.closePath();
+    ctx.moveTo(30, 53);
+    ctx.lineTo(61, 68);
     ctx.lineTo(72, 51);
     ctx.closePath();
     ctx.fill();
     ctx.fillStyle = palette.dark;
     ctx.beginPath();
-    ctx.moveTo(15, 42);
-    ctx.lineTo(-6, 29);
-    ctx.lineTo(3, 50);
+    ctx.moveTo(9, 42);
+    ctx.lineTo(-10, 30);
+    ctx.lineTo(-8, 53);
     ctx.closePath();
     ctx.fill();
-    ctx.fillStyle = palette.wing;
+    ctx.fillStyle = palette.body;
     ctx.beginPath();
-    ctx.moveTo(36, 27);
-    ctx.lineTo(55, 12);
-    ctx.lineTo(66, 31);
+    ctx.moveTo(69, 34);
+    ctx.lineTo(100, 30);
+    ctx.lineTo(113, 40);
+    ctx.lineTo(100, 50);
+    ctx.lineTo(69, 48);
     ctx.closePath();
     ctx.fill();
-    ctx.strokeStyle = palette.belly;
-    ctx.lineWidth = 5;
+    ctx.strokeStyle = palette.dark;
+    ctx.lineWidth = 4;
     ctx.lineCap = "round";
     ctx.beginPath();
-    ctx.moveTo(82, 43);
-    ctx.lineTo(106, 43);
+    ctx.moveTo(81, 42);
+    ctx.lineTo(110, 42);
     ctx.stroke();
-    drawEye(82, 35);
-    drawLegs(palette.dark, 9);
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(88, 47);
+    ctx.lineTo(95, 50);
+    ctx.lineTo(102, 47);
+    ctx.lineTo(109, 50);
+    ctx.stroke();
+    drawEye(86, 35);
+    ctx.strokeStyle = palette.horn;
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(44, 57);
+    ctx.lineTo(42 + legA, 70);
+    ctx.moveTo(64, 55);
+    ctx.lineTo(69 + legB, 69);
+    ctx.stroke();
     return true;
   }
 
   if (motif === "trend-tung") {
     ctx.fillStyle = palette.body;
     ctx.beginPath();
-    ctx.roundRect(19, 25, 59, 36, 12);
+    ctx.roundRect(34, 13, 35, 48, 13);
     ctx.fill();
     ctx.fillStyle = palette.belly;
     ctx.beginPath();
-    ctx.ellipse(49, 25, 29, 10, 0, 0, Math.PI * 2);
+    ctx.ellipse(51, 13, 17, 7, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.fillStyle = palette.dark;
     ctx.beginPath();
-    ctx.ellipse(49, 61, 29, 8, 0, 0, Math.PI * 2);
+    ctx.ellipse(51, 61, 17, 7, 0, 0, Math.PI * 2);
     ctx.fill();
-    ctx.strokeStyle = palette.horn;
+    ctx.strokeStyle = palette.dark;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(42, 24);
+    ctx.lineTo(62, 24);
+    ctx.moveTo(41, 36);
+    ctx.lineTo(63, 36);
+    ctx.moveTo(44, 48);
+    ctx.lineTo(60, 48);
+    ctx.stroke();
+    drawEye(46, 31);
+    drawEye(57, 31);
+    ctx.strokeStyle = palette.dark;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(46, 41);
+    ctx.quadraticCurveTo(52, 44, 58, 41);
+    ctx.stroke();
+    ctx.strokeStyle = palette.dark;
     ctx.lineWidth = 6;
     ctx.lineCap = "round";
     ctx.beginPath();
-    ctx.moveTo(22, 31);
-    ctx.lineTo(2, 13);
-    ctx.moveTo(75, 31);
-    ctx.lineTo(100, 11);
+    ctx.moveTo(35, 36);
+    ctx.lineTo(18, 49);
+    ctx.moveTo(68, 35);
+    ctx.lineTo(88, 24);
     ctx.stroke();
-    ctx.fillStyle = palette.wing;
+    ctx.fillStyle = palette.horn;
     ctx.beginPath();
-    ctx.arc(0, 12, 6, 0, Math.PI * 2);
-    ctx.arc(102, 9, 6, 0, Math.PI * 2);
+    ctx.moveTo(84, 10);
+    ctx.lineTo(98, 8);
+    ctx.lineTo(95, 42);
+    ctx.lineTo(84, 43);
+    ctx.closePath();
     ctx.fill();
-    drawEye(59, 39);
+    ctx.strokeStyle = palette.dark;
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(43, 59);
+    ctx.lineTo(35 + legA, 69);
+    ctx.moveTo(61, 59);
+    ctx.lineTo(70 + legB, 69);
+    ctx.stroke();
     return true;
   }
 
   if (motif === "trend-cappuccino") {
-    ctx.fillStyle = palette.body;
+    ctx.fillStyle = palette.belly;
     ctx.beginPath();
-    ctx.roundRect(27, 27, 52, 35, 9);
+    ctx.roundRect(36, 18, 35, 26, 7);
+    ctx.fill();
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.ellipse(53, 18, 18, 7, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.fillStyle = palette.belly;
     ctx.beginPath();
-    ctx.moveTo(31, 27);
-    ctx.bezierCurveTo(38, 14, 68, 14, 75, 27);
-    ctx.closePath();
+    ctx.ellipse(53, 17, 13, 4, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.strokeStyle = palette.dark;
-    ctx.lineWidth = 7;
+    ctx.lineWidth = 6;
     ctx.lineCap = "round";
     ctx.beginPath();
-    ctx.moveTo(28, 34);
-    ctx.bezierCurveTo(7, 39, 13, 57, 31, 51);
+    ctx.moveTo(70, 27);
+    ctx.bezierCurveTo(88, 28, 88, 42, 71, 41);
     ctx.stroke();
     ctx.fillStyle = palette.dark;
-    ctx.fillRect(38, 34, 36, 15);
-    drawEye(59, 42, palette.eye);
-    ctx.fillStyle = palette.horn;
+    ctx.fillRect(41, 30, 28, 10);
+    drawEye(49, 35, palette.eye);
+    drawEye(60, 35, palette.eye);
+    ctx.fillStyle = palette.wing;
     ctx.beginPath();
-    ctx.moveTo(76, 25);
-    ctx.lineTo(103, 12);
-    ctx.lineTo(91, 34);
+    ctx.moveTo(38, 45);
+    ctx.lineTo(27, 61);
+    ctx.lineTo(82, 61);
+    ctx.lineTo(69, 45);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = palette.horn;
+    ctx.lineWidth = 5;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(31, 50);
+    ctx.lineTo(9, 37);
+    ctx.moveTo(79, 50);
+    ctx.lineTo(104, 37);
+    ctx.stroke();
+    ctx.fillStyle = palette.belly;
+    ctx.beginPath();
+    ctx.moveTo(7, 35);
+    ctx.lineTo(21, 34);
+    ctx.lineTo(13, 44);
+    ctx.closePath();
+    ctx.moveTo(101, 35);
+    ctx.lineTo(115, 34);
+    ctx.lineTo(107, 44);
     ctx.closePath();
     ctx.fill();
     drawLegs(palette.dark, 8);
@@ -2538,26 +2704,52 @@ function drawTrendCreature(motif, palette, t, legA, legB) {
   if (motif === "trend-lirili") {
     ctx.fillStyle = palette.body;
     ctx.beginPath();
-    ctx.ellipse(35, 44, 33, 18, 0, 0, Math.PI * 2);
+    ctx.roundRect(28, 22, 34, 36, 13);
+    ctx.fill();
+    ctx.strokeStyle = palette.horn;
+    ctx.lineWidth = 4;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(34, 20);
+    ctx.lineTo(34, 10);
+    ctx.moveTo(45, 20);
+    ctx.lineTo(46, 7);
+    ctx.moveTo(56, 21);
+    ctx.lineTo(56, 11);
+    ctx.stroke();
+    ctx.fillStyle = palette.wing;
+    ctx.beginPath();
+    ctx.ellipse(76, 35, 18, 16, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.beginPath();
-    ctx.arc(68, 32, 17, 0, Math.PI * 2);
+    ctx.ellipse(62, 35, 10, 13, 0, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillStyle = palette.horn;
+    ctx.strokeStyle = palette.wing;
+    ctx.lineWidth = 9;
     ctx.beginPath();
-    ctx.moveTo(58, 22);
-    ctx.bezierCurveTo(48, 4, 63, 2, 68, 22);
-    ctx.moveTo(73, 22);
-    ctx.bezierCurveTo(85, 4, 95, 8, 82, 26);
-    ctx.fill();
-    drawTail(palette.wing);
+    ctx.moveTo(90, 39);
+    ctx.bezierCurveTo(113, 42, 105, 63, 87, 53);
+    ctx.stroke();
+    drawEye(80, 31);
     ctx.fillStyle = palette.belly;
     ctx.beginPath();
-    ctx.arc(27, 31, 5, 0, Math.PI * 2);
-    ctx.arc(44, 53, 5, 0, Math.PI * 2);
+    ctx.arc(38, 34, 2.2, 0, Math.PI * 2);
+    ctx.arc(52, 44, 2.2, 0, Math.PI * 2);
     ctx.fill();
-    drawEye(74, 30);
-    drawLegs(palette.dark, 11);
+    ctx.strokeStyle = palette.dark;
+    ctx.lineWidth = 5;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(35, 58);
+    ctx.lineTo(29 + legA, 68);
+    ctx.moveTo(55, 58);
+    ctx.lineTo(64 + legB, 68);
+    ctx.stroke();
+    ctx.fillStyle = palette.horn;
+    ctx.beginPath();
+    ctx.ellipse(28 + legA, 68, 10, 4, 0, 0, Math.PI * 2);
+    ctx.ellipse(66 + legB, 68, 10, 4, 0, 0, Math.PI * 2);
+    ctx.fill();
     return true;
   }
 
@@ -2576,11 +2768,22 @@ function drawTrendCreature(motif, palette, t, legA, legB) {
     ctx.fillRect(30, 39, 52, 11);
     drawEye(45, 45, palette.eye);
     drawEye(64, 45, palette.eye);
+    ctx.fillStyle = palette.horn;
+    ctx.beginPath();
+    ctx.moveTo(27, 27);
+    ctx.lineTo(40, 11);
+    ctx.lineTo(53, 27);
+    ctx.closePath();
+    ctx.moveTo(61, 26);
+    ctx.lineTo(77, 12);
+    ctx.lineTo(85, 29);
+    ctx.closePath();
+    ctx.fill();
     ctx.fillStyle = palette.wing;
     ctx.beginPath();
     ctx.moveTo(18, 45);
-    ctx.lineTo(-6, 35);
-    ctx.lineTo(6, 56);
+    ctx.bezierCurveTo(-8, 37, -13, 57, 7, 63);
+    ctx.bezierCurveTo(1, 54, 7, 48, 18, 45);
     ctx.closePath();
     ctx.fill();
     ctx.fillStyle = palette.horn;
@@ -2590,6 +2793,12 @@ function drawTrendCreature(motif, palette, t, legA, legB) {
     ctx.lineTo(97, 56);
     ctx.closePath();
     ctx.fill();
+    ctx.strokeStyle = palette.belly;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(34, 53);
+    ctx.quadraticCurveTo(53, 58, 77, 53);
+    ctx.stroke();
     drawLegs(palette.dark, 8);
     return true;
   }
@@ -2597,33 +2806,58 @@ function drawTrendCreature(motif, palette, t, legA, legB) {
   if (motif === "trend-brbr") {
     ctx.fillStyle = palette.body;
     ctx.beginPath();
-    ctx.ellipse(37, 46, 34, 17, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(66, 37);
-    ctx.lineTo(87, 23);
-    ctx.lineTo(99, 39);
-    ctx.lineTo(81, 51);
-    ctx.closePath();
+    ctx.roundRect(34, 21, 35, 41, 13);
     ctx.fill();
     ctx.fillStyle = palette.wing;
     ctx.beginPath();
-    ctx.moveTo(13, 31);
-    ctx.lineTo(25, 7);
-    ctx.lineTo(34, 33);
-    ctx.lineTo(46, 5);
-    ctx.lineTo(54, 35);
-    ctx.lineTo(66, 12);
-    ctx.lineTo(73, 38);
-    ctx.closePath();
+    ctx.ellipse(51, 18, 21, 9, 0, 0, Math.PI * 2);
+    ctx.moveTo(36, 25);
+    ctx.bezierCurveTo(41, 9, 63, 9, 70, 25);
+    ctx.fill();
+    ctx.fillStyle = palette.dark;
+    ctx.beginPath();
+    ctx.arc(52, 35, 15, 0, Math.PI * 2);
     ctx.fill();
     ctx.fillStyle = palette.belly;
     ctx.beginPath();
-    ctx.arc(23, 48, 4, 0, Math.PI * 2);
-    ctx.arc(41, 42, 4, 0, Math.PI * 2);
+    ctx.ellipse(52, 40, 9, 7, 0, 0, Math.PI * 2);
     ctx.fill();
-    drawEye(84, 34);
-    drawLegs(palette.dark, 8);
+    drawEye(46, 32);
+    drawEye(58, 32);
+    ctx.fillStyle = "#f8fafc";
+    ctx.beginPath();
+    ctx.ellipse(52, 39, 3.5, 5, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = palette.belly;
+    ctx.beginPath();
+    ctx.moveTo(40, 8);
+    ctx.lineTo(66, 8);
+    ctx.lineTo(61, 18);
+    ctx.lineTo(45, 18);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = palette.wing;
+    ctx.lineWidth = 8;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(35, 39);
+    ctx.lineTo(12, 48);
+    ctx.moveTo(69, 39);
+    ctx.lineTo(94, 48);
+    ctx.stroke();
+    ctx.strokeStyle = palette.dark;
+    ctx.lineWidth = 6;
+    ctx.beginPath();
+    ctx.moveTo(43, 58);
+    ctx.lineTo(34 + legA, 68);
+    ctx.moveTo(61, 58);
+    ctx.lineTo(72 + legB, 68);
+    ctx.stroke();
+    ctx.fillStyle = palette.belly;
+    ctx.beginPath();
+    ctx.ellipse(32 + legA, 68, 13, 5, 0, 0, Math.PI * 2);
+    ctx.ellipse(75 + legB, 68, 13, 5, 0, 0, Math.PI * 2);
+    ctx.fill();
     return true;
   }
 
@@ -2632,29 +2866,50 @@ function drawTrendCreature(motif, palette, t, legA, legB) {
     ctx.beginPath();
     ctx.ellipse(35, 44, 35, 18, 0, 0, Math.PI * 2);
     ctx.fill();
-    ctx.beginPath();
-    ctx.arc(68, 32, 17, 0, Math.PI * 2);
-    ctx.fill();
     ctx.fillStyle = palette.wing;
+    ctx.beginPath();
+    ctx.moveTo(0, 45);
+    ctx.lineTo(-19, 29);
+    ctx.lineTo(-15, 61);
+    ctx.closePath();
+    ctx.fill();
     ctx.beginPath();
     ctx.moveTo(20, 34);
     ctx.bezierCurveTo(31, 17, 60, 17, 63, 42);
     ctx.bezierCurveTo(48, 40, 36, 49, 25, 63);
     ctx.closePath();
     ctx.fill();
-    ctx.strokeStyle = palette.horn;
-    ctx.lineWidth = 5;
-    ctx.lineCap = "round";
+    ctx.fillStyle = palette.body;
     ctx.beginPath();
-    ctx.moveTo(18, 24);
-    ctx.lineTo(2, 5);
-    ctx.moveTo(27, 22);
-    ctx.lineTo(28, 3);
-    ctx.moveTo(36, 24);
-    ctx.lineTo(56, 6);
-    ctx.stroke();
-    drawTail(palette.dark);
+    ctx.arc(68, 32, 17, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = palette.dark;
+    ctx.beginPath();
+    ctx.moveTo(56, 23);
+    ctx.lineTo(62, 7);
+    ctx.lineTo(70, 24);
+    ctx.closePath();
+    ctx.moveTo(73, 24);
+    ctx.lineTo(85, 9);
+    ctx.lineTo(84, 30);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = palette.belly;
+    ctx.beginPath();
+    ctx.moveTo(78, 42);
+    ctx.lineTo(104, 41);
+    ctx.lineTo(82, 51);
+    ctx.closePath();
+    ctx.fill();
     drawEye(74, 30);
+    ctx.strokeStyle = palette.dark;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(75, 38);
+    ctx.lineTo(91, 36);
+    ctx.moveTo(75, 42);
+    ctx.lineTo(91, 45);
+    ctx.stroke();
     drawLegs(palette.dark, 10);
     return true;
   }
