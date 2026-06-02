@@ -52,10 +52,10 @@ button {
 .topbar {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: stretch;
   gap: 18px;
-  min-height: 58px;
-  padding: 10px 0 14px;
+  min-height: 82px;
+  padding: 12px 0 18px;
 }
 
 .brand {
@@ -114,7 +114,8 @@ h1 {
   align-items: end;
   gap: 8px;
   flex-wrap: wrap;
-  justify-content: flex-end;
+  justify-content: stretch;
+  width: 100%;
 }
 
 .field {
@@ -160,7 +161,7 @@ h1 {
 }
 
 .compact input {
-  width: 260px;
+  width: 320px;
   max-width: 100%;
 }
 
@@ -178,14 +179,14 @@ h1 {
 }
 
 .icon-button {
-  width: 40px;
-  height: 40px;
+  width: 52px;
+  height: 52px;
   border-radius: 8px;
   font-weight: 900;
 }
 
 .rename-button {
-  min-height: 40px;
+  min-height: 52px;
   border: 1px solid #bac5c1;
   border-radius: 8px;
   background: #ffffff;
@@ -221,7 +222,7 @@ h1 {
 .topbar-action {
   display: grid;
   place-items: center;
-  min-height: 40px;
+  min-height: 52px;
   border: 1px solid #1d2732;
   border-radius: 8px;
   background: var(--button);
@@ -229,6 +230,7 @@ h1 {
   padding: 5px 12px;
   font-weight: 950;
   white-space: nowrap;
+  flex: 1 1 180px;
   transition:
     transform 120ms ease,
     background 120ms ease,

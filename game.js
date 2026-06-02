@@ -3237,8 +3237,13 @@ function resizeCanvas() {
 function isTypingTarget(target) {
   return Boolean(
     target &&
+      typeof target.matches === "function" &&
       (target.matches("input, textarea, select") || target.isContentEditable)
   );
+}
+
+function isJumpKey(event) {
+  return event.code === "Space" || event.code === "ArrowUp" || event.code === "KeyW" || event.key.toLowerCase() === "w";
 }
 
 function isAdminRevealKey(event) {
@@ -3351,7 +3356,7 @@ document.addEventListener("keydown", (event) => {
 
   if (handleAdminRevealKeydown(event)) return;
 
-  if (event.code === "Space" || event.code === "ArrowUp") {
+  if (isJumpKey(event)) {
     event.preventDefault();
     jumpOrStart();
   }
