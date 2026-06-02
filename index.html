@@ -16,6 +16,12 @@
           </label>
           <button id="savePlayerBtn" class="icon-button" type="button" title="שמירה" aria-label="שמירה">✓</button>
           <button id="renameCurrentBtn" class="rename-button" type="button"><span class="bilingual-label"><span>שנה שם</span><span class="label-en">Rename</span></span></button>
+          <button id="openShopBtn" class="topbar-action" type="button" aria-haspopup="dialog">
+            <span class="bilingual-label"><span>חנות סקינים</span><span class="label-en">Skin Shop</span></span>
+          </button>
+          <button id="openLeaderboardBtn" class="topbar-action" type="button" aria-haspopup="dialog">
+            <span class="bilingual-label"><span>לוח שיאים</span><span class="label-en">Leaderboard</span></span>
+          </button>
           <button id="openSettingsBtn" class="icon-button settings-button" type="button" title="הגדרות" aria-label="הגדרות" aria-haspopup="dialog">⚙</button>
         </div>
       </header>
@@ -48,34 +54,6 @@
         </section>
 
         <section class="workspace">
-          <section class="panel leaderboard-panel" aria-labelledby="leaderboardTitle">
-            <div class="panel-head">
-              <h2 id="leaderboardTitle"><span class="bilingual-label"><span>לוח שיאים</span><span class="label-en">Leaderboard</span></span></h2>
-              <span id="leaderboardCount">0</span>
-            </div>
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th><span class="bilingual-label"><span>מקום</span><span class="label-en">Rank</span></span></th>
-                    <th><span class="bilingual-label"><span>שם</span><span class="label-en">Name</span></span></th>
-                    <th><span class="bilingual-label"><span>שיא משחק</span><span class="label-en">Best Run</span></span></th>
-                    <th><span class="bilingual-label"><span>נקודות חנות</span><span class="label-en">Shop Points</span></span></th>
-                    <th><span class="bilingual-label"><span>סקין</span><span class="label-en">Skin</span></span></th>
-                    <th><span class="bilingual-label"><span>דיווח</span><span class="label-en">Report</span></span></th>
-                  </tr>
-                </thead>
-                <tbody id="leaderboardBody"></tbody>
-              </table>
-            </div>
-          </section>
-
-          <section class="panel shop-launch-panel" aria-label="חנות סקינים">
-            <button id="openShopBtn" class="shop-launch-button" type="button" aria-haspopup="dialog">
-              <span class="bilingual-label"><span>חנות סקינים</span><span class="label-en">Skin Shop</span></span>
-            </button>
-          </section>
-
           <section id="adminPanel" class="panel admin-panel hidden" aria-labelledby="adminTitle">
             <div class="panel-head">
               <h2 id="adminTitle">אדמין</h2>
@@ -149,6 +127,33 @@
         </div>
 
         <div id="skinGrid" class="skin-grid"></div>
+      </section>
+    </div>
+
+    <div id="leaderboardModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="leaderboardTitle">
+      <section class="shop-modal-window leaderboard-modal-window" aria-labelledby="leaderboardTitle">
+        <div class="panel-head">
+          <h2 id="leaderboardTitle"><span class="bilingual-label"><span>לוח שיאים</span><span class="label-en">Leaderboard</span></span></h2>
+          <div class="modal-head-actions">
+            <span id="leaderboardCount">0</span>
+            <button id="closeLeaderboardBtn" class="close-shop-button" type="button" title="סגירה" aria-label="סגירה">×</button>
+          </div>
+        </div>
+        <div class="table-wrap leaderboard-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th><span class="bilingual-label"><span>מקום</span><span class="label-en">Rank</span></span></th>
+                <th><span class="bilingual-label"><span>שם</span><span class="label-en">Name</span></span></th>
+                <th><span class="bilingual-label"><span>שיא משחק</span><span class="label-en">Best Run</span></span></th>
+                <th><span class="bilingual-label"><span>נקודות חנות</span><span class="label-en">Shop Points</span></span></th>
+                <th><span class="bilingual-label"><span>סקין</span><span class="label-en">Skin</span></span></th>
+                <th><span class="bilingual-label"><span>דיווח</span><span class="label-en">Report</span></span></th>
+              </tr>
+            </thead>
+            <tbody id="leaderboardBody"></tbody>
+          </table>
+        </div>
       </section>
     </div>
 

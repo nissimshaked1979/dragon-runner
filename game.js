@@ -2,7 +2,8 @@ const STORAGE_KEY = "dragonRunnerStateV1";
 const ADMIN_PIN = "גלעדשקדהמלך20";
 const ADMIN_REVEAL_HOLD_MS = 10000;
 const SCORE_GAIN_PER_TICK = 0.25;
-const SHOP_POINTS_GRACE_TICKS = (40 * 1000) / 16.67;
+const SHOP_POINTS_GRACE_SCORE = 42;
+const SKIN_VISUAL_SCALE = 1.12;
 
 const SKINS = [
   {
@@ -405,6 +406,9 @@ const elements = {
   gameStatus: document.querySelector("#gameStatus"),
   leaderboardBody: document.querySelector("#leaderboardBody"),
   leaderboardCount: document.querySelector("#leaderboardCount"),
+  openLeaderboardBtn: document.querySelector("#openLeaderboardBtn"),
+  leaderboardModal: document.querySelector("#leaderboardModal"),
+  closeLeaderboardBtn: document.querySelector("#closeLeaderboardBtn"),
   activeSkinName: document.querySelector("#activeSkinName"),
   baseColorSwatches: document.querySelector("#baseColorSwatches"),
   skinGrid: document.querySelector("#skinGrid"),
@@ -488,7 +492,7 @@ function loadState() {
     const parsed = JSON.parse(raw);
     const merged = {
       currentPlayer: normalizeName(parsed.currentPlayer || "שחקן"),
-      admin: Boolean(parsed.admin),
+      admin: false,
       jumpSoundEnabled: parsed.jumpSoundEnabled !== false,
       players: parsed.players && typeof parsed.players === "object" ? parsed.players : {},
       playerReports: Array.isArray(parsed.playerReports) ? parsed.playerReports : [],
@@ -543,7 +547,11 @@ function withDefaultPlayer(nextState) {
 
 function saveState() {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    const persistedState = {
+      ...state,
+      admin: false,
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(persistedState));
   } catch {
     setStatus("שמירה מקומית לא זמינה", true, true, "Local save unavailable");
   }
@@ -1307,6 +1315,17 @@ function closeShop() {
   elements.openShopBtn.focus();
 }
 
+function openLeaderboard() {
+  renderAll();
+  elements.leaderboardModal.classList.remove("hidden");
+  elements.closeLeaderboardBtn.focus();
+}
+
+function closeLeaderboard() {
+  elements.leaderboardModal.classList.add("hidden");
+  elements.openLeaderboardBtn.focus();
+}
+
 function openSettings() {
   renderAll();
   elements.settingsModal.classList.remove("hidden");
@@ -1601,14 +1620,14 @@ function tick(time) {
 
 function updateGame(dt) {
   const scale = dt / 16.67;
-  const previousPace = game.pace;
+  const previousScore = game.score;
   const scoreDelta = scale * SCORE_GAIN_PER_TICK;
   game.score += scoreDelta;
   game.pace += scale;
-  if (previousPace >= SHOP_POINTS_GRACE_TICKS) {
+  if (previousScore >= SHOP_POINTS_GRACE_SCORE) {
     game.shopScore += scoreDelta;
-  } else if (game.pace > SHOP_POINTS_GRACE_TICKS) {
-    game.shopScore += (game.pace - SHOP_POINTS_GRACE_TICKS) * SCORE_GAIN_PER_TICK;
+  } else if (game.score > SHOP_POINTS_GRACE_SCORE) {
+    game.shopScore += game.score - SHOP_POINTS_GRACE_SCORE;
   }
   game.speed = Math.min(15, 7 + game.pace / 390);
   elements.scoreValue.textContent = Math.floor(game.score).toString();
@@ -1835,6 +1854,9 @@ function drawDragon() {
 
   ctx.save();
   ctx.translate(dragon.x, dragon.y);
+  ctx.translate(dragon.width / 2, dragon.height);
+  ctx.scale(SKIN_VISUAL_SCALE, SKIN_VISUAL_SCALE);
+  ctx.translate(-dragon.width / 2, -dragon.height);
 
   if (skin.motif !== "dragon") {
     drawAnimalCreature(skin.motif, palette, t, legA, legB);
@@ -3272,6 +3294,11 @@ elements.closeShopBtn.addEventListener("click", closeShop);
 elements.shopModal.addEventListener("click", (event) => {
   if (event.target === elements.shopModal) closeShop();
 });
+elements.openLeaderboardBtn.addEventListener("click", openLeaderboard);
+elements.closeLeaderboardBtn.addEventListener("click", closeLeaderboard);
+elements.leaderboardModal.addEventListener("click", (event) => {
+  if (event.target === elements.leaderboardModal) closeLeaderboard();
+});
 elements.openSettingsBtn.addEventListener("click", openSettings);
 elements.closeSettingsBtn.addEventListener("click", closeSettings);
 elements.settingsModal.addEventListener("click", (event) => {
@@ -3303,6 +3330,13 @@ document.addEventListener("keydown", (event) => {
     if (event.code === "Escape") {
       event.preventDefault();
       closeShop();
+    }
+    return;
+  }
+  if (!elements.leaderboardModal.classList.contains("hidden")) {
+    if (event.code === "Escape") {
+      event.preventDefault();
+      closeLeaderboard();
     }
     return;
   }

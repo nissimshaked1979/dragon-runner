@@ -204,6 +204,7 @@ h1 {
 
 .icon-button:hover,
 .rename-button:hover,
+.topbar-action:hover,
 .settings-button:hover,
 .round-button:hover,
 .primary-action:hover,
@@ -215,6 +216,27 @@ h1 {
 
 .settings-button {
   font-size: 1.1rem;
+}
+
+.topbar-action {
+  display: grid;
+  place-items: center;
+  min-height: 40px;
+  border: 1px solid #1d2732;
+  border-radius: 8px;
+  background: var(--button);
+  color: #ffffff;
+  padding: 5px 12px;
+  font-weight: 950;
+  white-space: nowrap;
+  transition:
+    transform 120ms ease,
+    background 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.topbar-action .bilingual-label .label-en {
+  color: rgba(255, 255, 255, 0.76);
 }
 
 .admin-switch.active {
@@ -302,38 +324,10 @@ h1 {
 
 .workspace {
   display: grid;
-  grid-template-columns: 1.2fr 1.4fr 1fr;
+  grid-template-columns: 1fr;
   gap: 16px;
   margin-top: 16px;
   align-items: start;
-}
-
-.shop-launch-panel {
-  min-height: 210px;
-  padding: 12px;
-}
-
-.shop-launch-button {
-  display: grid;
-  place-items: center;
-  width: 100%;
-  min-height: 186px;
-  border: 2px solid #1d2732;
-  border-radius: 8px;
-  background:
-    linear-gradient(135deg, rgba(31, 157, 106, 0.18), rgba(244, 196, 91, 0.28)),
-    #ffffff;
-  color: var(--ink);
-  font-size: 1.45rem;
-  font-weight: 950;
-  box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.55);
-}
-
-.shop-launch-button:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    inset 0 0 0 4px rgba(255, 255, 255, 0.7),
-    0 12px 24px rgba(25, 32, 42, 0.12);
 }
 
 .panel {
@@ -370,13 +364,8 @@ h1 {
   font-weight: 800;
 }
 
-.hud .bilingual-label .label-en,
-.shop-launch-button .bilingual-label .label-en {
+.hud .bilingual-label .label-en {
   color: rgba(255, 255, 255, 0.76);
-}
-
-.shop-launch-button .bilingual-label .label-en {
-  color: #587267;
 }
 
 .modal-backdrop {
@@ -407,6 +396,11 @@ h1 {
   width: min(540px, calc(100% - 18px));
   min-height: auto;
   max-height: min(520px, calc(100vh - 36px));
+}
+
+.leaderboard-modal-window {
+  min-height: auto;
+  max-height: min(760px, calc(100vh - 36px));
 }
 
 .shop-modal-window > .panel-head {
@@ -517,6 +511,10 @@ h1 {
   overflow-x: auto;
 }
 
+.leaderboard-table-wrap {
+  padding: 0 14px 14px;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -602,7 +600,7 @@ tbody tr.current {
   display: grid;
   gap: 10px;
   min-width: 0;
-  min-height: 170px;
+  min-height: 196px;
   border: 1px solid #dce3df;
   border-radius: 8px;
   background: #ffffff;
@@ -612,7 +610,7 @@ tbody tr.current {
 .skin-preview {
   position: relative;
   overflow: hidden;
-  height: 72px;
+  height: 96px;
   border-radius: 8px;
   border: 1px solid #dbe2dd;
   background:
@@ -624,8 +622,8 @@ tbody tr.current {
   position: absolute;
   inset-inline-start: 50%;
   top: 50%;
-  width: 104px;
-  height: 58px;
+  width: 132px;
+  height: 74px;
   transform: translate(-50%, -50%);
 }
 
@@ -776,6 +774,10 @@ tbody tr.current {
 
   .compact {
     flex: 1 1 180px;
+  }
+
+  .topbar-action {
+    flex: 1 1 130px;
   }
 
   .compact input {
