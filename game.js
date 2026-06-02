@@ -28,7 +28,7 @@ const SKINS = [
     englishName: "Rabbit",
     tier: "מתחיל",
     englishTier: "Beginner",
-    cost: 500,
+    cost: 2250,
     motif: "rabbit",
     palette: {
       body: "#f2f4f7",
@@ -45,7 +45,7 @@ const SKINS = [
     englishName: "Cat",
     tier: "מתקדם",
     englishTier: "Advanced",
-    cost: 1500,
+    cost: 6750,
     motif: "cat",
     palette: {
       body: "#f59e0b",
@@ -62,7 +62,7 @@ const SKINS = [
     englishName: "Fox",
     tier: "נדיר",
     englishTier: "Rare",
-    cost: 3000,
+    cost: 13500,
     motif: "fox",
     palette: {
       body: "#f97316",
@@ -79,7 +79,7 @@ const SKINS = [
     englishName: "Turtle",
     tier: "אפי",
     englishTier: "Epic",
-    cost: 5000,
+    cost: 22500,
     motif: "turtle",
     palette: {
       body: "#22c55e",
@@ -96,7 +96,7 @@ const SKINS = [
     englishName: "Parrot",
     tier: "אגדי",
     englishTier: "Legendary",
-    cost: 7500,
+    cost: 33750,
     motif: "parrot",
     palette: {
       body: "#16a34a",
@@ -113,7 +113,7 @@ const SKINS = [
     englishName: "Penguin",
     tier: "מיוחד",
     englishTier: "Special",
-    cost: 10000,
+    cost: 45000,
     motif: "penguin",
     palette: {
       body: "#111827",
@@ -130,7 +130,7 @@ const SKINS = [
     englishName: "Wolf",
     tier: "עילית",
     englishTier: "Elite",
-    cost: 13000,
+    cost: 58500,
     motif: "wolf",
     palette: {
       body: "#64748b",
@@ -147,7 +147,7 @@ const SKINS = [
     englishName: "Tiger",
     tier: "טורף",
     englishTier: "Predator",
-    cost: 16000,
+    cost: 72000,
     motif: "tiger",
     palette: {
       body: "#f59e0b",
@@ -164,7 +164,7 @@ const SKINS = [
     englishName: "Horse",
     tier: "מהיר",
     englishTier: "Fast",
-    cost: 19000,
+    cost: 85500,
     motif: "horse",
     palette: {
       body: "#8b5e34",
@@ -181,7 +181,7 @@ const SKINS = [
     englishName: "Elephant",
     tier: "כבד",
     englishTier: "Heavy",
-    cost: 22000,
+    cost: 99000,
     motif: "elephant",
     palette: {
       body: "#94a3b8",
@@ -198,7 +198,7 @@ const SKINS = [
     englishName: "Agama",
     tier: "הכי יקר",
     englishTier: "Most Expensive",
-    cost: 30000,
+    cost: 135000,
     motif: "agama",
     palette: {
       body: "#eab308",
@@ -206,6 +206,176 @@ const SKINS = [
       wing: "#fb7185",
       belly: "#fef3c7",
       horn: "#dc2626",
+      eye: "#111827",
+    },
+  },
+  {
+    id: "trend-tralalero",
+    name: "טרללו טרלה",
+    englishName: "Tralalero Tralala",
+    tier: "טרנד נדיר",
+    englishTier: "Rare Trend",
+    cost: 180000,
+    motif: "trend-tralalero",
+    palette: {
+      body: "#38bdf8",
+      dark: "#075985",
+      wing: "#f8fafc",
+      belly: "#dbeafe",
+      horn: "#ef4444",
+      eye: "#020617",
+    },
+  },
+  {
+    id: "trend-ballerina",
+    name: "בלרינה קפוצ'יני",
+    englishName: "Ballerina Cappuccina",
+    tier: "טרנד קפה",
+    englishTier: "Coffee Trend",
+    cost: 200000,
+    motif: "trend-ballerina",
+    palette: {
+      body: "#c08457",
+      dark: "#5c2e12",
+      wing: "#f9a8d4",
+      belly: "#fff7ed",
+      horn: "#fef3c7",
+      eye: "#111827",
+    },
+  },
+  {
+    id: "trend-sixty-seven",
+    name: "67",
+    englishName: "67",
+    tier: "טרנד מספרים",
+    englishTier: "Number Trend",
+    cost: 210000,
+    motif: "trend-sixty-seven",
+    palette: {
+      body: "#8b5cf6",
+      dark: "#312e81",
+      wing: "#22d3ee",
+      belly: "#fef08a",
+      horn: "#fb7185",
+      eye: "#020617",
+    },
+  },
+  {
+    id: "trend-bombardino",
+    name: "בומברדינו קרוקודילו",
+    englishName: "Bombardino Crocodilo",
+    tier: "טרנד אגדי",
+    englishTier: "Legendary Trend",
+    cost: 230000,
+    motif: "trend-bombardino",
+    palette: {
+      body: "#84cc16",
+      dark: "#365314",
+      wing: "#fb923c",
+      belly: "#fef3c7",
+      horn: "#ef4444",
+      eye: "#020617",
+    },
+  },
+  {
+    id: "trend-tung",
+    name: "טונג טונג סהור",
+    englishName: "Tung Tung Sahur",
+    tier: "טרנד תופים",
+    englishTier: "Drum Trend",
+    cost: 245000,
+    motif: "trend-tung",
+    palette: {
+      body: "#b45309",
+      dark: "#451a03",
+      wing: "#facc15",
+      belly: "#fed7aa",
+      horn: "#eab308",
+      eye: "#111827",
+    },
+  },
+  {
+    id: "trend-cappuccino",
+    name: "קפוצ'ינו אססינו",
+    englishName: "Cappuccino Assassino",
+    tier: "טרנד סודי",
+    englishTier: "Secret Trend",
+    cost: 260000,
+    motif: "trend-cappuccino",
+    palette: {
+      body: "#92400e",
+      dark: "#1f2937",
+      wing: "#0f172a",
+      belly: "#ffedd5",
+      horn: "#f8fafc",
+      eye: "#fef3c7",
+    },
+  },
+  {
+    id: "trend-lirili",
+    name: "לירילי לרילה",
+    englishName: "Lirili Larila",
+    tier: "טרנד חלומי",
+    englishTier: "Dream Trend",
+    cost: 275000,
+    motif: "trend-lirili",
+    palette: {
+      body: "#fb7185",
+      dark: "#9f1239",
+      wing: "#a7f3d0",
+      belly: "#fff1f2",
+      horn: "#facc15",
+      eye: "#111827",
+    },
+  },
+  {
+    id: "trend-bobrito",
+    name: "בובריטו בנדיטו",
+    englishName: "Bobrito Bandito",
+    tier: "טרנד בנדיט",
+    englishTier: "Bandit Trend",
+    cost: 290000,
+    motif: "trend-bobrito",
+    palette: {
+      body: "#a16207",
+      dark: "#292524",
+      wing: "#f97316",
+      belly: "#fef3c7",
+      horn: "#111827",
+      eye: "#f8fafc",
+    },
+  },
+  {
+    id: "trend-brbr",
+    name: "ברר ברר פטפין",
+    englishName: "Brr Brr Patapim",
+    tier: "טרנד קרח",
+    englishTier: "Ice Trend",
+    cost: 305000,
+    motif: "trend-brbr",
+    palette: {
+      body: "#67e8f9",
+      dark: "#0e7490",
+      wing: "#e0f2fe",
+      belly: "#f8fafc",
+      horn: "#22d3ee",
+      eye: "#0f172a",
+    },
+  },
+  {
+    id: "trend-trippi",
+    name: "טריפי טרופי",
+    englishName: "Trippi Troppi",
+    tier: "טרנד עליון",
+    englishTier: "Top Trend",
+    cost: 320000,
+    motif: "trend-trippi",
+    palette: {
+      body: "#14b8a6",
+      dark: "#115e59",
+      wing: "#f0abfc",
+      belly: "#ccfbf1",
+      horn: "#fde047",
       eye: "#111827",
     },
   },
@@ -909,7 +1079,146 @@ function creaturePreviewSvg(palette, motif) {
     `);
   }
 
+  const trendPreview = trendPreviewSvg(palette, motif);
+  if (trendPreview) return trendPreview;
+
   return dragonPreviewSvg(palette, motif);
+}
+
+function trendPreviewSvg(palette, motif) {
+  const svg = (content) => `<svg viewBox="0 0 130 72" role="img" focusable="false">${content}</svg>`;
+
+  if (motif === "trend-tralalero") {
+    return svg(`
+      <path d="M16 45 C35 18 86 18 111 42 C83 62 43 64 16 45 Z" fill="${palette.body}" />
+      <path d="M54 23 L66 4 L72 29 Z" fill="${palette.dark}" />
+      <path d="M94 42 L122 38 L98 52 Z" fill="${palette.belly}" />
+      <circle cx="94" cy="34" r="3" fill="${palette.eye}" />
+      <rect x="36" y="58" width="23" height="9" rx="4" fill="${palette.horn}" />
+      <rect x="70" y="58" width="23" height="9" rx="4" fill="${palette.horn}" />
+      <path d="M18 44 C8 38 8 32 19 29" stroke="${palette.dark}" stroke-width="5" fill="none" stroke-linecap="round" />
+    `);
+  }
+
+  if (motif === "trend-ballerina") {
+    return svg(`
+      <ellipse cx="63" cy="39" rx="24" ry="23" fill="${palette.body}" />
+      <path d="M39 47 C51 35 79 35 94 47 L82 61 L50 61 Z" fill="${palette.wing}" />
+      <rect x="47" y="18" width="42" height="31" rx="9" fill="${palette.body}" />
+      <path d="M49 18 H86 C83 8 55 8 49 18 Z" fill="${palette.belly}" />
+      <circle cx="72" cy="28" r="3" fill="${palette.eye}" />
+      <path d="M50 62 C44 69 36 68 35 63 C42 61 47 60 50 62 Z" fill="${palette.horn}" />
+      <path d="M82 62 C90 69 98 67 97 62 C89 61 85 60 82 62 Z" fill="${palette.horn}" />
+      <path d="M88 27 C108 26 108 43 89 42" stroke="${palette.dark}" stroke-width="5" fill="none" stroke-linecap="round" />
+    `);
+  }
+
+  if (motif === "trend-sixty-seven") {
+    return svg(`
+      <path d="M65 6 L80 28 L106 30 L87 47 L92 66 L65 55 L38 66 L43 47 L24 30 L50 28 Z" fill="${palette.body}" />
+      <circle cx="65" cy="39" r="25" fill="${palette.dark}" opacity="0.28" />
+      <text x="65" y="48" text-anchor="middle" font-size="31" font-weight="900" fill="${palette.belly}">67</text>
+      <path d="M25 55 L5 63 L19 44 Z" fill="${palette.wing}" />
+      <path d="M105 54 L124 61 L111 43 Z" fill="${palette.horn}" />
+    `);
+  }
+
+  if (motif === "trend-bombardino") {
+    return svg(`
+      <ellipse cx="58" cy="45" rx="41" ry="16" fill="${palette.body}" />
+      <path d="M89 37 L113 32 L117 44 L92 50 Z" fill="${palette.body}" />
+      <path d="M34 39 L16 29 L24 49 Z" fill="${palette.dark}" />
+      <path d="M58 25 L74 13 L83 31 Z" fill="${palette.wing}" />
+      <path d="M94 42 H121" stroke="${palette.belly}" stroke-width="5" stroke-linecap="round" />
+      <circle cx="101" cy="35" r="3" fill="${palette.eye}" />
+      <rect x="37" y="58" width="13" height="9" rx="4" fill="${palette.dark}" />
+      <rect x="70" y="58" width="13" height="9" rx="4" fill="${palette.dark}" />
+      <circle cx="49" cy="45" r="4" fill="${palette.dark}" />
+      <circle cx="61" cy="45" r="4" fill="${palette.dark}" />
+    `);
+  }
+
+  if (motif === "trend-tung") {
+    return svg(`
+      <rect x="33" y="25" width="59" height="36" rx="12" fill="${palette.body}" />
+      <ellipse cx="62" cy="25" rx="29" ry="10" fill="${palette.belly}" />
+      <ellipse cx="62" cy="61" rx="29" ry="8" fill="${palette.dark}" />
+      <path d="M35 31 L18 15 M84 31 L106 12" stroke="${palette.horn}" stroke-width="6" stroke-linecap="round" />
+      <circle cx="16" cy="13" r="6" fill="${palette.wing}" />
+      <circle cx="108" cy="10" r="6" fill="${palette.wing}" />
+      <circle cx="72" cy="39" r="3" fill="${palette.eye}" />
+      <path d="M41 45 H84" stroke="${palette.dark}" stroke-width="4" stroke-dasharray="6 5" />
+    `);
+  }
+
+  if (motif === "trend-cappuccino") {
+    return svg(`
+      <rect x="38" y="27" width="52" height="35" rx="9" fill="${palette.body}" />
+      <path d="M42 27 H86 C82 14 48 14 42 27 Z" fill="${palette.belly}" />
+      <path d="M32 31 C17 40 25 56 39 50" stroke="${palette.dark}" stroke-width="7" fill="none" stroke-linecap="round" />
+      <path d="M49 34 H83 V50 H49 Z" fill="${palette.dark}" opacity="0.9" />
+      <circle cx="70" cy="42" r="3" fill="${palette.eye}" />
+      <path d="M84 25 L106 13 L96 33 Z" fill="${palette.horn}" />
+      <path d="M88 51 L113 62" stroke="${palette.wing}" stroke-width="5" stroke-linecap="round" />
+    `);
+  }
+
+  if (motif === "trend-lirili") {
+    return svg(`
+      <ellipse cx="58" cy="45" rx="33" ry="18" fill="${palette.body}" />
+      <circle cx="91" cy="34" r="17" fill="${palette.body}" />
+      <path d="M81 23 C75 6 84 3 91 21 Z" fill="${palette.horn}" />
+      <path d="M98 23 C103 5 112 7 106 25 Z" fill="${palette.horn}" />
+      <path d="M30 44 C12 22 4 58 29 56" stroke="${palette.wing}" stroke-width="8" fill="none" stroke-linecap="round" />
+      <circle cx="96" cy="32" r="3" fill="${palette.eye}" />
+      <circle cx="47" cy="30" r="5" fill="${palette.belly}" />
+      <circle cx="60" cy="53" r="5" fill="${palette.belly}" />
+      <path d="M99 44 L118 43 L101 51 Z" fill="${palette.belly}" />
+    `);
+  }
+
+  if (motif === "trend-bobrito") {
+    return svg(`
+      <rect x="30" y="25" width="68" height="36" rx="18" fill="${palette.body}" />
+      <path d="M37 31 C49 16 76 16 91 32" fill="${palette.belly}" />
+      <path d="M43 39 H91 V50 H43 Z" fill="${palette.dark}" />
+      <circle cx="59" cy="45" r="3" fill="${palette.eye}" />
+      <circle cx="78" cy="45" r="3" fill="${palette.eye}" />
+      <path d="M27 45 L6 35 L17 56 Z" fill="${palette.wing}" />
+      <path d="M96 43 L119 34 L108 56 Z" fill="${palette.horn}" />
+      <rect x="45" y="58" width="12" height="8" rx="4" fill="${palette.dark}" />
+      <rect x="76" y="58" width="12" height="8" rx="4" fill="${palette.dark}" />
+    `);
+  }
+
+  if (motif === "trend-brbr") {
+    return svg(`
+      <ellipse cx="60" cy="47" rx="34" ry="17" fill="${palette.body}" />
+      <path d="M88 37 L105 23 L116 39 L99 50 Z" fill="${palette.body}" />
+      <path d="M35 30 L45 7 L53 32 L63 5 L70 34 L80 12 L86 38" fill="${palette.wing}" />
+      <path d="M22 46 L4 39 L13 55 Z" fill="${palette.dark}" />
+      <circle cx="101" cy="34" r="3" fill="${palette.eye}" />
+      <path d="M95 45 L120 45" stroke="${palette.belly}" stroke-width="4" stroke-linecap="round" />
+      <circle cx="42" cy="48" r="4" fill="${palette.belly}" />
+      <circle cx="57" cy="42" r="4" fill="${palette.belly}" />
+    `);
+  }
+
+  if (motif === "trend-trippi") {
+    return svg(`
+      <ellipse cx="57" cy="45" rx="35" ry="18" fill="${palette.body}" />
+      <circle cx="92" cy="34" r="17" fill="${palette.body}" />
+      <path d="M42 34 C51 17 73 18 83 41 C66 39 54 48 44 61 Z" fill="${palette.wing}" />
+      <path d="M35 22 L21 5 M41 22 L43 3 M48 24 L65 6" stroke="${palette.horn}" stroke-width="5" stroke-linecap="round" />
+      <path d="M31 44 C6 30 5 64 31 56" fill="${palette.dark}" />
+      <circle cx="98" cy="32" r="3" fill="${palette.eye}" />
+      <path d="M101 42 L119 40 L103 50 Z" fill="${palette.belly}" />
+      <rect x="43" y="58" width="11" height="9" rx="4" fill="${palette.dark}" />
+      <rect x="74" y="58" width="11" height="9" rx="4" fill="${palette.dark}" />
+    `);
+  }
+
+  return "";
 }
 
 function escapeHtml(value) {
@@ -1580,6 +1889,8 @@ function drawAnimalCreature(motif, palette, t, legA, legB) {
     ctx.stroke();
   };
 
+  if (drawTrendCreature(motif, palette, t, legA, legB)) return;
+
   if (motif === "rabbit") {
     ctx.fillStyle = palette.body;
     ctx.beginPath();
@@ -1998,6 +2309,357 @@ function drawAnimalCreature(motif, palette, t, legA, legB) {
     drawEye(87, 34);
     drawLegs(palette.dark, 8);
   }
+}
+
+function drawTrendCreature(motif, palette, t, legA, legB) {
+  if (!motif.startsWith("trend-")) return false;
+
+  const drawEye = (x, y, color = palette.eye) => {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(x, y, 3.2, 0, Math.PI * 2);
+    ctx.fill();
+  };
+  const drawLegs = (color = palette.dark, height = 10) => {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 4;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(26, 58);
+    ctx.lineTo(26 + legA, 58 + height);
+    ctx.moveTo(58, 58);
+    ctx.lineTo(58 + legB, 58 + height);
+    ctx.stroke();
+  };
+  const drawTail = (color = palette.dark) => {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 7;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(4, 44);
+    ctx.bezierCurveTo(-20, 31, -18, 61, 7, 56);
+    ctx.stroke();
+  };
+
+  if (motif === "trend-tralalero") {
+    ctx.fillStyle = palette.body;
+    ctx.beginPath();
+    ctx.ellipse(42, 43, 40, 17, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = palette.dark;
+    ctx.beginPath();
+    ctx.moveTo(35, 25);
+    ctx.lineTo(48, 4);
+    ctx.lineTo(54, 31);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = palette.belly;
+    ctx.beginPath();
+    ctx.moveTo(70, 42);
+    ctx.lineTo(101, 37);
+    ctx.lineTo(76, 52);
+    ctx.closePath();
+    ctx.fill();
+    drawEye(73, 34);
+    ctx.fillStyle = palette.horn;
+    ctx.beginPath();
+    ctx.roundRect(16, 60, 24, 8, 4);
+    ctx.roundRect(53, 60, 24, 8, 4);
+    ctx.fill();
+    return true;
+  }
+
+  if (motif === "trend-ballerina") {
+    ctx.fillStyle = palette.body;
+    ctx.beginPath();
+    ctx.roundRect(30, 21, 42, 34, 9);
+    ctx.fill();
+    ctx.fillStyle = palette.belly;
+    ctx.beginPath();
+    ctx.moveTo(33, 22);
+    ctx.bezierCurveTo(38, 8, 65, 8, 70, 22);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = palette.wing;
+    ctx.beginPath();
+    ctx.moveTo(18, 49);
+    ctx.bezierCurveTo(35, 35, 71, 35, 88, 49);
+    ctx.lineTo(75, 62);
+    ctx.lineTo(32, 62);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = palette.dark;
+    ctx.lineWidth = 5;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(73, 30);
+    ctx.bezierCurveTo(101, 27, 98, 48, 75, 44);
+    ctx.stroke();
+    drawEye(58, 31);
+    ctx.fillStyle = palette.horn;
+    ctx.beginPath();
+    ctx.ellipse(25 + Math.sin(t) * 2, 67, 10, 4, -0.2, 0, Math.PI * 2);
+    ctx.ellipse(76 + Math.cos(t) * 2, 67, 10, 4, 0.2, 0, Math.PI * 2);
+    ctx.fill();
+    return true;
+  }
+
+  if (motif === "trend-sixty-seven") {
+    ctx.fillStyle = palette.body;
+    ctx.beginPath();
+    ctx.moveTo(48, 7);
+    ctx.lineTo(62, 29);
+    ctx.lineTo(88, 31);
+    ctx.lineTo(68, 47);
+    ctx.lineTo(73, 68);
+    ctx.lineTo(48, 57);
+    ctx.lineTo(22, 68);
+    ctx.lineTo(27, 47);
+    ctx.lineTo(7, 31);
+    ctx.lineTo(34, 29);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = palette.dark;
+    ctx.globalAlpha = 0.25;
+    ctx.beginPath();
+    ctx.arc(48, 40, 25, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = palette.belly;
+    ctx.font = "900 28px Segoe UI, Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("67", 48, 43);
+    drawLegs(palette.dark, 7);
+    return true;
+  }
+
+  if (motif === "trend-bombardino") {
+    ctx.fillStyle = palette.body;
+    ctx.beginPath();
+    ctx.ellipse(38, 44, 39, 16, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(69, 37);
+    ctx.lineTo(96, 32);
+    ctx.lineTo(100, 45);
+    ctx.lineTo(72, 51);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = palette.dark;
+    ctx.beginPath();
+    ctx.moveTo(15, 42);
+    ctx.lineTo(-6, 29);
+    ctx.lineTo(3, 50);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = palette.wing;
+    ctx.beginPath();
+    ctx.moveTo(36, 27);
+    ctx.lineTo(55, 12);
+    ctx.lineTo(66, 31);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = palette.belly;
+    ctx.lineWidth = 5;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(82, 43);
+    ctx.lineTo(106, 43);
+    ctx.stroke();
+    drawEye(82, 35);
+    drawLegs(palette.dark, 9);
+    return true;
+  }
+
+  if (motif === "trend-tung") {
+    ctx.fillStyle = palette.body;
+    ctx.beginPath();
+    ctx.roundRect(19, 25, 59, 36, 12);
+    ctx.fill();
+    ctx.fillStyle = palette.belly;
+    ctx.beginPath();
+    ctx.ellipse(49, 25, 29, 10, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = palette.dark;
+    ctx.beginPath();
+    ctx.ellipse(49, 61, 29, 8, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = palette.horn;
+    ctx.lineWidth = 6;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(22, 31);
+    ctx.lineTo(2, 13);
+    ctx.moveTo(75, 31);
+    ctx.lineTo(100, 11);
+    ctx.stroke();
+    ctx.fillStyle = palette.wing;
+    ctx.beginPath();
+    ctx.arc(0, 12, 6, 0, Math.PI * 2);
+    ctx.arc(102, 9, 6, 0, Math.PI * 2);
+    ctx.fill();
+    drawEye(59, 39);
+    return true;
+  }
+
+  if (motif === "trend-cappuccino") {
+    ctx.fillStyle = palette.body;
+    ctx.beginPath();
+    ctx.roundRect(27, 27, 52, 35, 9);
+    ctx.fill();
+    ctx.fillStyle = palette.belly;
+    ctx.beginPath();
+    ctx.moveTo(31, 27);
+    ctx.bezierCurveTo(38, 14, 68, 14, 75, 27);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = palette.dark;
+    ctx.lineWidth = 7;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(28, 34);
+    ctx.bezierCurveTo(7, 39, 13, 57, 31, 51);
+    ctx.stroke();
+    ctx.fillStyle = palette.dark;
+    ctx.fillRect(38, 34, 36, 15);
+    drawEye(59, 42, palette.eye);
+    ctx.fillStyle = palette.horn;
+    ctx.beginPath();
+    ctx.moveTo(76, 25);
+    ctx.lineTo(103, 12);
+    ctx.lineTo(91, 34);
+    ctx.closePath();
+    ctx.fill();
+    drawLegs(palette.dark, 8);
+    return true;
+  }
+
+  if (motif === "trend-lirili") {
+    ctx.fillStyle = palette.body;
+    ctx.beginPath();
+    ctx.ellipse(35, 44, 33, 18, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(68, 32, 17, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = palette.horn;
+    ctx.beginPath();
+    ctx.moveTo(58, 22);
+    ctx.bezierCurveTo(48, 4, 63, 2, 68, 22);
+    ctx.moveTo(73, 22);
+    ctx.bezierCurveTo(85, 4, 95, 8, 82, 26);
+    ctx.fill();
+    drawTail(palette.wing);
+    ctx.fillStyle = palette.belly;
+    ctx.beginPath();
+    ctx.arc(27, 31, 5, 0, Math.PI * 2);
+    ctx.arc(44, 53, 5, 0, Math.PI * 2);
+    ctx.fill();
+    drawEye(74, 30);
+    drawLegs(palette.dark, 11);
+    return true;
+  }
+
+  if (motif === "trend-bobrito") {
+    ctx.fillStyle = palette.body;
+    ctx.beginPath();
+    ctx.roundRect(17, 25, 68, 36, 18);
+    ctx.fill();
+    ctx.fillStyle = palette.belly;
+    ctx.beginPath();
+    ctx.moveTo(24, 31);
+    ctx.bezierCurveTo(37, 16, 67, 16, 80, 32);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = palette.dark;
+    ctx.fillRect(30, 39, 52, 11);
+    drawEye(45, 45, palette.eye);
+    drawEye(64, 45, palette.eye);
+    ctx.fillStyle = palette.wing;
+    ctx.beginPath();
+    ctx.moveTo(18, 45);
+    ctx.lineTo(-6, 35);
+    ctx.lineTo(6, 56);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = palette.horn;
+    ctx.beginPath();
+    ctx.moveTo(85, 43);
+    ctx.lineTo(108, 34);
+    ctx.lineTo(97, 56);
+    ctx.closePath();
+    ctx.fill();
+    drawLegs(palette.dark, 8);
+    return true;
+  }
+
+  if (motif === "trend-brbr") {
+    ctx.fillStyle = palette.body;
+    ctx.beginPath();
+    ctx.ellipse(37, 46, 34, 17, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(66, 37);
+    ctx.lineTo(87, 23);
+    ctx.lineTo(99, 39);
+    ctx.lineTo(81, 51);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = palette.wing;
+    ctx.beginPath();
+    ctx.moveTo(13, 31);
+    ctx.lineTo(25, 7);
+    ctx.lineTo(34, 33);
+    ctx.lineTo(46, 5);
+    ctx.lineTo(54, 35);
+    ctx.lineTo(66, 12);
+    ctx.lineTo(73, 38);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = palette.belly;
+    ctx.beginPath();
+    ctx.arc(23, 48, 4, 0, Math.PI * 2);
+    ctx.arc(41, 42, 4, 0, Math.PI * 2);
+    ctx.fill();
+    drawEye(84, 34);
+    drawLegs(palette.dark, 8);
+    return true;
+  }
+
+  if (motif === "trend-trippi") {
+    ctx.fillStyle = palette.body;
+    ctx.beginPath();
+    ctx.ellipse(35, 44, 35, 18, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(68, 32, 17, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = palette.wing;
+    ctx.beginPath();
+    ctx.moveTo(20, 34);
+    ctx.bezierCurveTo(31, 17, 60, 17, 63, 42);
+    ctx.bezierCurveTo(48, 40, 36, 49, 25, 63);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = palette.horn;
+    ctx.lineWidth = 5;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(18, 24);
+    ctx.lineTo(2, 5);
+    ctx.moveTo(27, 22);
+    ctx.lineTo(28, 3);
+    ctx.moveTo(36, 24);
+    ctx.lineTo(56, 6);
+    ctx.stroke();
+    drawTail(palette.dark);
+    drawEye(74, 30);
+    drawLegs(palette.dark, 10);
+    return true;
+  }
+
+  return true;
 }
 
 function drawDragonMotif(motif, palette, t) {
