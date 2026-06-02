@@ -252,11 +252,11 @@ const SKINS = [
     cost: 210000,
     motif: "trend-sixty-seven",
     palette: {
-      body: "#8b5cf6",
-      dark: "#312e81",
-      wing: "#22d3ee",
-      belly: "#fef08a",
-      horn: "#fb7185",
+      body: "#2563eb",
+      dark: "#111827",
+      wing: "#ffffff",
+      belly: "#dbeafe",
+      horn: "#facc15",
       eye: "#020617",
     },
   },
@@ -1125,11 +1125,19 @@ function trendPreviewSvg(palette, motif) {
 
   if (motif === "trend-sixty-seven") {
     return svg(`
-      <path d="M65 6 L80 28 L106 30 L87 47 L92 66 L65 55 L38 66 L43 47 L24 30 L50 28 Z" fill="${palette.body}" />
-      <circle cx="65" cy="39" r="25" fill="${palette.dark}" opacity="0.28" />
-      <text x="65" y="48" text-anchor="middle" font-size="31" font-weight="900" fill="${palette.belly}">67</text>
-      <path d="M25 55 L5 63 L19 44 Z" fill="${palette.wing}" />
-      <path d="M105 54 L124 61 L111 43 Z" fill="${palette.horn}" />
+      <path d="M40 35 C25 20 14 25 10 38" stroke="${palette.dark}" stroke-width="6" fill="none" stroke-linecap="round" />
+      <path d="M90 35 C106 20 118 25 122 38" stroke="${palette.dark}" stroke-width="6" fill="none" stroke-linecap="round" />
+      <circle cx="9" cy="39" r="8" fill="${palette.wing}" stroke="${palette.dark}" stroke-width="3" />
+      <circle cx="123" cy="39" r="8" fill="${palette.wing}" stroke="${palette.dark}" stroke-width="3" />
+      <text x="65" y="51" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="54" font-weight="950" fill="${palette.body}" stroke="${palette.dark}" stroke-width="2.5" paint-order="stroke fill">67</text>
+      <path d="M50 55 L43 66 M79 55 L88 66" stroke="${palette.dark}" stroke-width="6" stroke-linecap="round" />
+      <ellipse cx="40" cy="66" rx="14" ry="5" fill="${palette.wing}" stroke="${palette.dark}" stroke-width="3" />
+      <ellipse cx="91" cy="66" rx="14" ry="5" fill="${palette.wing}" stroke="${palette.dark}" stroke-width="3" />
+      <circle cx="54" cy="30" r="3" fill="${palette.eye}" />
+      <circle cx="76" cy="30" r="3" fill="${palette.eye}" />
+      <path d="M57 40 Q66 46 76 40" stroke="${palette.eye}" stroke-width="3" fill="none" stroke-linecap="round" />
+      <path d="M44 16 L51 6 L58 16 Z M74 16 L81 6 L88 16 Z" fill="${palette.horn}" stroke="${palette.dark}" stroke-width="2" />
+      <path d="M32 21 L19 13 M101 21 L114 13" stroke="${palette.horn}" stroke-width="4" stroke-linecap="round" />
     `);
   }
 
@@ -2498,32 +2506,75 @@ function drawTrendCreature(motif, palette, t, legA, legB) {
   }
 
   if (motif === "trend-sixty-seven") {
+    ctx.strokeStyle = palette.dark;
+    ctx.lineWidth = 6;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(28, 36);
+    ctx.bezierCurveTo(13, 20, 2, 27, -2, 40);
+    ctx.moveTo(75, 36);
+    ctx.bezierCurveTo(92, 21, 103, 28, 108, 40);
+    ctx.stroke();
+
+    ctx.fillStyle = palette.wing;
+    ctx.strokeStyle = palette.dark;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(-3, 41, 8, 0, Math.PI * 2);
+    ctx.arc(109, 41, 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.strokeStyle = palette.dark;
+    ctx.lineWidth = 2.8;
     ctx.fillStyle = palette.body;
-    ctx.beginPath();
-    ctx.moveTo(48, 7);
-    ctx.lineTo(62, 29);
-    ctx.lineTo(88, 31);
-    ctx.lineTo(68, 47);
-    ctx.lineTo(73, 68);
-    ctx.lineTo(48, 57);
-    ctx.lineTo(22, 68);
-    ctx.lineTo(27, 47);
-    ctx.lineTo(7, 31);
-    ctx.lineTo(34, 29);
-    ctx.closePath();
-    ctx.fill();
-    ctx.fillStyle = palette.dark;
-    ctx.globalAlpha = 0.25;
-    ctx.beginPath();
-    ctx.arc(48, 40, 25, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.globalAlpha = 1;
-    ctx.fillStyle = palette.belly;
-    ctx.font = "900 28px Segoe UI, Arial";
+    ctx.font = "950 54px Segoe UI, Arial";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText("67", 48, 43);
-    drawLegs(palette.dark, 7);
+    ctx.strokeText("67", 52, 39);
+    ctx.fillText("67", 52, 39);
+
+    ctx.strokeStyle = palette.dark;
+    ctx.lineWidth = 6;
+    ctx.beginPath();
+    ctx.moveTo(39, 54);
+    ctx.lineTo(31 + legA, 67);
+    ctx.moveTo(65, 54);
+    ctx.lineTo(76 + legB, 67);
+    ctx.stroke();
+
+    ctx.fillStyle = palette.wing;
+    ctx.strokeStyle = palette.dark;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.ellipse(29 + legA, 68, 14, 5, -0.08, 0, Math.PI * 2);
+    ctx.ellipse(80 + legB, 68, 14, 5, 0.08, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    drawEye(43, 29);
+    drawEye(62, 29);
+    ctx.strokeStyle = palette.eye;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(44, 40);
+    ctx.quadraticCurveTo(53, 47, 65, 40);
+    ctx.stroke();
+
+    ctx.fillStyle = palette.horn;
+    ctx.strokeStyle = palette.dark;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(33, 15);
+    ctx.lineTo(40, 5);
+    ctx.lineTo(47, 15);
+    ctx.closePath();
+    ctx.moveTo(63, 15);
+    ctx.lineTo(70, 5);
+    ctx.lineTo(77, 15);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
     return true;
   }
 
