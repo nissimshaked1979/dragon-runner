@@ -7,6 +7,154 @@ const SKIN_VISUAL_SCALE = 1.12;
 const MAX_TRAIL_PARTICLES = 90;
 const TRAIL_SHOP_VERSION = 2;
 
+const DAILY_REGULAR_MISSIONS = [
+  {
+    id: "daily-jumps-50",
+    type: "jumps",
+    target: 50,
+    reward: 50000,
+    title: "קפוץ 50 פעמים",
+    englishTitle: "Jump 50 times",
+    description: "קפיצות בכל המשחקים של היום נספרות ביחד.",
+    englishDescription: "Jumps from all runs today count together.",
+  },
+  {
+    id: "daily-runs-5",
+    type: "runs",
+    target: 5,
+    reward: 65000,
+    title: "שחק 5 משחקים",
+    englishTitle: "Play 5 runs",
+    description: "כל התחלת משחק נספרת למשימה.",
+    englishDescription: "Every started run counts toward this mission.",
+  },
+  {
+    id: "daily-score-300",
+    type: "bestScore",
+    target: 300,
+    reward: 85000,
+    title: "תגיע ל-300 ניקוד ריצה",
+    englishTitle: "Reach 300 run score",
+    description: "צריך להגיע לזה במשחק אחד.",
+    englishDescription: "Reach this score in one run.",
+  },
+  {
+    id: "daily-seconds-180",
+    type: "totalSeconds",
+    target: 180,
+    reward: 100000,
+    title: "שרוד 3 דקות היום",
+    englishTitle: "Survive 3 minutes today",
+    description: "הזמן מכל המשחקים של היום מתחבר.",
+    englishDescription: "Time from all runs today adds up.",
+  },
+  {
+    id: "daily-score-700",
+    type: "bestScore",
+    target: 700,
+    reward: 160000,
+    title: "תגיע ל-700 ניקוד ריצה",
+    englishTitle: "Reach 700 run score",
+    description: "משימה קשה עם פרס גדול.",
+    englishDescription: "A hard mission with a big reward.",
+  },
+  {
+    id: "daily-jumps-120",
+    type: "jumps",
+    target: 120,
+    reward: 130000,
+    title: "קפוץ 120 פעמים",
+    englishTitle: "Jump 120 times",
+    description: "כל קפיצה היום מקדמת אותך.",
+    englishDescription: "Every jump today moves you forward.",
+  },
+  {
+    id: "daily-runs-10",
+    type: "runs",
+    target: 10,
+    reward: 140000,
+    title: "שחק 10 משחקים",
+    englishTitle: "Play 10 runs",
+    description: "משימה לשחקנים שלא מוותרים.",
+    englishDescription: "A mission for players who keep going.",
+  },
+];
+
+const DAILY_SECRET_MISSIONS = [
+  {
+    id: "secret-jumps-67",
+    type: "jumps",
+    target: 67,
+    reward: 67000,
+    title: "קפצת בדיוק לכיוון הטרנד",
+    englishTitle: "You jumped into the trend",
+    hint: "המספר הכי טרנדי יעזור לך.",
+    englishHint: "The trendiest number will help you.",
+    description: "קפוץ 67 פעמים ביום אחד.",
+    englishDescription: "Jump 67 times in one day.",
+  },
+  {
+    id: "secret-score-777",
+    type: "bestScore",
+    target: 777,
+    reward: 167000,
+    title: "שיא מזל סודי",
+    englishTitle: "Secret lucky score",
+    hint: "שלושה מספרים של מזל במסלול.",
+    englishHint: "Three lucky numbers on the track.",
+    description: "תגיע ל-777 ניקוד ריצה במשחק אחד.",
+    englishDescription: "Reach 777 run score in one run.",
+  },
+  {
+    id: "secret-runs-7",
+    type: "runs",
+    target: 7,
+    reward: 77000,
+    title: "שבע ריצות סודיות",
+    englishTitle: "Seven secret runs",
+    hint: "נסה את מספר המזל הקלאסי.",
+    englishHint: "Try the classic lucky number.",
+    description: "שחק 7 משחקים ביום אחד.",
+    englishDescription: "Play 7 runs in one day.",
+  },
+  {
+    id: "secret-seconds-267",
+    type: "totalSeconds",
+    target: 267,
+    reward: 160000,
+    title: "זמן סודי במסלול",
+    englishTitle: "Secret track time",
+    hint: "תשרוד 2 ואז 67.",
+    englishHint: "Survive 2 and then 67.",
+    description: "שרוד 267 שניות בסך הכול היום.",
+    englishDescription: "Survive 267 total seconds today.",
+  },
+  {
+    id: "secret-score-1000",
+    type: "bestScore",
+    target: 1000,
+    reward: 220000,
+    title: "אלף במסלול",
+    englishTitle: "One thousand on the track",
+    hint: "מספר עגול וגדול מחכה לך.",
+    englishHint: "A big round number is waiting.",
+    description: "תגיע ל-1000 ניקוד ריצה במשחק אחד.",
+    englishDescription: "Reach 1000 run score in one run.",
+  },
+  {
+    id: "secret-jumps-150",
+    type: "jumps",
+    target: 150,
+    reward: 150000,
+    title: "קפיצות בלי סוף",
+    englishTitle: "Endless jumps",
+    hint: "הרבה יותר מ-100 קפיצות.",
+    englishHint: "Much more than 100 jumps.",
+    description: "קפוץ 150 פעמים ביום אחד.",
+    englishDescription: "Jump 150 times in one day.",
+  },
+];
+
 const TRAILS = [
   { id: "fire", name: "שביל אש", englishName: "Fire Trail", tier: "מתחיל", englishTier: "Beginner", cost: 80000, kind: "fire", color: "#ff7a18", accent: "#ffd166", yOffset: 44, spread: 16, size: 18 },
   { id: "hearts", name: "שביל לבבות", englishName: "Heart Trail", tier: "יפה", englishTier: "Pretty", cost: 150000, kind: "heart", color: "#f472b6", accent: "#ffffff", yOffset: 38, spread: 18, size: 13 },
@@ -437,6 +585,8 @@ const elements = {
   scoreValue: document.querySelector("#scoreValue"),
   bestValue: document.querySelector("#bestValue"),
   pointsValue: document.querySelector("#pointsValue"),
+  dailyMissionDate: document.querySelector("#dailyMissionDate"),
+  dailyMissionGrid: document.querySelector("#dailyMissionGrid"),
   playBtn: document.querySelector("#playBtn"),
   pauseBtn: document.querySelector("#pauseBtn"),
   canvas: document.querySelector("#gameCanvas"),
@@ -517,6 +667,7 @@ const game = {
   obstacles: [],
   trailParticles: [],
   trailTimer: 0,
+  dailySecondBuffer: 0,
   dragon: {
     x: 92,
     y: 224,
@@ -587,6 +738,7 @@ function withDefaultPlayer(nextState) {
     player.ownedTrails = legacyFreeTrailShop || !Array.isArray(player.ownedTrails) ? [] : player.ownedTrails;
     player.ownedTrails = player.ownedTrails.filter((trailId) => TRAILS.some((trail) => trail.id === trailId));
     player.trailId = player.ownedTrails.includes(player.trailId) ? player.trailId : "";
+    ensureDailyMissionState(player);
   });
 
   nextState.playerReports = Array.isArray(nextState.playerReports)
@@ -646,6 +798,7 @@ function createPlayer(name) {
     skinColors: { classic: BASE_COLORS[0] },
     ownedSkins: ["classic"],
     ownedTrails: [],
+    dailyMissions: createDailyMissionState(),
   };
 }
 
@@ -654,6 +807,7 @@ function ensurePlayer(name) {
   if (!state.players[cleanName]) {
     state.players[cleanName] = createPlayer(cleanName);
   }
+  ensureDailyMissionState(state.players[cleanName]);
   return state.players[cleanName];
 }
 
@@ -667,6 +821,59 @@ function getSkinById(id) {
 
 function getTrailById(id) {
   return TRAILS.find((trail) => trail.id === id) || null;
+}
+
+function getDailyDateKey(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function hashDailyKey(dateKey) {
+  return [...dateKey].reduce((total, char) => total + char.charCodeAt(0), 0);
+}
+
+function getDailyMissionSet(dateKey = getDailyDateKey()) {
+  const seed = hashDailyKey(dateKey);
+  return {
+    regular: DAILY_REGULAR_MISSIONS[seed % DAILY_REGULAR_MISSIONS.length],
+    secret: DAILY_SECRET_MISSIONS[Math.floor(seed / DAILY_REGULAR_MISSIONS.length) % DAILY_SECRET_MISSIONS.length],
+  };
+}
+
+function createDailyMissionState(dateKey = getDailyDateKey()) {
+  return {
+    date: dateKey,
+    stats: {
+      jumps: 0,
+      runs: 0,
+      bestScore: 0,
+      totalSeconds: 0,
+    },
+    claimed: {
+      regular: false,
+      secret: false,
+    },
+  };
+}
+
+function ensureDailyMissionState(player) {
+  const today = getDailyDateKey();
+  if (!player.dailyMissions || player.dailyMissions.date !== today) {
+    player.dailyMissions = createDailyMissionState(today);
+    return player.dailyMissions;
+  }
+
+  const daily = player.dailyMissions;
+  daily.stats = daily.stats && typeof daily.stats === "object" ? daily.stats : {};
+  daily.claimed = daily.claimed && typeof daily.claimed === "object" ? daily.claimed : {};
+  ["jumps", "runs", "bestScore", "totalSeconds"].forEach((key) => {
+    daily.stats[key] = Number.isFinite(Number(daily.stats[key])) ? Math.max(0, Math.floor(Number(daily.stats[key]))) : 0;
+  });
+  daily.claimed.regular = Boolean(daily.claimed.regular);
+  daily.claimed.secret = Boolean(daily.claimed.secret);
+  return daily;
 }
 
 function mergeStoredPlayers(sourceName, targetName) {
@@ -697,6 +904,7 @@ function mergeStoredPlayers(sourceName, targetName) {
       ...(targetPlayer.skinColors || {}),
       ...(sourcePlayer.skinColors || {}),
     };
+    targetPlayer.dailyMissions = targetPlayer.dailyMissions || sourcePlayer.dailyMissions;
   }
 
   delete state.players[source];
@@ -772,6 +980,7 @@ function renderAll() {
     elements.adminPlayer.value = state.currentPlayer;
   }
   renderLeaderboard();
+  renderDailyMissions();
   renderColorSwatches();
   renderSkins();
   renderTrails();
@@ -779,6 +988,106 @@ function renderAll() {
   renderPlayerReportSummary();
   renderCreatorMessageSummary();
   draw();
+}
+
+function renderDailyMissions() {
+  const player = getCurrentPlayer();
+  const daily = ensureDailyMissionState(player);
+  const missions = getDailyMissionSet(daily.date);
+  elements.dailyMissionDate.textContent = daily.date;
+  elements.dailyMissionGrid.innerHTML = [
+    renderDailyMissionCard("regular", missions.regular, daily),
+    renderDailyMissionCard("secret", missions.secret, daily),
+  ].join("");
+
+  elements.dailyMissionGrid.querySelectorAll("[data-claim-mission]").forEach((button) => {
+    button.addEventListener("click", () => claimDailyMission(button.dataset.claimMission));
+  });
+}
+
+function renderDailyMissionCard(slot, mission, daily) {
+  const progress = getDailyMissionProgress(mission, daily);
+  const complete = progress >= mission.target;
+  const claimed = Boolean(daily.claimed[slot]);
+  const secretHidden = slot === "secret" && !complete && !claimed;
+  const title = secretHidden ? { he: "משימה סודית", en: "Secret Mission" } : { he: mission.title, en: mission.englishTitle };
+  const description = secretHidden
+    ? { he: `רמז: ${mission.hint}`, en: `Hint: ${mission.englishHint}` }
+    : { he: mission.description, en: mission.englishDescription };
+  const percent = Math.min(100, Math.floor((progress / mission.target) * 100));
+  const progressText = secretHidden
+    ? bilingualHtml("התקדמות סודית", "Secret progress")
+    : bilingualHtml(`${Math.min(progress, mission.target)} / ${mission.target}`, `${Math.min(progress, mission.target)} / ${mission.target}`);
+  const reward = bilingualHtml(`פרס: ${mission.reward} נקודות חנות`, `Reward: ${mission.reward} shop points`);
+  const buttonText = claimed
+    ? bilingualHtml("נאסף", "Claimed")
+    : complete
+      ? bilingualHtml("קבל פרס", "Claim Reward")
+      : bilingualHtml("עדיין לא הושלם", "Not Complete Yet");
+
+  return `
+    <article class="daily-mission-card ${slot} ${complete ? "complete" : ""}">
+      <div class="daily-mission-top">
+        <strong>${bilingualHtml(title.he, title.en)}</strong>
+        <span>${slot === "secret" ? bilingualHtml("סודית", "Secret") : bilingualHtml("רגילה", "Regular")}</span>
+      </div>
+      <p>${bilingualHtml(description.he, description.en)}</p>
+      <div class="mission-progress" aria-hidden="true"><span style="width:${percent}%"></span></div>
+      <div class="daily-mission-meta">
+        <span>${progressText}</span>
+        <span>${reward}</span>
+      </div>
+      <button class="${complete && !claimed ? "primary-action" : "ghost-action"}" data-claim-mission="${slot}" type="button" ${complete && !claimed ? "" : "disabled"}>${buttonText}</button>
+    </article>
+  `;
+}
+
+function getDailyMissionProgress(mission, daily) {
+  return Math.floor(Number(daily.stats?.[mission.type] || 0));
+}
+
+function isDailyMissionComplete(mission, daily) {
+  return getDailyMissionProgress(mission, daily) >= mission.target;
+}
+
+function claimDailyMission(slot) {
+  const player = getCurrentPlayer();
+  const daily = ensureDailyMissionState(player);
+  const missions = getDailyMissionSet(daily.date);
+  const mission = slot === "secret" ? missions.secret : missions.regular;
+  if (!mission || daily.claimed[slot] || !isDailyMissionComplete(mission, daily)) return;
+
+  daily.claimed[slot] = true;
+  player.points += mission.reward;
+  saveState();
+  renderAll();
+  setStatus(`קיבלת ${mission.reward} נקודות חנות`, true, true, `You got ${mission.reward} shop points`);
+}
+
+function updateDailyMissionProgress(type, value) {
+  const player = getCurrentPlayer();
+  const daily = ensureDailyMissionState(player);
+  const missions = getDailyMissionSet(daily.date);
+  const regularCompleteBefore = isDailyMissionComplete(missions.regular, daily);
+  const secretCompleteBefore = isDailyMissionComplete(missions.secret, daily);
+
+  if (type === "bestScore") {
+    daily.stats.bestScore = Math.max(daily.stats.bestScore, Math.floor(value));
+  } else {
+    daily.stats[type] = Math.max(0, Math.floor((daily.stats[type] || 0) + value));
+  }
+
+  const regularCompleteAfter = isDailyMissionComplete(missions.regular, daily);
+  const secretCompleteAfter = isDailyMissionComplete(missions.secret, daily);
+  saveState();
+  renderDailyMissions();
+
+  if (!regularCompleteBefore && regularCompleteAfter && !daily.claimed.regular) {
+    setStatus("משימה יומית הושלמה", true, true, "Daily mission complete");
+  }
+  if (!secretCompleteBefore && secretCompleteAfter && !daily.claimed.secret) {
+    setStatus("גילית את המשימה הסודית", true, true, "Secret mission discovered");
+  }
 }
 
 function renderLeaderboard() {
@@ -1826,6 +2135,7 @@ function resetGame() {
   game.obstacles = [];
   game.trailParticles = [];
   game.trailTimer = 0;
+  game.dailySecondBuffer = 0;
   game.clouds = createClouds();
   game.dragon.vy = 0;
   game.dragon.onGround = true;
@@ -1839,6 +2149,7 @@ function startGame() {
   resetGame();
   game.running = true;
   game.over = false;
+  updateDailyMissionProgress("runs", 1);
   setStatus("", false);
   lastTime = performance.now();
   rafId = requestAnimationFrame(tick);
@@ -1891,6 +2202,7 @@ function jumpDragon() {
   dragon.vy = -15.8;
   dragon.onGround = false;
   playJumpDing();
+  updateDailyMissionProgress("jumps", 1);
 }
 
 function togglePause() {
@@ -1921,6 +2233,12 @@ function updateGame(dt) {
   const scoreDelta = scale * SCORE_GAIN_PER_TICK;
   game.score += scoreDelta;
   game.pace += scale;
+  game.dailySecondBuffer += dt;
+  if (game.dailySecondBuffer >= 1000) {
+    const seconds = Math.floor(game.dailySecondBuffer / 1000);
+    game.dailySecondBuffer -= seconds * 1000;
+    updateDailyMissionProgress("totalSeconds", seconds);
+  }
   if (previousScore >= SHOP_POINTS_GRACE_SCORE) {
     game.shopScore += scoreDelta;
   } else if (game.score > SHOP_POINTS_GRACE_SCORE) {
@@ -1974,6 +2292,7 @@ function endGame() {
   const earned = Math.floor(game.shopScore);
   const player = getCurrentPlayer();
   const previousBest = player.best;
+  updateDailyMissionProgress("bestScore", score);
   player.best = Math.max(previousBest, score);
   player.points += earned;
   saveState();

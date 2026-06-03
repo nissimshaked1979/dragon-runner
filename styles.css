@@ -339,6 +339,98 @@ h1 {
   align-items: start;
 }
 
+.daily-panel {
+  background: #ffffff;
+}
+
+.daily-mission-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  padding: 14px;
+}
+
+.daily-mission-card {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  border: 1px solid #dce3df;
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(244, 196, 91, 0.12), transparent 58%),
+    #ffffff;
+  padding: 12px;
+}
+
+.daily-mission-card.secret {
+  background:
+    linear-gradient(180deg, rgba(139, 92, 246, 0.12), transparent 58%),
+    #ffffff;
+}
+
+.daily-mission-card.complete {
+  border-color: #1f9d6a;
+  box-shadow: 0 0 0 3px rgba(31, 157, 106, 0.12);
+}
+
+.daily-mission-top {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.daily-mission-top strong,
+.daily-mission-card p,
+.daily-mission-meta {
+  overflow-wrap: anywhere;
+}
+
+.daily-mission-top > span {
+  border-radius: 999px;
+  background: #f3f6f3;
+  color: var(--muted);
+  padding: 4px 8px;
+  font-size: 0.78rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.daily-mission-card p {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.mission-progress {
+  overflow: hidden;
+  height: 10px;
+  border-radius: 999px;
+  background: #edf1ef;
+}
+
+.mission-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--green), var(--gold));
+}
+
+.daily-mission-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.daily-mission-card button:disabled {
+  cursor: default;
+  opacity: 0.62;
+}
+
 .panel {
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -880,6 +972,7 @@ tbody tr.current {
   }
 
   .workspace,
+  .daily-mission-grid,
   .skin-grid {
     grid-template-columns: 1fr;
   }
