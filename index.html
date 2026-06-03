@@ -24,9 +24,17 @@
           <button id="openLeaderboardBtn" class="topbar-action" type="button" aria-haspopup="dialog">
             <span class="bilingual-label"><span>לוח שיאים</span><span class="label-en">Leaderboard</span></span>
           </button>
-          <button id="openCreatorMessageBtn" class="topbar-action" type="button" aria-haspopup="dialog">
-            <span class="bilingual-label"><span>דברו עם היוצר</span><span class="label-en">Contact Creator</span></span>
+          <button id="openDuelBtn" class="topbar-action" type="button" aria-haspopup="dialog">
+            <span class="bilingual-label"><span>דו קרב</span><span class="label-en">Duel</span></span>
           </button>
+          <div class="creator-actions">
+            <button id="openCreatorMessageBtn" class="topbar-action" type="button" aria-haspopup="dialog">
+              <span class="bilingual-label"><span>דברו עם היוצר</span><span class="label-en">Contact Creator</span></span>
+            </button>
+            <button id="openDailyMissionsBtn" class="topbar-action" type="button" aria-haspopup="dialog">
+              <span class="bilingual-label"><span>משימות יומיות</span><span class="label-en">Daily Missions</span></span>
+            </button>
+          </div>
           <button id="openSettingsBtn" class="icon-button settings-button" type="button" title="הגדרות" aria-label="הגדרות" aria-haspopup="dialog">⚙</button>
         </div>
       </header>
@@ -59,14 +67,6 @@
         </section>
 
         <section class="workspace">
-          <section id="dailyMissionPanel" class="panel daily-panel" aria-labelledby="dailyMissionTitle">
-            <div class="panel-head">
-              <h2 id="dailyMissionTitle"><span class="bilingual-label"><span>משימות יומיות</span><span class="label-en">Daily Missions</span></span></h2>
-              <span id="dailyMissionDate">היום</span>
-            </div>
-            <div id="dailyMissionGrid" class="daily-mission-grid"></div>
-          </section>
-
           <section id="adminPanel" class="panel admin-panel hidden" aria-labelledby="adminTitle">
             <div class="panel-head">
               <h2 id="adminTitle">אדמין</h2>
@@ -165,6 +165,51 @@
           <p><span class="bilingual-label"><span>כל שביל עובד עם כל חיה, ומתחילים בלי שביל</span><span class="label-en">Every trail works with every animal, and you start with no trail</span></span></p>
         </div>
         <div id="trailGrid" class="skin-grid trail-grid"></div>
+      </section>
+    </div>
+
+    <div id="duelModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="duelTitle">
+      <section class="shop-modal-window duel-window" aria-labelledby="duelTitle">
+        <div class="panel-head">
+          <h2 id="duelTitle"><span class="bilingual-label"><span>דו קרב</span><span class="label-en">Duel</span></span></h2>
+          <div class="modal-head-actions">
+            <span id="duelStatusLabel"><span class="bilingual-label"><span>מוכן</span><span class="label-en">Ready</span></span></span>
+            <button id="closeDuelBtn" class="close-shop-button" type="button" title="סגירה" aria-label="סגירה">×</button>
+          </div>
+        </div>
+
+        <div class="duel-toolbar">
+          <div class="duel-player-stat player-one">
+            <span class="bilingual-label"><span>שחקן 1</span><span class="label-en">Player 1</span></span>
+            <strong id="duelP1Score">0</strong>
+            <kbd>W</kbd>
+          </div>
+          <button id="startDuelBtn" class="primary-action" type="button">
+            <span class="bilingual-label"><span>התחל דו קרב</span><span class="label-en">Start Duel</span></span>
+          </button>
+          <div class="duel-player-stat player-two">
+            <span class="bilingual-label"><span>שחקן 2</span><span class="label-en">Player 2</span></span>
+            <strong id="duelP2Score">0</strong>
+            <kbd>↑</kbd>
+          </div>
+        </div>
+
+        <div class="duel-canvas-wrap">
+          <canvas id="duelCanvas" width="960" height="430" aria-label="Duel runner"></canvas>
+        </div>
+      </section>
+    </div>
+
+    <div id="dailyMissionsModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="dailyMissionTitle">
+      <section class="shop-modal-window daily-missions-window" aria-labelledby="dailyMissionTitle">
+        <div class="panel-head">
+          <h2 id="dailyMissionTitle"><span class="bilingual-label"><span>משימות יומיות</span><span class="label-en">Daily Missions</span></span></h2>
+          <div class="modal-head-actions">
+            <span id="dailyMissionDate">היום</span>
+            <button id="closeDailyMissionsBtn" class="close-shop-button" type="button" title="סגירה" aria-label="סגירה">×</button>
+          </div>
+        </div>
+        <div id="dailyMissionGrid" class="daily-mission-grid"></div>
       </section>
     </div>
 

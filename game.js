@@ -596,6 +596,17 @@ const elements = {
   openLeaderboardBtn: document.querySelector("#openLeaderboardBtn"),
   leaderboardModal: document.querySelector("#leaderboardModal"),
   closeLeaderboardBtn: document.querySelector("#closeLeaderboardBtn"),
+  openDuelBtn: document.querySelector("#openDuelBtn"),
+  duelModal: document.querySelector("#duelModal"),
+  closeDuelBtn: document.querySelector("#closeDuelBtn"),
+  duelStatusLabel: document.querySelector("#duelStatusLabel"),
+  duelCanvas: document.querySelector("#duelCanvas"),
+  startDuelBtn: document.querySelector("#startDuelBtn"),
+  duelP1Score: document.querySelector("#duelP1Score"),
+  duelP2Score: document.querySelector("#duelP2Score"),
+  openDailyMissionsBtn: document.querySelector("#openDailyMissionsBtn"),
+  dailyMissionsModal: document.querySelector("#dailyMissionsModal"),
+  closeDailyMissionsBtn: document.querySelector("#closeDailyMissionsBtn"),
   openCreatorMessageBtn: document.querySelector("#openCreatorMessageBtn"),
   creatorMessageModal: document.querySelector("#creatorMessageModal"),
   closeCreatorMessageBtn: document.querySelector("#closeCreatorMessageBtn"),
@@ -643,6 +654,7 @@ const elements = {
 };
 
 const ctx = elements.canvas.getContext("2d");
+const duelCtx = elements.duelCanvas.getContext("2d");
 
 let state = loadState();
 let adminPanelVisible = state.admin;
@@ -678,6 +690,55 @@ const game = {
     vy: 0,
     onGround: true,
   },
+};
+
+let duelRafId = 0;
+let duelLastTime = 0;
+
+const DUEL_WIDTH = 960;
+const DUEL_HEIGHT = 430;
+
+const duel = {
+  running: false,
+  over: false,
+  score: 0,
+  pace: 0,
+  speed: 6.6,
+  spawnTimer: 700,
+  obstacles: [],
+  clouds: [],
+  players: [
+    {
+      name: "שחקן 1",
+      englishName: "Player 1",
+      key: "W",
+      x: 94,
+      y: 0,
+      width: 62,
+      height: 58,
+      groundY: 176,
+      vy: 0,
+      onGround: true,
+      alive: true,
+      score: 0,
+      palette: { body: "#31c985", dark: "#16885b", belly: "#fff2a6", horn: "#f2b84b", eye: "#151a22" },
+    },
+    {
+      name: "שחקן 2",
+      englishName: "Player 2",
+      key: "↑",
+      x: 94,
+      y: 0,
+      width: 62,
+      height: 58,
+      groundY: 364,
+      vy: 0,
+      onGround: true,
+      alive: true,
+      score: 0,
+      palette: { body: "#2f80ed", dark: "#1d4ed8", belly: "#dbeafe", horn: "#facc15", eye: "#111827" },
+    },
+  ],
 };
 
 function loadState() {
@@ -1975,6 +2036,391 @@ function trailCostText(trail) {
   return { he: `${trail.cost} נקודות חנות`, en: `${trail.cost} shop points` };
 }
 
+function setDuelStatus(hebrew, english) {
+  elements.duelStatusLabel.innerHTML = bilingualHtml(hebrew, english);
+}
+
+function updateDuelScoreLabels() {
+  elements.duelP1Score.textContent = duel.players[0].score.toString();
+  elements.duelP2Score.textContent = duel.players[1].score.toString();
+}
+
+function resetDuelRound() {
+  cancelAnimationFrame(duelRafId);
+  duel.running = false;
+  duel.over = false;
+  duel.score = 0;
+  duel.pace = 0;
+  duel.speed = 6.6;
+  duel.spawnTimer = 650;
+  duel.obstacles = [];
+  duel.clouds = [
+    { x: 150, y: 42, size: 23, speed: 0.18 },
+    { x: 460, y: 238, size: 27, speed: 0.16 },
+    { x: 760, y: 58, size: 20, speed: 0.2 },
+  ];
+  duel.players.forEach((player) => {
+    player.y = player.groundY - player.height;
+    player.vy = 0;
+    player.onGround = true;
+    player.alive = true;
+    player.score = 0;
+  });
+  updateDuelScoreLabels();
+  drawDuel();
+}
+
+function resetDuel() {
+  resetDuelRound();
+  setDuelStatus("מוכן", "Ready");
+  elements.startDuelBtn.innerHTML = bilingualHtml("התחל דו קרב", "Start Duel");
+}
+
+function openDuel() {
+  resetDuel();
+  elements.duelModal.classList.remove("hidden");
+  elements.startDuelBtn.focus();
+}
+
+function closeDuel() {
+  cancelAnimationFrame(duelRafId);
+  duel.running = false;
+  elements.duelModal.classList.add("hidden");
+  elements.openDuelBtn.focus();
+}
+
+function startDuel() {
+  resetDuelRound();
+  duel.running = true;
+  duel.over = false;
+  setDuelStatus("רצים", "Running");
+  elements.startDuelBtn.innerHTML = bilingualHtml("התחל מחדש", "Restart");
+  duelLastTime = performance.now();
+  duelRafId = requestAnimationFrame(tickDuel);
+}
+
+function jumpDuelPlayer(index) {
+  if (elements.duelModal.classList.contains("hidden")) return;
+  if (!duel.running || duel.over) {
+    startDuel();
+  }
+
+  const player = duel.players[index];
+  if (!player || !player.alive || !player.onGround) return;
+  player.vy = -11.6;
+  player.onGround = false;
+  playJumpDing();
+}
+
+function handleDuelPointer(event) {
+  if (elements.duelModal.classList.contains("hidden")) return;
+  const rect = elements.duelCanvas.getBoundingClientRect();
+  const lane = event.clientY - rect.top < rect.height / 2 ? 0 : 1;
+  jumpDuelPlayer(lane);
+}
+
+function tickDuel(time) {
+  if (!duel.running) return;
+  const dt = Math.min(34, time - duelLastTime || 16);
+  duelLastTime = time;
+  updateDuel(dt);
+  drawDuel();
+  if (duel.running) {
+    duelRafId = requestAnimationFrame(tickDuel);
+  }
+}
+
+function updateDuel(dt) {
+  const scale = dt / 16.67;
+  const scoreDelta = scale * 0.26;
+  duel.score += scoreDelta;
+  duel.pace += scale;
+  duel.speed = Math.min(13.5, 6.6 + duel.pace / 340);
+
+  duel.players.forEach((player) => {
+    if (!player.alive) return;
+    player.score = Math.floor(duel.score);
+    player.vy += 0.78 * scale;
+    player.y += player.vy * scale;
+    if (player.y >= player.groundY - player.height) {
+      player.y = player.groundY - player.height;
+      player.vy = 0;
+      player.onGround = true;
+    }
+  });
+
+  duel.spawnTimer -= dt;
+  if (duel.spawnTimer <= 0) {
+    spawnDuelObstaclePair();
+    duel.spawnTimer = Math.max(560, randomBetween(880, 1320) - duel.pace * 0.45);
+  }
+
+  duel.obstacles.forEach((obstacle) => {
+    obstacle.x -= duel.speed * scale;
+  });
+  duel.obstacles = duel.obstacles.filter((obstacle) => obstacle.x + obstacle.width > -40);
+
+  duel.clouds.forEach((cloud) => {
+    cloud.x -= cloud.speed * scale;
+    if (cloud.x < -100) {
+      cloud.x = DUEL_WIDTH + randomBetween(60, 220);
+    }
+  });
+
+  duel.players.forEach((player, index) => {
+    if (!player.alive) return;
+    const hit = duel.obstacles.some((obstacle) => obstacle.lane === index && duelCollides(player, obstacle));
+    if (hit) {
+      player.alive = false;
+      player.score = Math.floor(duel.score);
+    }
+  });
+
+  updateDuelScoreLabels();
+
+  const alivePlayers = duel.players.filter((player) => player.alive);
+  if (alivePlayers.length < 2) {
+    endDuel();
+  }
+}
+
+function spawnDuelObstaclePair() {
+  const obstacleType = OBSTACLE_TYPES[randomBetween(0, OBSTACLE_TYPES.length - 1)];
+  const width = randomBetween(obstacleType.minWidth, obstacleType.maxWidth);
+  const height = randomBetween(obstacleType.minHeight, obstacleType.maxHeight);
+  duel.players.forEach((player, lane) => {
+    duel.obstacles.push({
+      type: obstacleType.type,
+      lane,
+      x: DUEL_WIDTH + 36,
+      y: player.groundY - height,
+      width,
+      height,
+      hitInsetX: obstacleType.hitInsetX,
+      hitInsetTop: obstacleType.hitInsetTop,
+    });
+  });
+}
+
+function duelCollides(player, obstacle) {
+  const playerBox = {
+    x: player.x + 12,
+    y: player.y + 8,
+    width: player.width - 22,
+    height: player.height - 10,
+  };
+  const hitInsetX = obstacle.hitInsetX ?? 5;
+  const hitInsetTop = obstacle.hitInsetTop ?? 4;
+  const obstacleBox = {
+    x: obstacle.x + hitInsetX,
+    y: obstacle.y + hitInsetTop,
+    width: obstacle.width - hitInsetX * 2,
+    height: obstacle.height - hitInsetTop - 2,
+  };
+  return (
+    playerBox.x < obstacleBox.x + obstacleBox.width &&
+    playerBox.x + playerBox.width > obstacleBox.x &&
+    playerBox.y < obstacleBox.y + obstacleBox.height &&
+    playerBox.y + playerBox.height > obstacleBox.y
+  );
+}
+
+function endDuel() {
+  if (duel.over) return;
+  duel.running = false;
+  duel.over = true;
+  cancelAnimationFrame(duelRafId);
+
+  const [playerOne, playerTwo] = duel.players;
+  if (playerOne.alive && !playerTwo.alive) {
+    setDuelStatus("שחקן 1 ניצח", "Player 1 wins");
+  } else if (playerTwo.alive && !playerOne.alive) {
+    setDuelStatus("שחקן 2 ניצח", "Player 2 wins");
+  } else {
+    setDuelStatus("תיקו", "Draw");
+  }
+  elements.startDuelBtn.innerHTML = bilingualHtml("משחק חדש", "New Match");
+  drawDuel();
+}
+
+function drawDuel() {
+  duelCtx.clearRect(0, 0, DUEL_WIDTH, DUEL_HEIGHT);
+  const sky = duelCtx.createLinearGradient(0, 0, 0, DUEL_HEIGHT);
+  sky.addColorStop(0, "#b9eff7");
+  sky.addColorStop(0.54, "#f8f7df");
+  sky.addColorStop(1, "#ffe8b4");
+  duelCtx.fillStyle = sky;
+  duelCtx.fillRect(0, 0, DUEL_WIDTH, DUEL_HEIGHT);
+
+  duelCtx.fillStyle = "rgba(244, 196, 91, 0.9)";
+  duelCtx.beginPath();
+  duelCtx.arc(DUEL_WIDTH - 78, 58, 30, 0, Math.PI * 2);
+  duelCtx.fill();
+
+  duel.clouds.forEach((cloud) => drawDuelCloud(cloud));
+  drawDuelLane(0);
+  drawDuelLane(1);
+  duel.obstacles.forEach((obstacle) => drawDuelObstacle(obstacle));
+  duel.players.forEach((player, index) => drawDuelRunner(player, index));
+  drawDuelOverlay();
+}
+
+function drawDuelCloud(cloud) {
+  duelCtx.fillStyle = "rgba(255, 255, 255, 0.75)";
+  duelCtx.beginPath();
+  duelCtx.ellipse(cloud.x, cloud.y, cloud.size * 1.2, cloud.size * 0.5, 0, 0, Math.PI * 2);
+  duelCtx.ellipse(cloud.x + cloud.size * 0.82, cloud.y + 3, cloud.size, cloud.size * 0.45, 0, 0, Math.PI * 2);
+  duelCtx.ellipse(cloud.x - cloud.size * 0.74, cloud.y + 4, cloud.size * 0.88, cloud.size * 0.42, 0, 0, Math.PI * 2);
+  duelCtx.fill();
+}
+
+function drawDuelLane(index) {
+  const player = duel.players[index];
+  const top = index === 0 ? 0 : 212;
+  const color = index === 0 ? "rgba(31, 157, 106, 0.1)" : "rgba(47, 128, 237, 0.1)";
+
+  duelCtx.fillStyle = color;
+  duelCtx.fillRect(0, top, DUEL_WIDTH, 210);
+  duelCtx.fillStyle = "#9b6f3a";
+  duelCtx.fillRect(0, player.groundY, DUEL_WIDTH, DUEL_HEIGHT - player.groundY);
+  duelCtx.fillStyle = "#6d4c2b";
+  duelCtx.fillRect(0, player.groundY, DUEL_WIDTH, 5);
+
+  duelCtx.strokeStyle = index === 0 ? "rgba(31, 157, 106, 0.85)" : "rgba(47, 128, 237, 0.85)";
+  duelCtx.lineWidth = 3;
+  duelCtx.setLineDash([12, 12]);
+  duelCtx.beginPath();
+  duelCtx.moveTo(0, player.groundY + 26);
+  duelCtx.lineTo(DUEL_WIDTH, player.groundY + 26);
+  duelCtx.stroke();
+  duelCtx.setLineDash([]);
+
+  duelCtx.fillStyle = "rgba(25, 32, 42, 0.78)";
+  duelCtx.font = "900 18px Segoe UI, Arial";
+  duelCtx.textAlign = "left";
+  duelCtx.textBaseline = "top";
+  duelCtx.fillText(`${player.englishName} - ${player.key}`, 18, top + 14);
+}
+
+function drawDuelObstacle(obstacle) {
+  const hue = obstacle.lane === 0 ? "#7c3aed" : "#dc2626";
+  duelCtx.save();
+  duelCtx.translate(obstacle.x, obstacle.y);
+  duelCtx.fillStyle = hue;
+  duelCtx.strokeStyle = "#1d2732";
+  duelCtx.lineWidth = 3;
+  duelCtx.beginPath();
+  if (obstacle.type === "spikes" || obstacle.type === "bone") {
+    const spikes = Math.max(3, Math.floor(obstacle.width / 18));
+    for (let i = 0; i < spikes; i += 1) {
+      const x = (obstacle.width / spikes) * i;
+      duelCtx.moveTo(x, obstacle.height);
+      duelCtx.lineTo(x + obstacle.width / spikes / 2, 0);
+      duelCtx.lineTo(x + obstacle.width / spikes, obstacle.height);
+    }
+  } else if (obstacle.type === "boulder") {
+    duelCtx.ellipse(obstacle.width / 2, obstacle.height / 2, obstacle.width / 2, obstacle.height / 2, 0, 0, Math.PI * 2);
+  } else {
+    duelCtx.roundRect(0, 0, obstacle.width, obstacle.height, 7);
+  }
+  duelCtx.fill();
+  duelCtx.stroke();
+  duelCtx.restore();
+}
+
+function drawDuelRunner(player, index) {
+  const t = duel.score / 8 + index;
+  const legA = Math.sin(t) * 5;
+  const legB = Math.sin(t + Math.PI) * 5;
+  const palette = player.palette;
+
+  duelCtx.save();
+  duelCtx.translate(player.x, player.y);
+  if (!player.alive) {
+    duelCtx.globalAlpha = 0.48;
+  }
+
+  duelCtx.fillStyle = palette.dark;
+  duelCtx.beginPath();
+  duelCtx.moveTo(8, 40);
+  duelCtx.quadraticCurveTo(-10, 31, 4, 22);
+  duelCtx.quadraticCurveTo(18, 28, 23, 37);
+  duelCtx.closePath();
+  duelCtx.fill();
+
+  duelCtx.fillStyle = palette.body;
+  duelCtx.beginPath();
+  duelCtx.ellipse(32, 34, 28, 19, 0, 0, Math.PI * 2);
+  duelCtx.fill();
+
+  duelCtx.fillStyle = palette.belly;
+  duelCtx.beginPath();
+  duelCtx.ellipse(36, 40, 16, 8, 0, 0, Math.PI * 2);
+  duelCtx.fill();
+
+  duelCtx.fillStyle = palette.body;
+  duelCtx.beginPath();
+  duelCtx.ellipse(57, 24, 17, 15, 0, 0, Math.PI * 2);
+  duelCtx.fill();
+
+  duelCtx.fillStyle = palette.horn;
+  duelCtx.beginPath();
+  duelCtx.moveTo(51, 11);
+  duelCtx.lineTo(56, 0);
+  duelCtx.lineTo(61, 12);
+  duelCtx.closePath();
+  duelCtx.moveTo(62, 13);
+  duelCtx.lineTo(72, 6);
+  duelCtx.lineTo(69, 18);
+  duelCtx.closePath();
+  duelCtx.fill();
+
+  duelCtx.strokeStyle = palette.dark;
+  duelCtx.lineWidth = 5;
+  duelCtx.lineCap = "round";
+  duelCtx.beginPath();
+  duelCtx.moveTo(23, 48);
+  duelCtx.lineTo(16 + legA, 58);
+  duelCtx.moveTo(42, 49);
+  duelCtx.lineTo(51 + legB, 58);
+  duelCtx.stroke();
+
+  duelCtx.fillStyle = palette.eye;
+  duelCtx.beginPath();
+  duelCtx.arc(62, 22, 3, 0, Math.PI * 2);
+  duelCtx.fill();
+
+  if (!player.alive) {
+    duelCtx.globalAlpha = 1;
+    duelCtx.strokeStyle = "#ef4444";
+    duelCtx.lineWidth = 4;
+    duelCtx.beginPath();
+    duelCtx.moveTo(53, 16);
+    duelCtx.lineTo(70, 32);
+    duelCtx.moveTo(70, 16);
+    duelCtx.lineTo(53, 32);
+    duelCtx.stroke();
+  }
+  duelCtx.restore();
+}
+
+function drawDuelOverlay() {
+  if (duel.running) return;
+
+  duelCtx.save();
+  duelCtx.fillStyle = "rgba(255, 255, 255, 0.72)";
+  duelCtx.fillRect(0, 0, DUEL_WIDTH, DUEL_HEIGHT);
+  duelCtx.fillStyle = "#1d2732";
+  duelCtx.textAlign = "center";
+  duelCtx.textBaseline = "middle";
+  duelCtx.font = "950 30px Segoe UI, Arial";
+  const title = duel.over ? elements.duelStatusLabel.innerText.split("\n")[0] : "Duel";
+  duelCtx.fillText(title, DUEL_WIDTH / 2, DUEL_HEIGHT / 2 - 26);
+  duelCtx.font = "850 18px Segoe UI, Arial";
+  duelCtx.fillText("Player 1: W    |    Player 2: ↑", DUEL_WIDTH / 2, DUEL_HEIGHT / 2 + 18);
+  duelCtx.restore();
+}
+
 function savePlayerName() {
   const name = normalizeName(elements.playerName.value);
   if (name === state.currentPlayer) {
@@ -2014,6 +2460,17 @@ function openLeaderboard() {
 function closeLeaderboard() {
   elements.leaderboardModal.classList.add("hidden");
   elements.openLeaderboardBtn.focus();
+}
+
+function openDailyMissions() {
+  renderAll();
+  elements.dailyMissionsModal.classList.remove("hidden");
+  elements.closeDailyMissionsBtn.focus();
+}
+
+function closeDailyMissions() {
+  elements.dailyMissionsModal.classList.add("hidden");
+  elements.openDailyMissionsBtn.focus();
 }
 
 function openCreatorMessage() {
@@ -4372,6 +4829,18 @@ elements.closeLeaderboardBtn.addEventListener("click", closeLeaderboard);
 elements.leaderboardModal.addEventListener("click", (event) => {
   if (event.target === elements.leaderboardModal) closeLeaderboard();
 });
+elements.openDuelBtn.addEventListener("click", openDuel);
+elements.closeDuelBtn.addEventListener("click", closeDuel);
+elements.startDuelBtn.addEventListener("click", startDuel);
+elements.duelCanvas.addEventListener("pointerdown", handleDuelPointer);
+elements.duelModal.addEventListener("click", (event) => {
+  if (event.target === elements.duelModal) closeDuel();
+});
+elements.openDailyMissionsBtn.addEventListener("click", openDailyMissions);
+elements.closeDailyMissionsBtn.addEventListener("click", closeDailyMissions);
+elements.dailyMissionsModal.addEventListener("click", (event) => {
+  if (event.target === elements.dailyMissionsModal) closeDailyMissions();
+});
 elements.openCreatorMessageBtn.addEventListener("click", openCreatorMessage);
 elements.closeCreatorMessageBtn.addEventListener("click", closeCreatorMessage);
 elements.creatorMessageModal.addEventListener("click", (event) => {
@@ -4410,6 +4879,29 @@ elements.adminLogoutBtn.addEventListener("click", logoutAdmin);
 
 window.addEventListener("resize", resizeCanvas);
 document.addEventListener("keydown", (event) => {
+  if (!elements.duelModal.classList.contains("hidden")) {
+    if (event.code === "Escape") {
+      event.preventDefault();
+      closeDuel();
+      return;
+    }
+    if (event.code === "KeyW") {
+      event.preventDefault();
+      jumpDuelPlayer(0);
+      return;
+    }
+    if (event.code === "ArrowUp") {
+      event.preventDefault();
+      jumpDuelPlayer(1);
+      return;
+    }
+    if (event.code === "Enter") {
+      event.preventDefault();
+      startDuel();
+      return;
+    }
+    return;
+  }
   if (!elements.shopModal.classList.contains("hidden")) {
     if (event.code === "Escape") {
       event.preventDefault();
@@ -4428,6 +4920,13 @@ document.addEventListener("keydown", (event) => {
     if (event.code === "Escape") {
       event.preventDefault();
       closeLeaderboard();
+    }
+    return;
+  }
+  if (!elements.dailyMissionsModal.classList.contains("hidden")) {
+    if (event.code === "Escape") {
+      event.preventDefault();
+      closeDailyMissions();
     }
     return;
   }
@@ -4474,4 +4973,5 @@ renderAll();
 scheduleDailyMissionRefresh();
 resizeCanvas();
 resetGame();
+resetDuel();
 setStatus("מוכן לריצה", true, false, "Ready to run");

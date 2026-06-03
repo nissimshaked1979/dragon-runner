@@ -226,6 +226,12 @@ h1 {
   font-size: 1.1rem;
 }
 
+.creator-actions {
+  display: grid;
+  gap: 6px;
+  flex: 1 1 145px;
+}
+
 .topbar-action {
   display: grid;
   place-items: center;
@@ -246,6 +252,12 @@ h1 {
 
 .topbar-action .bilingual-label .label-en {
   color: rgba(255, 255, 255, 0.76);
+}
+
+.creator-actions .topbar-action {
+  width: 100%;
+  min-height: 40px;
+  flex: none;
 }
 
 .admin-switch.active {
@@ -510,6 +522,18 @@ h1 {
   max-height: min(760px, calc(100vh - 36px));
 }
 
+.daily-missions-window {
+  width: min(820px, calc(100% - 18px));
+  min-height: auto;
+  max-height: min(660px, calc(100vh - 36px));
+}
+
+.duel-window {
+  width: min(1060px, calc(100% - 18px));
+  min-height: auto;
+  max-height: min(760px, calc(100vh - 36px));
+}
+
 .shop-modal-window > .panel-head {
   position: sticky;
   top: 0;
@@ -563,6 +587,68 @@ h1 {
   padding: 12px 14px;
   font-weight: 850;
   line-height: 1.45;
+}
+
+.duel-toolbar {
+  display: grid;
+  grid-template-columns: minmax(160px, 1fr) auto minmax(160px, 1fr);
+  gap: 12px;
+  align-items: stretch;
+  padding: 14px;
+}
+
+.duel-player-stat {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 10px;
+  align-items: center;
+  border: 2px solid #1d2732;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 10px 12px;
+  font-weight: 900;
+}
+
+.duel-player-stat strong {
+  grid-row: span 2;
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.duel-player-stat kbd {
+  justify-self: start;
+  min-width: 34px;
+  border: 2px solid #1d2732;
+  border-radius: 7px;
+  background: #202a38;
+  color: #ffffff;
+  padding: 4px 8px;
+  text-align: center;
+  font-weight: 950;
+}
+
+.duel-player-stat.player-one {
+  box-shadow: inset 6px 0 0 #1f9d6a;
+}
+
+.duel-player-stat.player-two {
+  box-shadow: inset -6px 0 0 #2f80ed;
+}
+
+.duel-canvas-wrap {
+  direction: ltr;
+  padding: 0 14px 14px;
+}
+
+#duelCanvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 960 / 430;
+  height: auto;
+  border: 2px solid #1d2732;
+  border-radius: 8px;
+  background: #b9eff7;
+  touch-action: manipulation;
 }
 
 .setting-row {
@@ -963,6 +1049,10 @@ tbody tr.current {
     flex: 1 1 130px;
   }
 
+  .creator-actions {
+    flex: 1 1 130px;
+  }
+
   .compact input {
     width: 100%;
   }
@@ -982,8 +1072,13 @@ tbody tr.current {
 
   .workspace,
   .daily-mission-grid,
-  .skin-grid {
+  .skin-grid,
+  .duel-toolbar {
     grid-template-columns: 1fr;
+  }
+
+  .duel-player-stat.player-two {
+    box-shadow: inset 6px 0 0 #2f80ed;
   }
 }
 
