@@ -178,24 +178,64 @@
           </div>
         </div>
 
-        <div class="duel-toolbar">
-          <div class="duel-player-stat player-one">
-            <span class="bilingual-label"><span>שחקן 1</span><span class="label-en">Player 1</span></span>
-            <strong id="duelP1Score">0</strong>
-            <kbd>W</kbd>
-          </div>
-          <button id="startDuelBtn" class="primary-action" type="button">
-            <span class="bilingual-label"><span>התחל דו קרב</span><span class="label-en">Start Duel</span></span>
+        <div id="duelModeSelect" class="duel-mode-select">
+          <button class="duel-mode-card" data-duel-mode="human" type="button" aria-label="בן אדם מול בן אדם">
+            <svg class="duel-mode-image" viewBox="0 0 260 160" role="img" aria-label="אדם מול אדם">
+              <rect x="0" y="0" width="260" height="160" rx="18" fill="#eaf7f1" />
+              <path d="M126 23 L134 23 L134 137 L126 137 Z" fill="#1d2732" opacity="0.18" />
+              <circle cx="74" cy="54" r="25" fill="#ffd7a8" stroke="#1d2732" stroke-width="5" />
+              <path d="M42 133 C47 96 101 96 106 133 Z" fill="#1f9d6a" stroke="#1d2732" stroke-width="5" />
+              <path d="M56 54 Q74 70 92 54" fill="none" stroke="#1d2732" stroke-width="5" stroke-linecap="round" />
+              <circle cx="64" cy="48" r="3" fill="#1d2732" />
+              <circle cx="84" cy="48" r="3" fill="#1d2732" />
+              <circle cx="186" cy="54" r="25" fill="#ffd7a8" stroke="#1d2732" stroke-width="5" />
+              <path d="M154 133 C159 96 213 96 218 133 Z" fill="#2f80ed" stroke="#1d2732" stroke-width="5" />
+              <path d="M168 54 Q186 70 204 54" fill="none" stroke="#1d2732" stroke-width="5" stroke-linecap="round" />
+              <circle cx="176" cy="48" r="3" fill="#1d2732" />
+              <circle cx="196" cy="48" r="3" fill="#1d2732" />
+            </svg>
           </button>
-          <div class="duel-player-stat player-two">
-            <span class="bilingual-label"><span>שחקן 2</span><span class="label-en">Player 2</span></span>
-            <strong id="duelP2Score">0</strong>
-            <kbd>↑</kbd>
-          </div>
+
+          <button class="duel-mode-card" data-duel-mode="bot" type="button" aria-label="בן אדם מול בוט">
+            <svg class="duel-mode-image" viewBox="0 0 260 160" role="img" aria-label="אדם מול בוט">
+              <rect x="0" y="0" width="260" height="160" rx="18" fill="#eef4ff" />
+              <path d="M126 23 L134 23 L134 137 L126 137 Z" fill="#1d2732" opacity="0.18" />
+              <circle cx="74" cy="54" r="25" fill="#ffd7a8" stroke="#1d2732" stroke-width="5" />
+              <path d="M42 133 C47 96 101 96 106 133 Z" fill="#1f9d6a" stroke="#1d2732" stroke-width="5" />
+              <path d="M56 54 Q74 70 92 54" fill="none" stroke="#1d2732" stroke-width="5" stroke-linecap="round" />
+              <circle cx="64" cy="48" r="3" fill="#1d2732" />
+              <circle cx="84" cy="48" r="3" fill="#1d2732" />
+              <rect x="156" y="31" width="60" height="54" rx="14" fill="#dbeafe" stroke="#1d2732" stroke-width="5" />
+              <path d="M186 31 L186 17" stroke="#1d2732" stroke-width="5" stroke-linecap="round" />
+              <circle cx="186" cy="14" r="6" fill="#facc15" stroke="#1d2732" stroke-width="4" />
+              <circle cx="176" cy="55" r="5" fill="#2f80ed" />
+              <circle cx="196" cy="55" r="5" fill="#2f80ed" />
+              <path d="M174 72 Q186 79 199 72" fill="none" stroke="#1d2732" stroke-width="4" stroke-linecap="round" />
+              <path d="M154 133 C159 96 213 96 218 133 Z" fill="#94a3b8" stroke="#1d2732" stroke-width="5" />
+            </svg>
+          </button>
         </div>
 
-        <div class="duel-canvas-wrap">
-          <canvas id="duelCanvas" width="960" height="430" aria-label="Duel runner"></canvas>
+        <div id="duelGamePanel" class="duel-game-panel hidden">
+          <div class="duel-toolbar">
+            <div class="duel-player-stat player-one">
+              <span class="bilingual-label"><span>שחקן 1</span><span class="label-en">Player 1</span></span>
+              <strong id="duelP1Score">0</strong>
+              <kbd>W</kbd>
+            </div>
+            <button id="startDuelBtn" class="primary-action" type="button">
+              <span class="bilingual-label"><span>התחל דו קרב</span><span class="label-en">Start Duel</span></span>
+            </button>
+            <div class="duel-player-stat player-two">
+              <span id="duelP2Name" class="bilingual-label"><span>שחקן 2</span><span class="label-en">Player 2</span></span>
+              <strong id="duelP2Score">0</strong>
+              <kbd id="duelP2Key">↑</kbd>
+            </div>
+          </div>
+
+          <div class="duel-canvas-wrap">
+            <canvas id="duelCanvas" width="960" height="430" aria-label="Duel runner"></canvas>
+          </div>
         </div>
       </section>
     </div>

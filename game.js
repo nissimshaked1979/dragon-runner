@@ -600,8 +600,12 @@ const elements = {
   duelModal: document.querySelector("#duelModal"),
   closeDuelBtn: document.querySelector("#closeDuelBtn"),
   duelStatusLabel: document.querySelector("#duelStatusLabel"),
+  duelModeSelect: document.querySelector("#duelModeSelect"),
+  duelGamePanel: document.querySelector("#duelGamePanel"),
   duelCanvas: document.querySelector("#duelCanvas"),
   startDuelBtn: document.querySelector("#startDuelBtn"),
+  duelP2Name: document.querySelector("#duelP2Name"),
+  duelP2Key: document.querySelector("#duelP2Key"),
   duelP1Score: document.querySelector("#duelP1Score"),
   duelP2Score: document.querySelector("#duelP2Score"),
   openDailyMissionsBtn: document.querySelector("#openDailyMissionsBtn"),
@@ -699,12 +703,17 @@ const DUEL_WIDTH = 960;
 const DUEL_HEIGHT = 430;
 
 const duel = {
+  mode: "human",
   running: false,
   over: false,
   score: 0,
   pace: 0,
   speed: 6.6,
   spawnTimer: 700,
+  botDecisionTimer: 0,
+  botReactionTimer: 0,
+  botTargetObstacleId: "",
+  nextObstacleId: 1,
   obstacles: [],
   clouds: [],
   players: [
@@ -2037,12 +2046,51 @@ function trailCostText(trail) {
 }
 
 function setDuelStatus(hebrew, english) {
+  elements.duelStatusLabel.classList.remove("hidden");
   elements.duelStatusLabel.innerHTML = bilingualHtml(hebrew, english);
 }
 
 function updateDuelScoreLabels() {
   elements.duelP1Score.textContent = duel.players[0].score.toString();
   elements.duelP2Score.textContent = duel.players[1].score.toString();
+}
+
+function showDuelModeSelect() {
+  cancelAnimationFrame(duelRafId);
+  duel.running = false;
+  duel.over = false;
+  elements.duelModeSelect.classList.remove("hidden");
+  elements.duelGamePanel.classList.add("hidden");
+  elements.duelStatusLabel.classList.add("hidden");
+}
+
+function updateDuelModeLabels() {
+  if (duel.mode === "bot") {
+    duel.players[1].name = "בוט";
+    duel.players[1].englishName = "Bot";
+    duel.players[1].key = "AUTO";
+    elements.duelP2Name.innerHTML = bilingualHtml("בוט", "Bot");
+    elements.duelP2Key.textContent = "AUTO";
+    elements.startDuelBtn.innerHTML = bilingualHtml("התחל מול בוט", "Start vs Bot");
+    return;
+  }
+
+  duel.players[1].name = "שחקן 2";
+  duel.players[1].englishName = "Player 2";
+  duel.players[1].key = "↑";
+  elements.duelP2Name.innerHTML = bilingualHtml("שחקן 2", "Player 2");
+  elements.duelP2Key.textContent = "↑";
+  elements.startDuelBtn.innerHTML = bilingualHtml("התחל דו קרב", "Start Duel");
+}
+
+function selectDuelMode(mode) {
+  duel.mode = mode === "bot" ? "bot" : "human";
+  elements.duelModeSelect.classList.add("hidden");
+  elements.duelGamePanel.classList.remove("hidden");
+  updateDuelModeLabels();
+  resetDuelRound();
+  setDuelStatus(duel.mode === "bot" ? "בן אדם מול בוט" : "בן אדם מול בן אדם", duel.mode === "bot" ? "Human vs Bot" : "Human vs Human");
+  elements.startDuelBtn.focus();
 }
 
 function resetDuelRound() {
@@ -2053,6 +2101,10 @@ function resetDuelRound() {
   duel.pace = 0;
   duel.speed = 6.6;
   duel.spawnTimer = 650;
+  duel.botDecisionTimer = 0;
+  duel.botReactionTimer = 0;
+  duel.botTargetObstacleId = "";
+  duel.nextObstacleId = 1;
   duel.obstacles = [];
   duel.clouds = [
     { x: 150, y: 42, size: 23, speed: 0.18 },
@@ -2071,15 +2123,15 @@ function resetDuelRound() {
 }
 
 function resetDuel() {
-  resetDuelRound();
-  setDuelStatus("מוכן", "Ready");
-  elements.startDuelBtn.innerHTML = bilingualHtml("התחל דו קרב", "Start Duel");
+  showDuelModeSelect();
+  updateDuelModeLabels();
 }
 
 function openDuel() {
   resetDuel();
   elements.duelModal.classList.remove("hidden");
-  elements.startDuelBtn.focus();
+  const firstMode = elements.duelModeSelect.querySelector("[data-duel-mode]");
+  if (firstMode) firstMode.focus();
 }
 
 function closeDuel() {
@@ -2090,20 +2142,24 @@ function closeDuel() {
 }
 
 function startDuel() {
+  if (elements.duelGamePanel.classList.contains("hidden")) return;
   resetDuelRound();
   duel.running = true;
   duel.over = false;
-  setDuelStatus("רצים", "Running");
+  setDuelStatus(duel.mode === "bot" ? "רצים מול בוט" : "רצים", duel.mode === "bot" ? "Running vs Bot" : "Running");
   elements.startDuelBtn.innerHTML = bilingualHtml("התחל מחדש", "Restart");
   duelLastTime = performance.now();
   duelRafId = requestAnimationFrame(tickDuel);
 }
 
-function jumpDuelPlayer(index) {
+function jumpDuelPlayer(index, fromBot = false) {
   if (elements.duelModal.classList.contains("hidden")) return;
+  if (elements.duelGamePanel.classList.contains("hidden")) return;
+  if (duel.mode === "bot" && index === 1 && !fromBot) return;
   if (!duel.running || duel.over) {
     startDuel();
   }
+  if (!duel.running) return;
 
   const player = duel.players[index];
   if (!player || !player.alive || !player.onGround) return;
@@ -2114,6 +2170,11 @@ function jumpDuelPlayer(index) {
 
 function handleDuelPointer(event) {
   if (elements.duelModal.classList.contains("hidden")) return;
+  if (elements.duelGamePanel.classList.contains("hidden")) return;
+  if (duel.mode === "bot") {
+    jumpDuelPlayer(0);
+    return;
+  }
   const rect = elements.duelCanvas.getBoundingClientRect();
   const lane = event.clientY - rect.top < rect.height / 2 ? 0 : 1;
   jumpDuelPlayer(lane);
@@ -2167,6 +2228,8 @@ function updateDuel(dt) {
     }
   });
 
+  updateDuelBot(dt);
+
   duel.players.forEach((player, index) => {
     if (!player.alive) return;
     const hit = duel.obstacles.some((obstacle) => obstacle.lane === index && duelCollides(player, obstacle));
@@ -2184,12 +2247,56 @@ function updateDuel(dt) {
   }
 }
 
+function updateDuelBot(dt) {
+  if (duel.mode !== "bot" || !duel.running || duel.over) return;
+
+  const bot = duel.players[1];
+  if (!bot.alive) return;
+
+  if (duel.botReactionTimer > 0) {
+    duel.botReactionTimer -= dt;
+    if (duel.botReactionTimer <= 0) {
+      jumpDuelPlayer(1, true);
+    }
+    return;
+  }
+
+  duel.botDecisionTimer = Math.max(0, duel.botDecisionTimer - dt);
+  if (!bot.onGround || duel.botDecisionTimer > 0) return;
+
+  const obstacle = duel.obstacles
+    .filter((item) => item.lane === 1 && item.x + item.width > bot.x)
+    .sort((a, b) => a.x - b.x)[0];
+  if (!obstacle) return;
+
+  const distance = obstacle.x - (bot.x + bot.width);
+  const dangerDistance = Math.max(148, duel.speed * 26);
+  const rescueDistance = Math.max(54, duel.speed * 8);
+  if (distance <= 18 || distance > dangerDistance) return;
+
+  if (obstacle.id === duel.botTargetObstacleId && distance > rescueDistance) return;
+
+  const skill = Math.min(0.97, 0.9 + duel.score / 2800);
+  const mustRescue = distance <= rescueDistance;
+  if (!mustRescue && Math.random() > skill) {
+    duel.botDecisionTimer = randomBetween(70, 170);
+    return;
+  }
+
+  duel.botTargetObstacleId = obstacle.id;
+  duel.botReactionTimer = mustRescue ? randomBetween(20, 70) : randomBetween(55, 130);
+  duel.botDecisionTimer = randomBetween(150, 320);
+}
+
 function spawnDuelObstaclePair() {
   const obstacleType = OBSTACLE_TYPES[randomBetween(0, OBSTACLE_TYPES.length - 1)];
   const width = randomBetween(obstacleType.minWidth, obstacleType.maxWidth);
   const height = randomBetween(obstacleType.minHeight, obstacleType.maxHeight);
+  const pairId = duel.nextObstacleId;
+  duel.nextObstacleId += 1;
   duel.players.forEach((player, lane) => {
     duel.obstacles.push({
+      id: `${pairId}-${lane}`,
       type: obstacleType.type,
       lane,
       x: DUEL_WIDTH + 36,
@@ -2233,9 +2340,9 @@ function endDuel() {
 
   const [playerOne, playerTwo] = duel.players;
   if (playerOne.alive && !playerTwo.alive) {
-    setDuelStatus("שחקן 1 ניצח", "Player 1 wins");
+    setDuelStatus(duel.mode === "bot" ? "ניצחת את הבוט" : "שחקן 1 ניצח", duel.mode === "bot" ? "You beat the bot" : "Player 1 wins");
   } else if (playerTwo.alive && !playerOne.alive) {
-    setDuelStatus("שחקן 2 ניצח", "Player 2 wins");
+    setDuelStatus(duel.mode === "bot" ? "הבוט ניצח" : "שחקן 2 ניצח", duel.mode === "bot" ? "Bot wins" : "Player 2 wins");
   } else {
     setDuelStatus("תיקו", "Draw");
   }
@@ -2303,28 +2410,173 @@ function drawDuelLane(index) {
 }
 
 function drawDuelObstacle(obstacle) {
-  const hue = obstacle.lane === 0 ? "#7c3aed" : "#dc2626";
   duelCtx.save();
   duelCtx.translate(obstacle.x, obstacle.y);
-  duelCtx.fillStyle = hue;
-  duelCtx.strokeStyle = "#1d2732";
-  duelCtx.lineWidth = 3;
-  duelCtx.beginPath();
-  if (obstacle.type === "spikes" || obstacle.type === "bone") {
-    const spikes = Math.max(3, Math.floor(obstacle.width / 18));
-    for (let i = 0; i < spikes; i += 1) {
-      const x = (obstacle.width / spikes) * i;
-      duelCtx.moveTo(x, obstacle.height);
-      duelCtx.lineTo(x + obstacle.width / spikes / 2, 0);
-      duelCtx.lineTo(x + obstacle.width / spikes, obstacle.height);
+  const laneColor = obstacle.lane === 0 ? "#7c3aed" : "#2563eb";
+  const dark = "#1d2732";
+
+  if (obstacle.type === "crystal") {
+    const gradient = duelCtx.createLinearGradient(0, 0, obstacle.width, obstacle.height);
+    gradient.addColorStop(0, "#67e8f9");
+    gradient.addColorStop(0.55, laneColor);
+    gradient.addColorStop(1, "#0f172a");
+    duelCtx.fillStyle = gradient;
+    duelCtx.strokeStyle = dark;
+    duelCtx.lineWidth = 3;
+    duelCtx.beginPath();
+    duelCtx.moveTo(obstacle.width / 2, 0);
+    duelCtx.lineTo(obstacle.width, obstacle.height * 0.42);
+    duelCtx.lineTo(obstacle.width * 0.72, obstacle.height);
+    duelCtx.lineTo(obstacle.width * 0.28, obstacle.height);
+    duelCtx.lineTo(0, obstacle.height * 0.42);
+    duelCtx.closePath();
+    duelCtx.fill();
+    duelCtx.stroke();
+    duelCtx.strokeStyle = "rgba(255, 255, 255, 0.78)";
+    duelCtx.lineWidth = 2;
+    duelCtx.beginPath();
+    duelCtx.moveTo(obstacle.width / 2, 7);
+    duelCtx.lineTo(obstacle.width * 0.36, obstacle.height * 0.72);
+    duelCtx.moveTo(obstacle.width / 2, 7);
+    duelCtx.lineTo(obstacle.width * 0.68, obstacle.height * 0.64);
+    duelCtx.stroke();
+  } else if (obstacle.type === "tower") {
+    duelCtx.fillStyle = "#64748b";
+    duelCtx.strokeStyle = dark;
+    duelCtx.lineWidth = 3;
+    duelCtx.beginPath();
+    duelCtx.roundRect(3, 12, obstacle.width - 6, obstacle.height - 12, 6);
+    duelCtx.fill();
+    duelCtx.stroke();
+    duelCtx.fillStyle = laneColor;
+    duelCtx.beginPath();
+    duelCtx.moveTo(0, 14);
+    duelCtx.lineTo(obstacle.width / 2, 0);
+    duelCtx.lineTo(obstacle.width, 14);
+    duelCtx.closePath();
+    duelCtx.fill();
+    duelCtx.stroke();
+    duelCtx.fillStyle = "#fef3c7";
+    for (let y = 24; y < obstacle.height - 10; y += 15) {
+      duelCtx.fillRect(obstacle.width / 2 - 5, y, 10, 8);
     }
+  } else if (obstacle.type === "log") {
+    duelCtx.fillStyle = "#92400e";
+    duelCtx.strokeStyle = dark;
+    duelCtx.lineWidth = 3;
+    duelCtx.beginPath();
+    duelCtx.roundRect(0, 4, obstacle.width, obstacle.height - 8, 10);
+    duelCtx.fill();
+    duelCtx.stroke();
+    duelCtx.strokeStyle = "#facc15";
+    duelCtx.lineWidth = 2;
+    for (let x = 10; x < obstacle.width; x += 16) {
+      duelCtx.beginPath();
+      duelCtx.moveTo(x, 8);
+      duelCtx.lineTo(x - 4, obstacle.height - 8);
+      duelCtx.stroke();
+    }
+    duelCtx.fillStyle = "#fed7aa";
+    duelCtx.beginPath();
+    duelCtx.ellipse(obstacle.width - 8, obstacle.height / 2, 7, obstacle.height / 2 - 8, 0, 0, Math.PI * 2);
+    duelCtx.fill();
+  } else if (obstacle.type === "flame") {
+    const flame = duelCtx.createRadialGradient(obstacle.width / 2, obstacle.height * 0.7, 4, obstacle.width / 2, obstacle.height * 0.58, obstacle.height);
+    flame.addColorStop(0, "#fef3c7");
+    flame.addColorStop(0.4, "#fb923c");
+    flame.addColorStop(1, "#dc2626");
+    duelCtx.fillStyle = flame;
+    duelCtx.strokeStyle = dark;
+    duelCtx.lineWidth = 3;
+    duelCtx.beginPath();
+    duelCtx.moveTo(obstacle.width / 2, 0);
+    duelCtx.bezierCurveTo(obstacle.width * 1.1, obstacle.height * 0.36, obstacle.width * 0.72, obstacle.height, obstacle.width / 2, obstacle.height);
+    duelCtx.bezierCurveTo(obstacle.width * 0.04, obstacle.height * 0.88, -obstacle.width * 0.06, obstacle.height * 0.38, obstacle.width / 2, 0);
+    duelCtx.fill();
+    duelCtx.stroke();
+    duelCtx.fillStyle = "#fff7ed";
+    duelCtx.beginPath();
+    duelCtx.moveTo(obstacle.width * 0.52, obstacle.height * 0.35);
+    duelCtx.bezierCurveTo(obstacle.width * 0.73, obstacle.height * 0.58, obstacle.width * 0.58, obstacle.height * 0.85, obstacle.width * 0.43, obstacle.height * 0.84);
+    duelCtx.bezierCurveTo(obstacle.width * 0.25, obstacle.height * 0.7, obstacle.width * 0.36, obstacle.height * 0.5, obstacle.width * 0.52, obstacle.height * 0.35);
+    duelCtx.fill();
+  } else if (obstacle.type === "spikes") {
+    const spikes = Math.max(3, Math.floor(obstacle.width / 17));
+    duelCtx.fillStyle = "#e5e7eb";
+    duelCtx.strokeStyle = dark;
+    duelCtx.lineWidth = 3;
+    duelCtx.beginPath();
+    for (let i = 0; i < spikes; i += 1) {
+      const step = obstacle.width / spikes;
+      const x = step * i;
+      duelCtx.moveTo(x, obstacle.height);
+      duelCtx.lineTo(x + step / 2, 0);
+      duelCtx.lineTo(x + step, obstacle.height);
+    }
+    duelCtx.fill();
+    duelCtx.stroke();
+    duelCtx.fillStyle = laneColor;
+    duelCtx.fillRect(0, obstacle.height - 7, obstacle.width, 7);
   } else if (obstacle.type === "boulder") {
-    duelCtx.ellipse(obstacle.width / 2, obstacle.height / 2, obstacle.width / 2, obstacle.height / 2, 0, 0, Math.PI * 2);
+    duelCtx.fillStyle = "#78716c";
+    duelCtx.strokeStyle = dark;
+    duelCtx.lineWidth = 3;
+    duelCtx.beginPath();
+    duelCtx.ellipse(obstacle.width / 2, obstacle.height / 2, obstacle.width / 2, obstacle.height / 2, -0.15, 0, Math.PI * 2);
+    duelCtx.fill();
+    duelCtx.stroke();
+    duelCtx.strokeStyle = "#44403c";
+    duelCtx.lineWidth = 2;
+    duelCtx.beginPath();
+    duelCtx.moveTo(obstacle.width * 0.25, obstacle.height * 0.36);
+    duelCtx.lineTo(obstacle.width * 0.46, obstacle.height * 0.28);
+    duelCtx.lineTo(obstacle.width * 0.58, obstacle.height * 0.45);
+    duelCtx.moveTo(obstacle.width * 0.48, obstacle.height * 0.68);
+    duelCtx.lineTo(obstacle.width * 0.72, obstacle.height * 0.57);
+    duelCtx.stroke();
+  } else if (obstacle.type === "portal") {
+    duelCtx.strokeStyle = laneColor;
+    duelCtx.lineWidth = 7;
+    duelCtx.beginPath();
+    duelCtx.ellipse(obstacle.width / 2, obstacle.height / 2, obstacle.width / 2 - 5, obstacle.height / 2 - 4, 0, 0, Math.PI * 2);
+    duelCtx.stroke();
+    duelCtx.strokeStyle = "#facc15";
+    duelCtx.lineWidth = 3;
+    duelCtx.beginPath();
+    duelCtx.ellipse(obstacle.width / 2, obstacle.height / 2, obstacle.width / 2 - 13, obstacle.height / 2 - 12, 0, 0, Math.PI * 2);
+    duelCtx.stroke();
+    duelCtx.fillStyle = "rgba(124, 58, 237, 0.22)";
+    duelCtx.beginPath();
+    duelCtx.ellipse(obstacle.width / 2, obstacle.height / 2, obstacle.width / 2 - 14, obstacle.height / 2 - 12, 0, 0, Math.PI * 2);
+    duelCtx.fill();
+  } else if (obstacle.type === "bone") {
+    duelCtx.strokeStyle = dark;
+    duelCtx.lineWidth = 3;
+    duelCtx.fillStyle = "#f8fafc";
+    duelCtx.beginPath();
+    duelCtx.roundRect(obstacle.width * 0.18, obstacle.height * 0.34, obstacle.width * 0.64, obstacle.height * 0.28, 8);
+    duelCtx.fill();
+    duelCtx.stroke();
+    [[0.16, 0.34], [0.16, 0.66], [0.84, 0.34], [0.84, 0.66]].forEach(([x, y]) => {
+      duelCtx.beginPath();
+      duelCtx.arc(obstacle.width * x, obstacle.height * y, obstacle.height * 0.22, 0, Math.PI * 2);
+      duelCtx.fill();
+      duelCtx.stroke();
+    });
   } else {
+    duelCtx.fillStyle = laneColor;
+    duelCtx.strokeStyle = dark;
+    duelCtx.lineWidth = 3;
+    duelCtx.beginPath();
     duelCtx.roundRect(0, 0, obstacle.width, obstacle.height, 7);
+    duelCtx.fill();
+    duelCtx.stroke();
   }
+
+  duelCtx.fillStyle = "rgba(29, 39, 50, 0.18)";
+  duelCtx.beginPath();
+  duelCtx.ellipse(obstacle.width / 2, obstacle.height + 5, obstacle.width * 0.45, 5, 0, 0, Math.PI * 2);
   duelCtx.fill();
-  duelCtx.stroke();
   duelCtx.restore();
 }
 
@@ -2417,7 +2669,7 @@ function drawDuelOverlay() {
   const title = duel.over ? elements.duelStatusLabel.innerText.split("\n")[0] : "Duel";
   duelCtx.fillText(title, DUEL_WIDTH / 2, DUEL_HEIGHT / 2 - 26);
   duelCtx.font = "850 18px Segoe UI, Arial";
-  duelCtx.fillText("Player 1: W    |    Player 2: ↑", DUEL_WIDTH / 2, DUEL_HEIGHT / 2 + 18);
+  duelCtx.fillText(duel.mode === "bot" ? "Player 1: W    |    Bot: AUTO" : "Player 1: W    |    Player 2: ↑", DUEL_WIDTH / 2, DUEL_HEIGHT / 2 + 18);
   duelCtx.restore();
 }
 
@@ -4832,6 +5084,9 @@ elements.leaderboardModal.addEventListener("click", (event) => {
 elements.openDuelBtn.addEventListener("click", openDuel);
 elements.closeDuelBtn.addEventListener("click", closeDuel);
 elements.startDuelBtn.addEventListener("click", startDuel);
+elements.duelModeSelect.querySelectorAll("[data-duel-mode]").forEach((button) => {
+  button.addEventListener("click", () => selectDuelMode(button.dataset.duelMode));
+});
 elements.duelCanvas.addEventListener("pointerdown", handleDuelPointer);
 elements.duelModal.addEventListener("click", (event) => {
   if (event.target === elements.duelModal) closeDuel();
@@ -4883,6 +5138,13 @@ document.addEventListener("keydown", (event) => {
     if (event.code === "Escape") {
       event.preventDefault();
       closeDuel();
+      return;
+    }
+    if (!elements.duelModeSelect.classList.contains("hidden")) {
+      if (event.code === "Enter") {
+        event.preventDefault();
+        selectDuelMode("human");
+      }
       return;
     }
     if (event.code === "KeyW") {
