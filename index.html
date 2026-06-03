@@ -14,10 +14,12 @@
             <span class="bilingual-label"><span>שחקן</span><span class="label-en">Player</span></span>
             <input id="playerName" autocomplete="off" />
           </label>
-          <button id="savePlayerBtn" class="icon-button" type="button" title="שמירה" aria-label="שמירה">✓</button>
           <button id="renameCurrentBtn" class="rename-button" type="button"><span class="bilingual-label"><span>שנה שם</span><span class="label-en">Rename</span></span></button>
           <button id="openShopBtn" class="topbar-action" type="button" aria-haspopup="dialog">
             <span class="bilingual-label"><span>חנות סקינים</span><span class="label-en">Skin Shop</span></span>
+          </button>
+          <button id="openTrailShopBtn" class="topbar-action" type="button" aria-haspopup="dialog">
+            <span class="bilingual-label"><span>חנות שבילים</span><span class="label-en">Trail Shop</span></span>
           </button>
           <button id="openLeaderboardBtn" class="topbar-action" type="button" aria-haspopup="dialog">
             <span class="bilingual-label"><span>לוח שיאים</span><span class="label-en">Leaderboard</span></span>
@@ -134,7 +136,18 @@
         </div>
 
         <div id="skinGrid" class="skin-grid"></div>
+      </section>
+    </div>
 
+    <div id="trailShopModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="trailShopTitle">
+      <section class="shop-modal-window" aria-labelledby="trailShopTitle">
+        <div class="panel-head">
+          <h2 id="trailShopTitle"><span class="bilingual-label"><span>חנות שבילים</span><span class="label-en">Trail Shop</span></span></h2>
+          <div class="modal-head-actions">
+            <span id="activeTrailName"><span class="bilingual-label"><span>בלי שביל</span><span class="label-en">No Trail</span></span></span>
+            <button id="closeTrailShopBtn" class="close-shop-button" type="button" title="סגירה" aria-label="סגירה">×</button>
+          </div>
+        </div>
         <div class="shop-section-head">
           <h3><span class="bilingual-label"><span>חנות שבילים</span><span class="label-en">Trail Shop</span></span></h3>
           <p><span class="bilingual-label"><span>כל שביל עובד עם כל חיה, ומתחילים בלי שביל</span><span class="label-en">Every trail works with every animal, and you start with no trail</span></span></p>

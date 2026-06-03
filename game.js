@@ -8,28 +8,28 @@ const MAX_TRAIL_PARTICLES = 90;
 const TRAIL_SHOP_VERSION = 2;
 
 const TRAILS = [
-  { id: "fire", name: "שביל אש", englishName: "Fire Trail", tier: "מתחיל", englishTier: "Beginner", cost: 45000, kind: "fire", color: "#ff7a18", accent: "#ffd166", yOffset: 44, spread: 16, size: 18 },
-  { id: "hearts", name: "שביל לבבות", englishName: "Heart Trail", tier: "יפה", englishTier: "Pretty", cost: 90000, kind: "heart", color: "#f472b6", accent: "#ffffff", yOffset: 38, spread: 18, size: 13 },
-  { id: "gold-sparkles", name: "שביל ניצוצות זהב", englishName: "Gold Sparkle Trail", tier: "מבריק", englishTier: "Shiny", cost: 140000, kind: "sparkle", color: "#facc15", accent: "#ffffff", yOffset: 36, spread: 18, size: 14 },
-  { id: "embers", name: "שביל גחלים", englishName: "Ember Trail", tier: "חם", englishTier: "Hot", cost: 190000, kind: "ember", color: "#fb923c", accent: "#fed7aa", yOffset: 40, spread: 18, size: 14 },
-  { id: "leaves", name: "שביל עלים", englishName: "Leaf Trail", tier: "טבע", englishTier: "Nature", cost: 240000, kind: "leaf", color: "#22c55e", accent: "#166534", yOffset: 50, spread: 12, size: 15 },
-  { id: "feathers", name: "שביל נוצות", englishName: "Feather Trail", tier: "נדיר", englishTier: "Rare", cost: 300000, kind: "feather", color: "#2563eb", accent: "#fef08a", yOffset: 32, spread: 22, size: 17 },
-  { id: "snow", name: "שביל שלג", englishName: "Snow Trail", tier: "קפוא", englishTier: "Frozen", cost: 360000, kind: "snow", color: "#bae6fd", accent: "#ffffff", yOffset: 40, spread: 20, size: 15 },
-  { id: "moon", name: "שביל ירח", englishName: "Moon Trail", tier: "לילה", englishTier: "Night", cost: 430000, kind: "moon", color: "#cbd5e1", accent: "#475569", yOffset: 34, spread: 18, size: 15 },
-  { id: "tiger-stripes", name: "שביל פסים", englishName: "Stripe Trail", tier: "טורף", englishTier: "Predator", cost: 500000, kind: "stripe", color: "#f97316", accent: "#111827", yOffset: 42, spread: 18, size: 17 },
-  { id: "hoof-clouds", name: "שביל פרסות", englishName: "Hoof Trail", tier: "מהיר", englishTier: "Fast", cost: 570000, kind: "hoof", color: "#a16207", accent: "#fde68a", yOffset: 58, spread: 8, size: 15 },
-  { id: "giant-dust", name: "שביל ענני אבק", englishName: "Dust Cloud Trail", tier: "גדול", englishTier: "Big", cost: 650000, kind: "dust", color: "#94a3b8", accent: "#e2e8f0", yOffset: 58, spread: 12, size: 18 },
-  { id: "gems", name: "שביל יהלומים", englishName: "Gem Trail", tier: "יוקרתי", englishTier: "Luxury", cost: 760000, kind: "gem", color: "#dc2626", accent: "#facc15", yOffset: 36, spread: 20, size: 16 },
-  { id: "waves", name: "שביל גלים", englishName: "Wave Trail", tier: "ים", englishTier: "Sea", cost: 880000, kind: "wave", color: "#38bdf8", accent: "#ffffff", yOffset: 44, spread: 18, size: 16 },
-  { id: "ribbons", name: "שביל סרטים", englishName: "Ribbon Trail", tier: "אפי", englishTier: "Epic", cost: 1020000, kind: "ribbon", color: "#f9a8d4", accent: "#fff7ed", yOffset: 32, spread: 22, size: 17 },
-  { id: "smoke", name: "שביל עשן ירוק", englishName: "Green Smoke Trail", tier: "מסתורי", englishTier: "Mystery", cost: 1160000, kind: "smoke", color: "#84cc16", accent: "#f8fafc", yOffset: 38, spread: 18, size: 17 },
-  { id: "pulse", name: "שביל פעימות", englishName: "Pulse Trail", tier: "חזק", englishTier: "Power", cost: 1300000, kind: "pulse", color: "#b45309", accent: "#facc15", yOffset: 44, spread: 16, size: 16 },
-  { id: "coffee", name: "שביל קפה", englishName: "Coffee Trail", tier: "סודי", englishTier: "Secret", cost: 1450000, kind: "coffee", color: "#92400e", accent: "#ffedd5", yOffset: 34, spread: 18, size: 16 },
-  { id: "cactus", name: "שביל קקטוסים", englishName: "Cactus Trail", tier: "מדבר", englishTier: "Desert", cost: 1600000, kind: "cactus", color: "#22c55e", accent: "#fef3c7", yOffset: 48, spread: 12, size: 15 },
-  { id: "peppers", name: "שביל פלפלים", englishName: "Pepper Trail", tier: "חריף", englishTier: "Spicy", cost: 1750000, kind: "pepper", color: "#ef4444", accent: "#facc15", yOffset: 40, spread: 18, size: 15 },
-  { id: "forest", name: "שביל יער", englishName: "Forest Trail", tier: "אגדי", englishTier: "Legendary", cost: 1950000, kind: "forest", color: "#15803d", accent: "#a3e635", yOffset: 44, spread: 16, size: 16 },
-  { id: "rainbow", name: "שביל קשת", englishName: "Rainbow Trail", tier: "הכי יפה", englishTier: "Most Beautiful", cost: 2200000, kind: "rainbow", color: "#38bdf8", accent: "#f0abfc", yOffset: 34, spread: 22, size: 18 },
-  { id: "sixty-seven", name: "שביל 67", englishName: "67 Trail", tier: "הכי יקר", englishTier: "Most Expensive", cost: 3000000, kind: "number", color: "#2563eb", accent: "#facc15", yOffset: 34, spread: 20, size: 18 },
+  { id: "fire", name: "שביל אש", englishName: "Fire Trail", tier: "מתחיל", englishTier: "Beginner", cost: 80000, kind: "fire", color: "#ff7a18", accent: "#ffd166", yOffset: 44, spread: 16, size: 18 },
+  { id: "hearts", name: "שביל לבבות", englishName: "Heart Trail", tier: "יפה", englishTier: "Pretty", cost: 150000, kind: "heart", color: "#f472b6", accent: "#ffffff", yOffset: 38, spread: 18, size: 13 },
+  { id: "gold-sparkles", name: "שביל ניצוצות זהב", englishName: "Gold Sparkle Trail", tier: "מבריק", englishTier: "Shiny", cost: 240000, kind: "sparkle", color: "#facc15", accent: "#ffffff", yOffset: 36, spread: 18, size: 14 },
+  { id: "embers", name: "שביל גחלים", englishName: "Ember Trail", tier: "חם", englishTier: "Hot", cost: 330000, kind: "ember", color: "#fb923c", accent: "#fed7aa", yOffset: 40, spread: 18, size: 14 },
+  { id: "leaves", name: "שביל עלים", englishName: "Leaf Trail", tier: "טבע", englishTier: "Nature", cost: 430000, kind: "leaf", color: "#22c55e", accent: "#166534", yOffset: 50, spread: 12, size: 15 },
+  { id: "feathers", name: "שביל נוצות", englishName: "Feather Trail", tier: "נדיר", englishTier: "Rare", cost: 540000, kind: "feather", color: "#2563eb", accent: "#fef08a", yOffset: 32, spread: 22, size: 17 },
+  { id: "snow", name: "שביל שלג", englishName: "Snow Trail", tier: "קפוא", englishTier: "Frozen", cost: 660000, kind: "snow", color: "#bae6fd", accent: "#ffffff", yOffset: 40, spread: 20, size: 15 },
+  { id: "moon", name: "שביל ירח", englishName: "Moon Trail", tier: "לילה", englishTier: "Night", cost: 790000, kind: "moon", color: "#cbd5e1", accent: "#475569", yOffset: 34, spread: 18, size: 15 },
+  { id: "tiger-stripes", name: "שביל פסים", englishName: "Stripe Trail", tier: "טורף", englishTier: "Predator", cost: 930000, kind: "stripe", color: "#f97316", accent: "#111827", yOffset: 42, spread: 18, size: 17 },
+  { id: "hoof-clouds", name: "שביל פרסות", englishName: "Hoof Trail", tier: "מהיר", englishTier: "Fast", cost: 1080000, kind: "hoof", color: "#a16207", accent: "#fde68a", yOffset: 58, spread: 8, size: 15 },
+  { id: "giant-dust", name: "שביל ענני אבק", englishName: "Dust Cloud Trail", tier: "גדול", englishTier: "Big", cost: 1250000, kind: "dust", color: "#94a3b8", accent: "#e2e8f0", yOffset: 58, spread: 12, size: 18 },
+  { id: "gems", name: "שביל יהלומים", englishName: "Gem Trail", tier: "יוקרתי", englishTier: "Luxury", cost: 1450000, kind: "gem", color: "#dc2626", accent: "#facc15", yOffset: 36, spread: 20, size: 16 },
+  { id: "waves", name: "שביל גלים", englishName: "Wave Trail", tier: "ים", englishTier: "Sea", cost: 1650000, kind: "wave", color: "#38bdf8", accent: "#ffffff", yOffset: 44, spread: 18, size: 16 },
+  { id: "ribbons", name: "שביל סרטים", englishName: "Ribbon Trail", tier: "אפי", englishTier: "Epic", cost: 1900000, kind: "ribbon", color: "#f9a8d4", accent: "#fff7ed", yOffset: 32, spread: 22, size: 17 },
+  { id: "smoke", name: "שביל עשן ירוק", englishName: "Green Smoke Trail", tier: "מסתורי", englishTier: "Mystery", cost: 2150000, kind: "smoke", color: "#84cc16", accent: "#f8fafc", yOffset: 38, spread: 18, size: 17 },
+  { id: "pulse", name: "שביל פעימות", englishName: "Pulse Trail", tier: "חזק", englishTier: "Power", cost: 2400000, kind: "pulse", color: "#b45309", accent: "#facc15", yOffset: 44, spread: 16, size: 16 },
+  { id: "coffee", name: "שביל קפה", englishName: "Coffee Trail", tier: "סודי", englishTier: "Secret", cost: 2650000, kind: "coffee", color: "#92400e", accent: "#ffedd5", yOffset: 34, spread: 18, size: 16 },
+  { id: "cactus", name: "שביל קקטוסים", englishName: "Cactus Trail", tier: "מדבר", englishTier: "Desert", cost: 2900000, kind: "cactus", color: "#22c55e", accent: "#fef3c7", yOffset: 48, spread: 12, size: 15 },
+  { id: "peppers", name: "שביל פלפלים", englishName: "Pepper Trail", tier: "חריף", englishTier: "Spicy", cost: 3150000, kind: "pepper", color: "#ef4444", accent: "#facc15", yOffset: 40, spread: 18, size: 15 },
+  { id: "forest", name: "שביל יער", englishName: "Forest Trail", tier: "אגדי", englishTier: "Legendary", cost: 3450000, kind: "forest", color: "#15803d", accent: "#a3e635", yOffset: 44, spread: 16, size: 16 },
+  { id: "rainbow", name: "שביל קשת", englishName: "Rainbow Trail", tier: "הכי יפה", englishTier: "Most Beautiful", cost: 3750000, kind: "rainbow", color: "#38bdf8", accent: "#f0abfc", yOffset: 34, spread: 22, size: 18 },
+  { id: "sixty-seven", name: "שביל 67", englishName: "67 Trail", tier: "הכי יקר", englishTier: "Most Expensive", cost: 5000000, kind: "number", color: "#2563eb", accent: "#facc15", yOffset: 34, spread: 20, size: 18 },
 ];
 
 const OBSTACLE_TYPES = [
@@ -433,7 +433,6 @@ const BASE_COLORS = [
 
 const elements = {
   playerName: document.querySelector("#playerName"),
-  savePlayerBtn: document.querySelector("#savePlayerBtn"),
   renameCurrentBtn: document.querySelector("#renameCurrentBtn"),
   scoreValue: document.querySelector("#scoreValue"),
   bestValue: document.querySelector("#bestValue"),
@@ -455,6 +454,10 @@ const elements = {
   activeSkinName: document.querySelector("#activeSkinName"),
   baseColorSwatches: document.querySelector("#baseColorSwatches"),
   skinGrid: document.querySelector("#skinGrid"),
+  openTrailShopBtn: document.querySelector("#openTrailShopBtn"),
+  trailShopModal: document.querySelector("#trailShopModal"),
+  closeTrailShopBtn: document.querySelector("#closeTrailShopBtn"),
+  activeTrailName: document.querySelector("#activeTrailName"),
   trailGrid: document.querySelector("#trailGrid"),
   openShopBtn: document.querySelector("#openShopBtn"),
   shopModal: document.querySelector("#shopModal"),
@@ -756,6 +759,8 @@ function renderAll() {
   elements.bestValue.textContent = player.best.toString();
   elements.pointsValue.textContent = player.points.toString();
   elements.activeSkinName.innerHTML = skinNameHtml(getSkinById(player.skinId));
+  const activeTrail = getTrailById(player.trailId);
+  elements.activeTrailName.innerHTML = activeTrail ? trailNameHtml(activeTrail) : bilingualHtml("בלי שביל", "No Trail");
   elements.leaderboardCount.textContent = Object.keys(state.players).length.toString();
   elements.jumpSoundToggle.checked = state.jumpSoundEnabled;
   elements.jumpSoundState.innerHTML = state.jumpSoundEnabled ? bilingualHtml("פעיל", "On") : bilingualHtml("כבוי", "Off");
@@ -1558,6 +1563,17 @@ function openShop() {
 function closeShop() {
   elements.shopModal.classList.add("hidden");
   elements.openShopBtn.focus();
+}
+
+function openTrailShop() {
+  renderAll();
+  elements.trailShopModal.classList.remove("hidden");
+  elements.closeTrailShopBtn.focus();
+}
+
+function closeTrailShop() {
+  elements.trailShopModal.classList.add("hidden");
+  elements.openTrailShopBtn.focus();
 }
 
 function openLeaderboard() {
@@ -3898,7 +3914,6 @@ function handleAdminRevealKeyup(event) {
   }
 }
 
-elements.savePlayerBtn.addEventListener("click", savePlayerName);
 elements.renameCurrentBtn.addEventListener("click", renameCurrentPlayer);
 elements.playerName.addEventListener("keydown", (event) => {
   if (event.key === "Enter") savePlayerName();
@@ -3907,6 +3922,11 @@ elements.openShopBtn.addEventListener("click", openShop);
 elements.closeShopBtn.addEventListener("click", closeShop);
 elements.shopModal.addEventListener("click", (event) => {
   if (event.target === elements.shopModal) closeShop();
+});
+elements.openTrailShopBtn.addEventListener("click", openTrailShop);
+elements.closeTrailShopBtn.addEventListener("click", closeTrailShop);
+elements.trailShopModal.addEventListener("click", (event) => {
+  if (event.target === elements.trailShopModal) closeTrailShop();
 });
 elements.openLeaderboardBtn.addEventListener("click", openLeaderboard);
 elements.closeLeaderboardBtn.addEventListener("click", closeLeaderboard);
@@ -3955,6 +3975,13 @@ document.addEventListener("keydown", (event) => {
     if (event.code === "Escape") {
       event.preventDefault();
       closeShop();
+    }
+    return;
+  }
+  if (!elements.trailShopModal.classList.contains("hidden")) {
+    if (event.code === "Escape") {
+      event.preventDefault();
+      closeTrailShop();
     }
     return;
   }
