@@ -888,6 +888,15 @@ tbody tr.current {
   padding: 6px;
 }
 
+.admin-mission-copy {
+  display: grid;
+  gap: 3px;
+}
+
+.admin-mission-copy strong {
+  color: var(--ink);
+}
+
 .report-delete-action {
   width: 28px;
   height: 28px;

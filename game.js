@@ -636,6 +636,7 @@ const elements = {
   adminSkin: document.querySelector("#adminSkin"),
   applyAdminSkinBtn: document.querySelector("#applyAdminSkinBtn"),
   removeAdminSkinBtn: document.querySelector("#removeAdminSkinBtn"),
+  adminMissionSummary: document.querySelector("#adminMissionSummary"),
   playerReportSummary: document.querySelector("#playerReportSummary"),
   creatorMessageSummary: document.querySelector("#creatorMessageSummary"),
   adminLogoutBtn: document.querySelector("#adminLogoutBtn"),
@@ -686,6 +687,7 @@ function loadState() {
     players: {},
     playerReports: [],
     creatorMessages: [],
+    hiddenAdminMissionInfo: [],
     trailShopVersion: TRAIL_SHOP_VERSION,
   };
 
@@ -700,6 +702,7 @@ function loadState() {
       players: parsed.players && typeof parsed.players === "object" ? parsed.players : {},
       playerReports: Array.isArray(parsed.playerReports) ? parsed.playerReports : [],
       creatorMessages: Array.isArray(parsed.creatorMessages) ? parsed.creatorMessages : [],
+      hiddenAdminMissionInfo: Array.isArray(parsed.hiddenAdminMissionInfo) ? parsed.hiddenAdminMissionInfo : [],
       trailShopVersion: Number.isFinite(Number(parsed.trailShopVersion)) ? Number(parsed.trailShopVersion) : 1,
     };
     return withDefaultPlayer(merged);
@@ -763,6 +766,17 @@ function withDefaultPlayer(nextState) {
         }))
         .filter((message) => message.from && message.text)
         .slice(-50)
+    : [];
+
+  nextState.hiddenAdminMissionInfo = Array.isArray(nextState.hiddenAdminMissionInfo)
+    ? nextState.hiddenAdminMissionInfo
+        .filter((item) => item && typeof item === "object")
+        .map((item) => ({
+          date: typeof item.date === "string" ? item.date : "",
+          slot: item.slot === "regular" || item.slot === "secret" ? item.slot : "",
+        }))
+        .filter((item) => item.date && item.slot)
+        .slice(-20)
     : [];
 
   return nextState;
@@ -985,6 +999,7 @@ function renderAll() {
   renderSkins();
   renderTrails();
   renderAdminSkinOptions();
+  renderAdminMissionSummary();
   renderPlayerReportSummary();
   renderCreatorMessageSummary();
   draw();
@@ -1088,6 +1103,68 @@ function updateDailyMissionProgress(type, value) {
   if (!secretCompleteBefore && secretCompleteAfter && !daily.claimed.secret) {
     setStatus("גילית את המשימה הסודית", true, true, "Secret mission discovered");
   }
+}
+
+function isAdminMissionInfoHidden(date, slot) {
+  return (state.hiddenAdminMissionInfo || []).some((item) => item.date === date && item.slot === slot);
+}
+
+function renderAdminMissionSummary() {
+  if (!elements.adminMissionSummary) return;
+
+  const player = getCurrentPlayer();
+  const daily = ensureDailyMissionState(player);
+  const date = getDailyDateKey();
+  const missions = getDailyMissionSet(date);
+  const rows = [
+    { slot: "regular", label: "משימה רגילה", mission: missions.regular },
+    { slot: "secret", label: "משימה סודית", mission: missions.secret },
+  ].filter((row) => !isAdminMissionInfoHidden(date, row.slot));
+
+  if (!rows.length) {
+    elements.adminMissionSummary.innerHTML = "אין משימות להצגה";
+    return;
+  }
+
+  elements.adminMissionSummary.innerHTML = rows
+    .map(({ slot, label, mission }) => {
+      const progress = Math.min(getDailyMissionProgress(mission, daily), mission.target);
+      const targetText = Number(mission.target).toLocaleString("he-IL");
+      const rewardText = Number(mission.reward).toLocaleString("he-IL");
+      const hint = slot === "secret" && mission.hint ? `<span>רמז: ${escapeHtml(mission.hint)}</span>` : "";
+
+      return `
+        <div class="report-summary-item admin-mission-item">
+          <button class="report-delete-action" data-hide-admin-mission="${slot}" type="button" title="הסתרה" aria-label="הסתרת משימה">×</button>
+          <div class="admin-mission-copy">
+            <strong>${escapeHtml(label)}: ${escapeHtml(mission.title)}</strong>
+            <span>מה צריך לעשות: ${escapeHtml(mission.description)}</span>
+            <span>יעד: ${escapeHtml(targetText)} | פרס: ${escapeHtml(rewardText)} נקודות חנות</span>
+            <span>התקדמות השחקן הנוכחי: ${escapeHtml(progress.toLocaleString("he-IL"))} / ${escapeHtml(targetText)}</span>
+            ${hint}
+          </div>
+        </div>
+      `;
+    })
+    .join("");
+
+  elements.adminMissionSummary.querySelectorAll("[data-hide-admin-mission]").forEach((button) => {
+    button.addEventListener("click", () => hideAdminMissionInfo(button.dataset.hideAdminMission));
+  });
+}
+
+function hideAdminMissionInfo(slot) {
+  if (slot !== "regular" && slot !== "secret") return;
+
+  const date = getDailyDateKey();
+  state.hiddenAdminMissionInfo = state.hiddenAdminMissionInfo || [];
+  if (!isAdminMissionInfoHidden(date, slot)) {
+    state.hiddenAdminMissionInfo.push({ date, slot });
+    state.hiddenAdminMissionInfo = state.hiddenAdminMissionInfo.slice(-20);
+  }
+  saveState();
+  renderAdminMissionSummary();
+  setStatus("המשימה הוסתרה מהאדמין", true, true, "Mission hidden from admin");
 }
 
 function renderLeaderboard() {
