@@ -580,6 +580,7 @@ const BASE_COLORS = [
 ];
 
 const elements = {
+  screenBanner: document.querySelector("#screenBanner"),
   playerName: document.querySelector("#playerName"),
   renameCurrentBtn: document.querySelector("#renameCurrentBtn"),
   scoreValue: document.querySelector("#scoreValue"),
@@ -648,6 +649,10 @@ const elements = {
   adminBest: document.querySelector("#adminBest"),
   raiseBestBtn: document.querySelector("#raiseBestBtn"),
   subtractBestBtn: document.querySelector("#subtractBestBtn"),
+  adminBannerText: document.querySelector("#adminBannerText"),
+  adminBannerSeconds: document.querySelector("#adminBannerSeconds"),
+  showBannerBtn: document.querySelector("#showBannerBtn"),
+  clearBannerBtn: document.querySelector("#clearBannerBtn"),
   adminSkin: document.querySelector("#adminSkin"),
   applyAdminSkinBtn: document.querySelector("#applyAdminSkinBtn"),
   removeAdminSkinBtn: document.querySelector("#removeAdminSkinBtn"),
@@ -664,6 +669,7 @@ let state = loadState();
 let adminPanelVisible = state.admin;
 let statusTimer = 0;
 let dailyMissionRefreshTimer = 0;
+let screenBannerTimer = 0;
 let rafId = 0;
 let lastTime = 0;
 let spawnTimer = 0;
@@ -769,6 +775,7 @@ function loadState() {
     playerReports: [],
     creatorMessages: [],
     hiddenAdminMissionInfo: [],
+    screenBanner: { text: "", expiresAt: 0 },
     trailShopVersion: TRAIL_SHOP_VERSION,
   };
 
@@ -784,6 +791,7 @@ function loadState() {
       playerReports: Array.isArray(parsed.playerReports) ? parsed.playerReports : [],
       creatorMessages: Array.isArray(parsed.creatorMessages) ? parsed.creatorMessages : [],
       hiddenAdminMissionInfo: Array.isArray(parsed.hiddenAdminMissionInfo) ? parsed.hiddenAdminMissionInfo : [],
+      screenBanner: parsed.screenBanner && typeof parsed.screenBanner === "object" ? parsed.screenBanner : { text: "", expiresAt: 0 },
       trailShopVersion: Number.isFinite(Number(parsed.trailShopVersion)) ? Number(parsed.trailShopVersion) : 1,
     };
     return withDefaultPlayer(merged);
@@ -859,6 +867,14 @@ function withDefaultPlayer(nextState) {
         .filter((item) => item.date && item.slot)
         .slice(-20)
     : [];
+
+  nextState.screenBanner =
+    nextState.screenBanner && typeof nextState.screenBanner === "object"
+      ? {
+          text: String(nextState.screenBanner.text || "").trim().slice(0, 80),
+          expiresAt: Number.isFinite(Number(nextState.screenBanner.expiresAt)) ? Number(nextState.screenBanner.expiresAt) : 0,
+        }
+      : { text: "", expiresAt: 0 };
 
   return nextState;
 }
@@ -1097,6 +1113,32 @@ function setStatus(text, visible = true, autoHide = false, englishText = "") {
   }
 }
 
+function renderScreenBanner() {
+  clearTimeout(screenBannerTimer);
+  const banner = state.screenBanner || { text: "", expiresAt: 0 };
+  const text = String(banner.text || "").trim();
+  const expiresAt = Number(banner.expiresAt || 0);
+  const remaining = expiresAt - Date.now();
+
+  if (!text || remaining <= 0) {
+    elements.screenBanner.textContent = "";
+    elements.screenBanner.classList.add("hidden");
+    if (text || expiresAt) {
+      state.screenBanner = { text: "", expiresAt: 0 };
+      saveState();
+    }
+    return;
+  }
+
+  elements.screenBanner.textContent = text;
+  elements.screenBanner.classList.remove("hidden");
+  screenBannerTimer = window.setTimeout(() => {
+    state.screenBanner = { text: "", expiresAt: 0 };
+    saveState();
+    renderScreenBanner();
+  }, Math.min(remaining, 2147483647));
+}
+
 function renderAll() {
   const player = getCurrentPlayer();
   elements.playerName.value = state.currentPlayer;
@@ -1125,6 +1167,7 @@ function renderAll() {
   renderAdminMissionSummary();
   renderPlayerReportSummary();
   renderCreatorMessageSummary();
+  renderScreenBanner();
   draw();
 }
 
@@ -2272,7 +2315,7 @@ function updateDuelBot(dt) {
   }
 
   duel.botDecisionTimer = Math.max(0, duel.botDecisionTimer - dt);
-  if (!bot.onGround || duel.botDecisionTimer > 0) return;
+  if (!bot.onGround) return;
 
   const obstacle = duel.obstacles
     .filter((item) => item.lane === 1 && item.x + item.width > bot.x)
@@ -2280,22 +2323,27 @@ function updateDuelBot(dt) {
   if (!obstacle) return;
 
   const distance = obstacle.x - (bot.x + bot.width);
-  const dangerDistance = Math.max(148, duel.speed * 26);
-  const rescueDistance = Math.max(54, duel.speed * 8);
-  if (distance <= 18 || distance > dangerDistance) return;
+  if (distance < -12) return;
 
-  if (obstacle.id === duel.botTargetObstacleId && distance > rescueDistance) return;
+  const heightBonusFrames = obstacle.height >= 48 ? 3 : obstacle.height >= 38 ? 2 : 0;
+  const targetFrames = 14 + heightBonusFrames;
+  const jumpDistance = Math.max(96, Math.min(260, duel.speed * targetFrames + obstacle.width * 0.48));
+  const rescueDistance = Math.max(58, duel.speed * 7.5);
+  const alreadyPlanned = obstacle.id === duel.botTargetObstacleId;
 
-  const skill = Math.min(0.97, 0.9 + duel.score / 2800);
-  const mustRescue = distance <= rescueDistance;
-  if (!mustRescue && Math.random() > skill) {
-    duel.botDecisionTimer = randomBetween(70, 170);
+  if (distance <= rescueDistance) {
+    duel.botTargetObstacleId = obstacle.id;
+    duel.botReactionTimer = 0;
+    duel.botDecisionTimer = randomBetween(90, 180);
+    jumpDuelPlayer(1, true);
     return;
   }
 
+  if (alreadyPlanned || duel.botDecisionTimer > 0 || distance > jumpDistance) return;
+
   duel.botTargetObstacleId = obstacle.id;
-  duel.botReactionTimer = mustRescue ? randomBetween(20, 70) : randomBetween(55, 130);
-  duel.botDecisionTimer = randomBetween(150, 320);
+  duel.botReactionTimer = randomBetween(8, Math.max(26, 62 - duel.speed * 2));
+  duel.botDecisionTimer = randomBetween(110, 230);
 }
 
 function spawnDuelObstaclePair() {
@@ -2922,6 +2970,35 @@ function setAdminBest() {
 
 function subtractAdminBest() {
   changeAdminBest(-1);
+}
+
+function showAdminScreenBanner() {
+  if (!state.admin) return;
+  const text = elements.adminBannerText.value.trim().replace(/\s+/g, " ").slice(0, 80);
+  const seconds = Math.max(1, Math.min(600, Number.parseInt(elements.adminBannerSeconds.value, 10) || 5));
+
+  if (!text) {
+    setStatus("כתוב קודם מה להציג", true, true, "Write text first");
+    elements.adminBannerText.focus();
+    return;
+  }
+
+  elements.adminBannerSeconds.value = seconds.toString();
+  state.screenBanner = {
+    text,
+    expiresAt: Date.now() + seconds * 1000,
+  };
+  saveState();
+  renderScreenBanner();
+  setStatus("הכיתוב הופיע על המסך", true, true, "Screen text shown");
+}
+
+function clearAdminScreenBanner() {
+  if (!state.admin) return;
+  state.screenBanner = { text: "", expiresAt: 0 };
+  saveState();
+  renderScreenBanner();
+  setStatus("הכיתוב נמחק", true, true, "Screen text cleared");
 }
 
 function applyAdminSkin() {
@@ -5142,6 +5219,11 @@ elements.renamePlayerBtn.addEventListener("click", renameAdminPlayer);
 elements.mergePlayerBtn.addEventListener("click", renameAdminPlayer);
 elements.raiseBestBtn.addEventListener("click", setAdminBest);
 elements.subtractBestBtn.addEventListener("click", subtractAdminBest);
+elements.showBannerBtn.addEventListener("click", showAdminScreenBanner);
+elements.clearBannerBtn.addEventListener("click", clearAdminScreenBanner);
+elements.adminBannerText.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") showAdminScreenBanner();
+});
 elements.applyAdminSkinBtn.addEventListener("click", applyAdminSkin);
 elements.removeAdminSkinBtn.addEventListener("click", removeAdminSkin);
 elements.adminLogoutBtn.addEventListener("click", logoutAdmin);

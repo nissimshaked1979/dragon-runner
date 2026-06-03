@@ -33,6 +33,27 @@ body {
     var(--paper);
 }
 
+.screen-banner {
+  position: fixed;
+  z-index: 40;
+  top: 18px;
+  left: 50%;
+  width: min(760px, calc(100% - 28px));
+  transform: translateX(-50%);
+  border: 3px solid #1d2732;
+  border-radius: 8px;
+  background: #fff7df;
+  color: #1d2732;
+  padding: 14px 18px;
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.28);
+  font-size: clamp(1.25rem, 3vw, 2.2rem);
+  font-weight: 950;
+  line-height: 1.15;
+  text-align: center;
+  overflow-wrap: anywhere;
+  pointer-events: none;
+}
+
 button,
 input,
 select {

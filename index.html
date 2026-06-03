@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
+    <div id="screenBanner" class="screen-banner hidden" aria-live="polite"></div>
     <div class="app">
       <header class="topbar">
         <div class="player-strip" aria-label="פרטי שחקן">
@@ -113,6 +114,19 @@
               </label>
               <button id="applyAdminSkinBtn" class="secondary-action" type="button">החלף סקין</button>
               <button id="removeAdminSkinBtn" class="danger-action" type="button">הסר סקין מהשחקן</button>
+              <div class="report-summary-box">
+                <span>כיתוב על המסך</span>
+                <label class="field">
+                  <span>מה לכתוב</span>
+                  <input id="adminBannerText" autocomplete="off" maxlength="80" placeholder="הכיתוב שיופיע לכולם במסך הזה" />
+                </label>
+                <label class="field">
+                  <span>כמה שניות</span>
+                  <input id="adminBannerSeconds" type="number" min="1" max="600" step="1" value="5" />
+                </label>
+                <button id="showBannerBtn" class="primary-action" type="button">הצג כיתוב</button>
+                <button id="clearBannerBtn" class="danger-action" type="button">מחק כיתוב</button>
+              </div>
               <div class="report-summary-box">
                 <span>משימות היום</span>
                 <div id="adminMissionSummary" class="report-summary">אין משימות להצגה</div>
