@@ -701,6 +701,16 @@ let duelLastTime = 0;
 
 const DUEL_WIDTH = 960;
 const DUEL_HEIGHT = 430;
+const DUEL_OBSTACLE_HEIGHT_LIMITS = {
+  crystal: { min: 34, max: 54 },
+  tower: { min: 40, max: 56 },
+  log: { min: 24, max: 32 },
+  flame: { min: 38, max: 54 },
+  spikes: { min: 24, max: 32 },
+  boulder: { min: 34, max: 46 },
+  portal: { min: 42, max: 56 },
+  bone: { min: 24, max: 32 },
+};
 
 const duel = {
   mode: "human",
@@ -2291,7 +2301,11 @@ function updateDuelBot(dt) {
 function spawnDuelObstaclePair() {
   const obstacleType = OBSTACLE_TYPES[randomBetween(0, OBSTACLE_TYPES.length - 1)];
   const width = randomBetween(obstacleType.minWidth, obstacleType.maxWidth);
-  const height = randomBetween(obstacleType.minHeight, obstacleType.maxHeight);
+  const heightLimits = DUEL_OBSTACLE_HEIGHT_LIMITS[obstacleType.type] || {
+    min: obstacleType.minHeight,
+    max: Math.min(obstacleType.maxHeight, 56),
+  };
+  const height = randomBetween(heightLimits.min, heightLimits.max);
   const pairId = duel.nextObstacleId;
   duel.nextObstacleId += 1;
   duel.players.forEach((player, lane) => {
