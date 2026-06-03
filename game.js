@@ -1,6 +1,7 @@
 const STORAGE_KEY = "dragonRunnerStateV1";
 const ADMIN_PIN = "גלעדשקדהמלך20";
-const ADMIN_REVEAL_HOLD_MS = 10000;
+const ADMIN_REVEAL_HOLD_MS = 1500;
+const ADMIN_SECRET_INPUT_MAX = 40;
 const SCORE_GAIN_PER_TICK = 0.25;
 const SHOP_POINTS_GRACE_SCORE = 42;
 const SKIN_VISUAL_SCALE = 1.12;
@@ -12,7 +13,7 @@ const DAILY_REGULAR_MISSIONS = [
     id: "daily-jumps-50",
     type: "jumps",
     target: 50,
-    reward: 5000,
+    reward: 4000,
     title: "קפוץ 50 פעמים",
     englishTitle: "Jump 50 times",
     description: "קפיצות בכל המשחקים של היום נספרות ביחד.",
@@ -22,7 +23,7 @@ const DAILY_REGULAR_MISSIONS = [
     id: "daily-runs-5",
     type: "runs",
     target: 5,
-    reward: 6500,
+    reward: 5200,
     title: "שחק 5 משחקים",
     englishTitle: "Play 5 runs",
     description: "כל התחלת משחק נספרת למשימה.",
@@ -32,7 +33,7 @@ const DAILY_REGULAR_MISSIONS = [
     id: "daily-score-300",
     type: "bestScore",
     target: 300,
-    reward: 8500,
+    reward: 6800,
     title: "תגיע ל-300 ניקוד ריצה",
     englishTitle: "Reach 300 run score",
     description: "צריך להגיע לזה במשחק אחד.",
@@ -42,7 +43,7 @@ const DAILY_REGULAR_MISSIONS = [
     id: "daily-seconds-180",
     type: "totalSeconds",
     target: 180,
-    reward: 10000,
+    reward: 8000,
     title: "שרוד 3 דקות היום",
     englishTitle: "Survive 3 minutes today",
     description: "הזמן מכל המשחקים של היום מתחבר.",
@@ -52,7 +53,7 @@ const DAILY_REGULAR_MISSIONS = [
     id: "daily-score-700",
     type: "bestScore",
     target: 700,
-    reward: 16000,
+    reward: 12800,
     title: "תגיע ל-700 ניקוד ריצה",
     englishTitle: "Reach 700 run score",
     description: "משימה קשה עם פרס גדול.",
@@ -62,7 +63,7 @@ const DAILY_REGULAR_MISSIONS = [
     id: "daily-jumps-120",
     type: "jumps",
     target: 120,
-    reward: 13000,
+    reward: 10400,
     title: "קפוץ 120 פעמים",
     englishTitle: "Jump 120 times",
     description: "כל קפיצה היום מקדמת אותך.",
@@ -72,7 +73,7 @@ const DAILY_REGULAR_MISSIONS = [
     id: "daily-runs-10",
     type: "runs",
     target: 10,
-    reward: 14000,
+    reward: 11200,
     title: "שחק 10 משחקים",
     englishTitle: "Play 10 runs",
     description: "משימה לשחקנים שלא מוותרים.",
@@ -85,7 +86,7 @@ const DAILY_SECRET_MISSIONS = [
     id: "secret-jumps-67",
     type: "jumps",
     target: 67,
-    reward: 6700,
+    reward: 5400,
     title: "קפצת בדיוק לכיוון הטרנד",
     englishTitle: "You jumped into the trend",
     hint: "המספר הכי טרנדי יעזור לך.",
@@ -97,7 +98,7 @@ const DAILY_SECRET_MISSIONS = [
     id: "secret-score-777",
     type: "bestScore",
     target: 777,
-    reward: 16700,
+    reward: 13400,
     title: "שיא מזל סודי",
     englishTitle: "Secret lucky score",
     hint: "שלושה מספרים של מזל במסלול.",
@@ -109,7 +110,7 @@ const DAILY_SECRET_MISSIONS = [
     id: "secret-runs-7",
     type: "runs",
     target: 7,
-    reward: 7700,
+    reward: 6200,
     title: "שבע ריצות סודיות",
     englishTitle: "Seven secret runs",
     hint: "נסה את מספר המזל הקלאסי.",
@@ -121,7 +122,7 @@ const DAILY_SECRET_MISSIONS = [
     id: "secret-seconds-267",
     type: "totalSeconds",
     target: 267,
-    reward: 16000,
+    reward: 12800,
     title: "זמן סודי במסלול",
     englishTitle: "Secret track time",
     hint: "תשרוד 2 ואז 67.",
@@ -133,7 +134,7 @@ const DAILY_SECRET_MISSIONS = [
     id: "secret-score-1000",
     type: "bestScore",
     target: 1000,
-    reward: 22000,
+    reward: 17600,
     title: "אלף במסלול",
     englishTitle: "One thousand on the track",
     hint: "מספר עגול וגדול מחכה לך.",
@@ -145,7 +146,7 @@ const DAILY_SECRET_MISSIONS = [
     id: "secret-jumps-150",
     type: "jumps",
     target: 150,
-    reward: 15000,
+    reward: 12000,
     title: "קפיצות בלי סוף",
     englishTitle: "Endless jumps",
     hint: "הרבה יותר מ-100 קפיצות.",
@@ -677,6 +678,7 @@ let view = { width: 960, height: 360, dpr: 1 };
 let adminRevealTimeout = 0;
 let jumpAudioContext = null;
 const heldAdminRevealKeys = new Set();
+let adminSecretInput = "";
 
 const game = {
   running: false,
@@ -707,6 +709,7 @@ let duelLastTime = 0;
 
 const DUEL_WIDTH = 960;
 const DUEL_HEIGHT = 430;
+const DUEL_BOT_SHOP_POINTS_PER_SECOND = 5;
 const DUEL_OBSTACLE_HEIGHT_LIMITS = {
   crystal: { min: 34, max: 54 },
   tower: { min: 40, max: 56 },
@@ -723,6 +726,7 @@ const duel = {
   running: false,
   over: false,
   score: 0,
+  elapsedMs: 0,
   pace: 0,
   speed: 6.6,
   spawnTimer: 700,
@@ -2151,6 +2155,7 @@ function resetDuelRound() {
   duel.running = false;
   duel.over = false;
   duel.score = 0;
+  duel.elapsedMs = 0;
   duel.pace = 0;
   duel.speed = 6.6;
   duel.spawnTimer = 650;
@@ -2248,6 +2253,7 @@ function updateDuel(dt) {
   const scale = dt / 16.67;
   const scoreDelta = scale * 0.26;
   duel.score += scoreDelta;
+  duel.elapsedMs += dt;
   duel.pace += scale;
   duel.speed = Math.min(13.5, 6.6 + duel.pace / 340);
 
@@ -2383,7 +2389,16 @@ function endDuel() {
 
   const [playerOne, playerTwo] = duel.players;
   if (playerOne.alive && !playerTwo.alive) {
-    setDuelStatus(duel.mode === "bot" ? "ניצחת את הבוט" : "שחקן 1 ניצח", duel.mode === "bot" ? "You beat the bot" : "Player 1 wins");
+    if (duel.mode === "bot") {
+      const reward = Math.max(DUEL_BOT_SHOP_POINTS_PER_SECOND, Math.floor((duel.elapsedMs / 1000) * DUEL_BOT_SHOP_POINTS_PER_SECOND));
+      const player = getCurrentPlayer();
+      player.points += reward;
+      saveState();
+      renderAll();
+      setDuelStatus(`ניצחת את הבוט +${reward} נקודות חנות`, `You beat the bot +${reward} shop points`);
+    } else {
+      setDuelStatus("שחקן 1 ניצח", "Player 1 wins");
+    }
   } else if (playerTwo.alive && !playerOne.alive) {
     setDuelStatus(duel.mode === "bot" ? "הבוט ניצח" : "שחקן 2 ניצח", duel.mode === "bot" ? "Bot wins" : "Player 2 wins");
   } else {
@@ -2822,16 +2837,23 @@ function setJumpSoundEnabled(enabled) {
 
 function handleAdminLogin() {
   if (elements.adminPin.value.trim() === ADMIN_PIN) {
-    state.admin = true;
-    adminPanelVisible = true;
-    elements.adminPin.value = "";
-    elements.adminPlayer.value = state.currentPlayer;
-    saveState();
-    renderAll();
-    setStatus("Admin פעיל", true, true);
+    unlockAdmin();
     return;
   }
   setStatus("קוד לא תקין", true, true);
+}
+
+function unlockAdmin() {
+  state.admin = true;
+  adminPanelVisible = true;
+  adminSecretInput = "";
+  heldAdminRevealKeys.clear();
+  cancelAdminRevealHold();
+  elements.adminPin.value = "";
+  elements.adminPlayer.value = state.currentPlayer;
+  saveState();
+  renderAll();
+  setStatus("Admin פעיל", true, true);
 }
 
 function logoutAdmin() {
@@ -5109,10 +5131,37 @@ function cancelAdminRevealHold() {
 
 function revealAdminPanel() {
   adminRevealTimeout = 0;
+  adminSecretInput = "";
   heldAdminRevealKeys.clear();
   adminPanelVisible = true;
   renderAll();
   elements.adminPin.focus();
+}
+
+function trackAdminSecretInput(event) {
+  if (state.admin || adminPanelVisible || event.ctrlKey || event.metaKey || event.altKey) return false;
+
+  let chunk = "";
+  if (event.code === "F1") {
+    chunk = "f1";
+  } else if (event.key && event.key.length === 1 && event.key.trim()) {
+    chunk = event.key;
+  } else {
+    return false;
+  }
+
+  adminSecretInput = (adminSecretInput + chunk).slice(-ADMIN_SECRET_INPUT_MAX);
+  const compactInput = adminSecretInput.toLowerCase().replace(/\s+/g, "");
+
+  if (compactInput.endsWith("f1a2")) {
+    revealAdminPanel();
+    return true;
+  }
+  if (adminSecretInput.endsWith(ADMIN_PIN)) {
+    unlockAdmin();
+    return true;
+  }
+  return false;
 }
 
 function handleAdminRevealKeydown(event) {
@@ -5285,6 +5334,10 @@ document.addEventListener("keydown", (event) => {
   }
   if (isTypingTarget(event.target)) return;
 
+  if (trackAdminSecretInput(event)) {
+    event.preventDefault();
+    return;
+  }
   if (handleAdminRevealKeydown(event)) return;
 
   if (isJumpKey(event)) {
