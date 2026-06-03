@@ -2216,7 +2216,7 @@ function jumpDuelPlayer(index, fromBot = false) {
 
   const player = duel.players[index];
   if (!player || !player.alive || !player.onGround) return;
-  player.vy = -11.6;
+  player.vy = fromBot ? -13.2 : -11.6;
   player.onGround = false;
   playJumpDing();
 }
@@ -2305,16 +2305,6 @@ function updateDuelBot(dt) {
 
   const bot = duel.players[1];
   if (!bot.alive) return;
-
-  if (duel.botReactionTimer > 0) {
-    duel.botReactionTimer -= dt;
-    if (duel.botReactionTimer <= 0) {
-      jumpDuelPlayer(1, true);
-    }
-    return;
-  }
-
-  duel.botDecisionTimer = Math.max(0, duel.botDecisionTimer - dt);
   if (!bot.onGround) return;
 
   const obstacle = duel.obstacles
@@ -2323,27 +2313,18 @@ function updateDuelBot(dt) {
   if (!obstacle) return;
 
   const distance = obstacle.x - (bot.x + bot.width);
-  if (distance < -12) return;
+  if (distance < -obstacle.width - 18) return;
 
-  const heightBonusFrames = obstacle.height >= 48 ? 3 : obstacle.height >= 38 ? 2 : 0;
-  const targetFrames = 14 + heightBonusFrames;
-  const jumpDistance = Math.max(96, Math.min(260, duel.speed * targetFrames + obstacle.width * 0.48));
-  const rescueDistance = Math.max(58, duel.speed * 7.5);
-  const alreadyPlanned = obstacle.id === duel.botTargetObstacleId;
-
-  if (distance <= rescueDistance) {
-    duel.botTargetObstacleId = obstacle.id;
-    duel.botReactionTimer = 0;
-    duel.botDecisionTimer = randomBetween(90, 180);
-    jumpDuelPlayer(1, true);
-    return;
-  }
-
-  if (alreadyPlanned || duel.botDecisionTimer > 0 || distance > jumpDistance) return;
+  const startInset = obstacle.hitInsetX ?? 5;
+  const framesToFirstTouch =
+    obstacle.height >= 48 ? 17 : obstacle.height >= 38 ? 15 : obstacle.width >= 60 ? 9 : 10;
+  const jumpDistance = Math.max(44, Math.min(210, duel.speed * framesToFirstTouch - startInset));
+  if (distance > jumpDistance) return;
 
   duel.botTargetObstacleId = obstacle.id;
-  duel.botReactionTimer = randomBetween(8, Math.max(26, 62 - duel.speed * 2));
-  duel.botDecisionTimer = randomBetween(110, 230);
+  duel.botReactionTimer = 0;
+  duel.botDecisionTimer = 0;
+  jumpDuelPlayer(1, true);
 }
 
 function spawnDuelObstaclePair() {
@@ -2374,9 +2355,9 @@ function spawnDuelObstaclePair() {
 function duelCollides(player, obstacle) {
   const playerBox = {
     x: player.x + 12,
-    y: player.y + 8,
+    y: player.y + 10,
     width: player.width - 22,
-    height: player.height - 10,
+    height: player.height - 22,
   };
   const hitInsetX = obstacle.hitInsetX ?? 5;
   const hitInsetTop = obstacle.hitInsetTop ?? 4;
