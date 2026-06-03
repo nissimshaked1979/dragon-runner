@@ -12,7 +12,7 @@ const DAILY_REGULAR_MISSIONS = [
     id: "daily-jumps-50",
     type: "jumps",
     target: 50,
-    reward: 50000,
+    reward: 5000,
     title: "קפוץ 50 פעמים",
     englishTitle: "Jump 50 times",
     description: "קפיצות בכל המשחקים של היום נספרות ביחד.",
@@ -22,7 +22,7 @@ const DAILY_REGULAR_MISSIONS = [
     id: "daily-runs-5",
     type: "runs",
     target: 5,
-    reward: 65000,
+    reward: 6500,
     title: "שחק 5 משחקים",
     englishTitle: "Play 5 runs",
     description: "כל התחלת משחק נספרת למשימה.",
@@ -32,7 +32,7 @@ const DAILY_REGULAR_MISSIONS = [
     id: "daily-score-300",
     type: "bestScore",
     target: 300,
-    reward: 85000,
+    reward: 8500,
     title: "תגיע ל-300 ניקוד ריצה",
     englishTitle: "Reach 300 run score",
     description: "צריך להגיע לזה במשחק אחד.",
@@ -42,7 +42,7 @@ const DAILY_REGULAR_MISSIONS = [
     id: "daily-seconds-180",
     type: "totalSeconds",
     target: 180,
-    reward: 100000,
+    reward: 10000,
     title: "שרוד 3 דקות היום",
     englishTitle: "Survive 3 minutes today",
     description: "הזמן מכל המשחקים של היום מתחבר.",
@@ -52,7 +52,7 @@ const DAILY_REGULAR_MISSIONS = [
     id: "daily-score-700",
     type: "bestScore",
     target: 700,
-    reward: 160000,
+    reward: 16000,
     title: "תגיע ל-700 ניקוד ריצה",
     englishTitle: "Reach 700 run score",
     description: "משימה קשה עם פרס גדול.",
@@ -62,7 +62,7 @@ const DAILY_REGULAR_MISSIONS = [
     id: "daily-jumps-120",
     type: "jumps",
     target: 120,
-    reward: 130000,
+    reward: 13000,
     title: "קפוץ 120 פעמים",
     englishTitle: "Jump 120 times",
     description: "כל קפיצה היום מקדמת אותך.",
@@ -72,7 +72,7 @@ const DAILY_REGULAR_MISSIONS = [
     id: "daily-runs-10",
     type: "runs",
     target: 10,
-    reward: 140000,
+    reward: 14000,
     title: "שחק 10 משחקים",
     englishTitle: "Play 10 runs",
     description: "משימה לשחקנים שלא מוותרים.",
@@ -85,7 +85,7 @@ const DAILY_SECRET_MISSIONS = [
     id: "secret-jumps-67",
     type: "jumps",
     target: 67,
-    reward: 67000,
+    reward: 6700,
     title: "קפצת בדיוק לכיוון הטרנד",
     englishTitle: "You jumped into the trend",
     hint: "המספר הכי טרנדי יעזור לך.",
@@ -97,7 +97,7 @@ const DAILY_SECRET_MISSIONS = [
     id: "secret-score-777",
     type: "bestScore",
     target: 777,
-    reward: 167000,
+    reward: 16700,
     title: "שיא מזל סודי",
     englishTitle: "Secret lucky score",
     hint: "שלושה מספרים של מזל במסלול.",
@@ -109,7 +109,7 @@ const DAILY_SECRET_MISSIONS = [
     id: "secret-runs-7",
     type: "runs",
     target: 7,
-    reward: 77000,
+    reward: 7700,
     title: "שבע ריצות סודיות",
     englishTitle: "Seven secret runs",
     hint: "נסה את מספר המזל הקלאסי.",
@@ -121,7 +121,7 @@ const DAILY_SECRET_MISSIONS = [
     id: "secret-seconds-267",
     type: "totalSeconds",
     target: 267,
-    reward: 160000,
+    reward: 16000,
     title: "זמן סודי במסלול",
     englishTitle: "Secret track time",
     hint: "תשרוד 2 ואז 67.",
@@ -133,7 +133,7 @@ const DAILY_SECRET_MISSIONS = [
     id: "secret-score-1000",
     type: "bestScore",
     target: 1000,
-    reward: 220000,
+    reward: 22000,
     title: "אלף במסלול",
     englishTitle: "One thousand on the track",
     hint: "מספר עגול וגדול מחכה לך.",
@@ -145,7 +145,7 @@ const DAILY_SECRET_MISSIONS = [
     id: "secret-jumps-150",
     type: "jumps",
     target: 150,
-    reward: 150000,
+    reward: 15000,
     title: "קפיצות בלי סוף",
     englishTitle: "Endless jumps",
     hint: "הרבה יותר מ-100 קפיצות.",
@@ -647,6 +647,7 @@ const ctx = elements.canvas.getContext("2d");
 let state = loadState();
 let adminPanelVisible = state.admin;
 let statusTimer = 0;
+let dailyMissionRefreshTimer = 0;
 let rafId = 0;
 let lastTime = 0;
 let spawnTimer = 0;
@@ -844,15 +845,57 @@ function getDailyDateKey(date = new Date()) {
   return `${year}-${month}-${day}`;
 }
 
+function getNextLocalMidnightDelay(date = new Date()) {
+  const nextMidnight = new Date(date);
+  nextMidnight.setHours(24, 0, 0, 0);
+  return Math.max(1000, nextMidnight.getTime() - date.getTime() + 250);
+}
+
+function scheduleDailyMissionRefresh() {
+  if (dailyMissionRefreshTimer) {
+    window.clearTimeout(dailyMissionRefreshTimer);
+  }
+  dailyMissionRefreshTimer = window.setTimeout(() => {
+    refreshDailyMissionsForNewDay(true);
+  }, getNextLocalMidnightDelay());
+}
+
+function refreshDailyMissionsForNewDay(showStatus = false) {
+  const player = getCurrentPlayer();
+  const previousDate = player.dailyMissions?.date || "";
+  const daily = ensureDailyMissionState(player);
+  if (daily.date !== previousDate) {
+    saveState();
+    renderAll();
+    if (showStatus) {
+      setStatus("המשימות היומיות התחלפו", true, true, "Daily missions changed");
+    }
+  } else {
+    renderDailyMissions();
+    renderAdminMissionSummary();
+  }
+  scheduleDailyMissionRefresh();
+}
+
 function hashDailyKey(dateKey) {
   return [...dateKey].reduce((total, char) => total + char.charCodeAt(0), 0);
 }
 
+function getDailyDayNumber(dateKey) {
+  const [year, month, day] = String(dateKey)
+    .split("-")
+    .map((part) => Number(part));
+  if (!Number.isInteger(year) || !Number.isInteger(month) || !Number.isInteger(day)) {
+    return hashDailyKey(dateKey);
+  }
+  return Math.floor(Date.UTC(year, month - 1, day) / 86400000);
+}
+
 function getDailyMissionSet(dateKey = getDailyDateKey()) {
-  const seed = hashDailyKey(dateKey);
+  const dayNumber = getDailyDayNumber(dateKey);
   return {
-    regular: DAILY_REGULAR_MISSIONS[seed % DAILY_REGULAR_MISSIONS.length],
-    secret: DAILY_SECRET_MISSIONS[Math.floor(seed / DAILY_REGULAR_MISSIONS.length) % DAILY_SECRET_MISSIONS.length],
+    regular: DAILY_REGULAR_MISSIONS[dayNumber % DAILY_REGULAR_MISSIONS.length],
+    secret: DAILY_SECRET_MISSIONS[(dayNumber + 2) % DAILY_SECRET_MISSIONS.length],
   };
 }
 
@@ -4419,9 +4462,16 @@ window.addEventListener("blur", () => {
   heldAdminRevealKeys.clear();
   cancelAdminRevealHold();
 });
+window.addEventListener("focus", () => refreshDailyMissionsForNewDay(false));
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) {
+    refreshDailyMissionsForNewDay(false);
+  }
+});
 
 applyPlayerMerges();
 renderAll();
+scheduleDailyMissionRefresh();
 resizeCanvas();
 resetGame();
 setStatus("מוכן לריצה", true, false, "Ready to run");
