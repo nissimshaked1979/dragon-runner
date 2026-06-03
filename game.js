@@ -4,6 +4,43 @@ const ADMIN_REVEAL_HOLD_MS = 10000;
 const SCORE_GAIN_PER_TICK = 0.25;
 const SHOP_POINTS_GRACE_SCORE = 42;
 const SKIN_VISUAL_SCALE = 1.12;
+const MAX_TRAIL_PARTICLES = 90;
+
+const TRAILS = [
+  { id: "fire", name: "שביל אש", englishName: "Fire Trail", tier: "חינם", englishTier: "Free", cost: 0, kind: "fire", color: "#ff7a18", accent: "#ffd166", yOffset: 44, spread: 16, size: 18 },
+  { id: "hearts", name: "שביל לבבות", englishName: "Heart Trail", tier: "יפה", englishTier: "Pretty", cost: 18000, kind: "heart", color: "#f472b6", accent: "#ffffff", yOffset: 38, spread: 18, size: 13 },
+  { id: "gold-sparkles", name: "שביל ניצוצות זהב", englishName: "Gold Sparkle Trail", tier: "מבריק", englishTier: "Shiny", cost: 32000, kind: "sparkle", color: "#facc15", accent: "#ffffff", yOffset: 36, spread: 18, size: 14 },
+  { id: "embers", name: "שביל גחלים", englishName: "Ember Trail", tier: "חם", englishTier: "Hot", cost: 46000, kind: "ember", color: "#fb923c", accent: "#fed7aa", yOffset: 40, spread: 18, size: 14 },
+  { id: "leaves", name: "שביל עלים", englishName: "Leaf Trail", tier: "טבע", englishTier: "Nature", cost: 62000, kind: "leaf", color: "#22c55e", accent: "#166534", yOffset: 50, spread: 12, size: 15 },
+  { id: "feathers", name: "שביל נוצות", englishName: "Feather Trail", tier: "נדיר", englishTier: "Rare", cost: 78000, kind: "feather", color: "#2563eb", accent: "#fef08a", yOffset: 32, spread: 22, size: 17 },
+  { id: "snow", name: "שביל שלג", englishName: "Snow Trail", tier: "קפוא", englishTier: "Frozen", cost: 94000, kind: "snow", color: "#bae6fd", accent: "#ffffff", yOffset: 40, spread: 20, size: 15 },
+  { id: "moon", name: "שביל ירח", englishName: "Moon Trail", tier: "לילה", englishTier: "Night", cost: 112000, kind: "moon", color: "#cbd5e1", accent: "#475569", yOffset: 34, spread: 18, size: 15 },
+  { id: "tiger-stripes", name: "שביל פסים", englishName: "Stripe Trail", tier: "טורף", englishTier: "Predator", cost: 132000, kind: "stripe", color: "#f97316", accent: "#111827", yOffset: 42, spread: 18, size: 17 },
+  { id: "hoof-clouds", name: "שביל פרסות", englishName: "Hoof Trail", tier: "מהיר", englishTier: "Fast", cost: 152000, kind: "hoof", color: "#a16207", accent: "#fde68a", yOffset: 58, spread: 8, size: 15 },
+  { id: "giant-dust", name: "שביל ענני אבק", englishName: "Dust Cloud Trail", tier: "גדול", englishTier: "Big", cost: 174000, kind: "dust", color: "#94a3b8", accent: "#e2e8f0", yOffset: 58, spread: 12, size: 18 },
+  { id: "gems", name: "שביל יהלומים", englishName: "Gem Trail", tier: "יוקרתי", englishTier: "Luxury", cost: 198000, kind: "gem", color: "#dc2626", accent: "#facc15", yOffset: 36, spread: 20, size: 16 },
+  { id: "waves", name: "שביל גלים", englishName: "Wave Trail", tier: "ים", englishTier: "Sea", cost: 224000, kind: "wave", color: "#38bdf8", accent: "#ffffff", yOffset: 44, spread: 18, size: 16 },
+  { id: "ribbons", name: "שביל סרטים", englishName: "Ribbon Trail", tier: "אפי", englishTier: "Epic", cost: 252000, kind: "ribbon", color: "#f9a8d4", accent: "#fff7ed", yOffset: 32, spread: 22, size: 17 },
+  { id: "sixty-seven", name: "שביל 67", englishName: "67 Trail", tier: "טרנדי", englishTier: "Trendy", cost: 280000, kind: "number", color: "#2563eb", accent: "#facc15", yOffset: 34, spread: 20, size: 18 },
+  { id: "smoke", name: "שביל עשן ירוק", englishName: "Green Smoke Trail", tier: "מסתורי", englishTier: "Mystery", cost: 315000, kind: "smoke", color: "#84cc16", accent: "#f8fafc", yOffset: 38, spread: 18, size: 17 },
+  { id: "pulse", name: "שביל פעימות", englishName: "Pulse Trail", tier: "חזק", englishTier: "Power", cost: 350000, kind: "pulse", color: "#b45309", accent: "#facc15", yOffset: 44, spread: 16, size: 16 },
+  { id: "coffee", name: "שביל קפה", englishName: "Coffee Trail", tier: "סודי", englishTier: "Secret", cost: 390000, kind: "coffee", color: "#92400e", accent: "#ffedd5", yOffset: 34, spread: 18, size: 16 },
+  { id: "cactus", name: "שביל קקטוסים", englishName: "Cactus Trail", tier: "מדבר", englishTier: "Desert", cost: 430000, kind: "cactus", color: "#22c55e", accent: "#fef3c7", yOffset: 48, spread: 12, size: 15 },
+  { id: "peppers", name: "שביל פלפלים", englishName: "Pepper Trail", tier: "חריף", englishTier: "Spicy", cost: 470000, kind: "pepper", color: "#ef4444", accent: "#facc15", yOffset: 40, spread: 18, size: 15 },
+  { id: "forest", name: "שביל יער", englishName: "Forest Trail", tier: "אגדי", englishTier: "Legendary", cost: 520000, kind: "forest", color: "#15803d", accent: "#a3e635", yOffset: 44, spread: 16, size: 16 },
+  { id: "rainbow", name: "שביל קשת", englishName: "Rainbow Trail", tier: "הכי יפה", englishTier: "Most Beautiful", cost: 650000, kind: "rainbow", color: "#38bdf8", accent: "#f0abfc", yOffset: 34, spread: 22, size: 18 },
+];
+
+const OBSTACLE_TYPES = [
+  { type: "crystal", minWidth: 26, maxWidth: 42, minHeight: 42, maxHeight: 68 },
+  { type: "tower", minWidth: 32, maxWidth: 45, minHeight: 58, maxHeight: 84 },
+  { type: "log", minWidth: 44, maxWidth: 64, minHeight: 28, maxHeight: 40 },
+  { type: "flame", minWidth: 30, maxWidth: 44, minHeight: 46, maxHeight: 66, hitInsetX: 8, hitInsetTop: 8 },
+  { type: "spikes", minWidth: 52, maxWidth: 76, minHeight: 28, maxHeight: 40, hitInsetX: 6, hitInsetTop: 10 },
+  { type: "boulder", minWidth: 38, maxWidth: 56, minHeight: 38, maxHeight: 52, hitInsetX: 7, hitInsetTop: 7 },
+  { type: "portal", minWidth: 42, maxWidth: 56, minHeight: 58, maxHeight: 78, hitInsetX: 11, hitInsetTop: 7 },
+  { type: "bone", minWidth: 54, maxWidth: 74, minHeight: 28, maxHeight: 38, hitInsetX: 8, hitInsetTop: 7 },
+];
 
 const SKINS = [
   {
@@ -417,6 +454,7 @@ const elements = {
   activeSkinName: document.querySelector("#activeSkinName"),
   baseColorSwatches: document.querySelector("#baseColorSwatches"),
   skinGrid: document.querySelector("#skinGrid"),
+  trailGrid: document.querySelector("#trailGrid"),
   openShopBtn: document.querySelector("#openShopBtn"),
   shopModal: document.querySelector("#shopModal"),
   closeShopBtn: document.querySelector("#closeShopBtn"),
@@ -473,6 +511,8 @@ const game = {
   groundY: 292,
   clouds: [],
   obstacles: [],
+  trailParticles: [],
+  trailTimer: 0,
   dragon: {
     x: 92,
     y: 224,
@@ -536,6 +576,11 @@ function withDefaultPlayer(nextState) {
     });
     player.ownedSkins = Array.isArray(player.ownedSkins) ? player.ownedSkins : ["classic"];
     if (!player.ownedSkins.includes("classic")) player.ownedSkins.push("classic");
+    player.trailId = TRAILS.some((trail) => trail.id === player.trailId) ? player.trailId : "fire";
+    player.ownedTrails = Array.isArray(player.ownedTrails) ? player.ownedTrails : ["fire"];
+    player.ownedTrails = player.ownedTrails.filter((trailId) => TRAILS.some((trail) => trail.id === trailId));
+    if (!player.ownedTrails.includes("fire")) player.ownedTrails.push("fire");
+    if (!player.ownedTrails.includes(player.trailId)) player.trailId = "fire";
   });
 
   nextState.playerReports = Array.isArray(nextState.playerReports)
@@ -590,9 +635,11 @@ function createPlayer(name) {
     points: 0,
     best: 0,
     skinId: "classic",
+    trailId: "fire",
     baseColor: BASE_COLORS[0],
     skinColors: { classic: BASE_COLORS[0] },
     ownedSkins: ["classic"],
+    ownedTrails: ["fire"],
   };
 }
 
@@ -612,6 +659,10 @@ function getSkinById(id) {
   return SKINS.find((skin) => skin.id === id) || SKINS[0];
 }
 
+function getTrailById(id) {
+  return TRAILS.find((trail) => trail.id === id) || TRAILS[0];
+}
+
 function mergeStoredPlayers(sourceName, targetName) {
   const source = normalizeName(sourceName);
   const target = normalizeName(targetName);
@@ -628,8 +679,12 @@ function mergeStoredPlayers(sourceName, targetName) {
     targetPlayer.best = Math.max(targetPlayer.best, sourcePlayer.best);
     targetPlayer.points = Math.max(0, targetPlayer.points + sourcePlayer.points);
     targetPlayer.ownedSkins = Array.from(new Set([...targetPlayer.ownedSkins, ...sourcePlayer.ownedSkins]));
+    targetPlayer.ownedTrails = Array.from(new Set([...(targetPlayer.ownedTrails || ["fire"]), ...(sourcePlayer.ownedTrails || ["fire"])]));
     if (sourcePlayer.skinId && sourcePlayer.skinId !== "classic") {
       targetPlayer.skinId = sourcePlayer.skinId;
+    }
+    if (sourcePlayer.trailId && sourcePlayer.trailId !== "fire") {
+      targetPlayer.trailId = sourcePlayer.trailId;
     }
     targetPlayer.baseColor = sourcePlayer.baseColor || targetPlayer.baseColor;
     targetPlayer.skinColors = {
@@ -711,6 +766,7 @@ function renderAll() {
   renderLeaderboard();
   renderColorSwatches();
   renderSkins();
+  renderTrails();
   renderAdminSkinOptions();
   renderPlayerReportSummary();
   renderCreatorMessageSummary();
@@ -909,6 +965,86 @@ function renderSkins() {
   });
 }
 
+function renderTrails() {
+  const player = getCurrentPlayer();
+  elements.trailGrid.innerHTML = TRAILS.map((trail) => {
+    const owned = player.ownedTrails.includes(trail.id);
+    const active = player.trailId === trail.id;
+    const canBuy = state.admin || owned || trail.cost === 0 || player.points >= trail.cost;
+    const missing = Math.max(0, trail.cost - player.points);
+    const buttonClass = active ? "active" : owned || state.admin ? "owned" : canBuy ? "" : "locked";
+    const label = active
+      ? { he: "פעיל", en: "Active" }
+      : owned || state.admin
+        ? { he: "בחר", en: "Choose" }
+        : canBuy
+          ? { he: "רכוש", en: "Buy" }
+          : { he: `${missing} חסר`, en: `${missing} missing` };
+    const cost = trailCostText(trail);
+    const tierAndCost = trail.cost === 0 && trail.tier === "חינם"
+      ? cost
+      : { he: `${trail.tier} · ${cost.he}`, en: `${trail.englishTier} · ${cost.en}` };
+
+    return `
+      <article class="skin-card trail-card">
+        <div class="skin-preview trail-preview" aria-hidden="true">${trailPreviewSvg(trail)}</div>
+        <div class="skin-meta">
+          <strong>${trailNameHtml(trail)}</strong>
+          <span>${bilingualHtml(tierAndCost.he, tierAndCost.en)}</span>
+        </div>
+        <button class="${buttonClass}" data-trail="${trail.id}" type="button" ${canBuy ? "" : "disabled"}>${bilingualHtml(label.he, label.en)}</button>
+      </article>
+    `;
+  }).join("");
+
+  elements.trailGrid.querySelectorAll("[data-trail]").forEach((button) => {
+    button.addEventListener("click", () => buyOrEquipTrail(button.dataset.trail));
+  });
+}
+
+function trailPreviewSvg(trail) {
+  const particles = Array.from({ length: 7 }, (_, index) => {
+    const x = 18 + index * 20;
+    const y = 46 + Math.sin(index * 1.4) * 14;
+    const size = 14 + (index % 3) * 3;
+    return trailShapeSvg(trail, x, y, size, index);
+  }).join("");
+
+  return `
+    <svg viewBox="0 0 150 86" role="img" focusable="false">
+      <path d="M10 62 C40 30 75 75 140 36" stroke="${trail.color}" stroke-width="4" fill="none" opacity="0.28" stroke-linecap="round" />
+      ${particles}
+    </svg>
+  `;
+}
+
+function trailShapeSvg(trail, x, y, size, index) {
+  const color = index % 2 ? trail.accent : trail.color;
+  const spin = index * 17;
+  if (trail.kind === "heart") {
+    return `<path d="M${x} ${y + size * 0.28} C${x - size} ${y - size * 0.3} ${x - size * 0.25} ${y - size} ${x} ${y - size * 0.35} C${x + size * 0.25} ${y - size} ${x + size} ${y - size * 0.3} ${x} ${y + size * 0.28} Z" fill="${color}" opacity="0.86" />`;
+  }
+  if (trail.kind === "sparkle" || trail.kind === "gem") {
+    return `<path d="M${x} ${y - size} L${x + size * 0.28} ${y - size * 0.25} L${x + size} ${y} L${x + size * 0.28} ${y + size * 0.25} L${x} ${y + size} L${x - size * 0.28} ${y + size * 0.25} L${x - size} ${y} L${x - size * 0.28} ${y - size * 0.25} Z" fill="${color}" opacity="0.88" />`;
+  }
+  if (trail.kind === "leaf" || trail.kind === "feather" || trail.kind === "forest") {
+    return `<ellipse cx="${x}" cy="${y}" rx="${size * 0.35}" ry="${size}" fill="${color}" opacity="0.86" transform="rotate(${spin} ${x} ${y})" />`;
+  }
+  if (trail.kind === "number") {
+    return `<text x="${x - size * 0.65}" y="${y + size * 0.35}" fill="${color}" font-size="${size * 1.25}" font-weight="900">67</text>`;
+  }
+  if (trail.kind === "rainbow") {
+    return `<circle cx="${x}" cy="${y}" r="${size * 0.58}" fill="none" stroke="#ef4444" stroke-width="3" opacity="0.9" /><circle cx="${x}" cy="${y}" r="${size * 0.38}" fill="none" stroke="#facc15" stroke-width="3" opacity="0.9" /><circle cx="${x}" cy="${y}" r="${size * 0.18}" fill="none" stroke="#22c55e" stroke-width="3" opacity="0.9" />`;
+  }
+  if (trail.kind === "coffee") {
+    return `<ellipse cx="${x}" cy="${y}" rx="${size * 0.74}" ry="${size * 0.48}" fill="${color}" opacity="0.86" /><path d="M${x + size * 0.4} ${y - 2} C${x + size} ${y - 8} ${x + size} ${y + 8} ${x + size * 0.4} ${y + 3}" stroke="${trail.accent}" stroke-width="3" fill="none" />`;
+  }
+  if (trail.kind === "wave" || trail.kind === "ribbon") {
+    return `<path d="M${x - size} ${y} C${x - size * 0.35} ${y - size} ${x + size * 0.35} ${y + size} ${x + size} ${y}" stroke="${color}" stroke-width="5" fill="none" opacity="0.84" stroke-linecap="round" />`;
+  }
+  return `<circle cx="${x}" cy="${y}" r="${size * 0.55}" fill="${color}" opacity="0.82" />`;
+}
+
 function dragonPreviewSvg(palette, motif) {
   return `
     <svg viewBox="0 0 130 72" role="img" focusable="false">
@@ -997,6 +1133,30 @@ function buyOrEquipSkin(skinId) {
   saveState();
   renderAll();
   setStatus("סקין הוחלף", true, true, "Skin changed");
+}
+
+function buyOrEquipTrail(trailId) {
+  const trail = getTrailById(trailId);
+  const player = getCurrentPlayer();
+  const owned = player.ownedTrails.includes(trail.id);
+
+  if (!owned && !state.admin) {
+    if (player.points < trail.cost) {
+      setStatus("אין מספיק נקודות חנות", true, true, "Not enough shop points");
+      return;
+    }
+    player.points -= trail.cost;
+    player.ownedTrails.push(trail.id);
+  }
+
+  if (!owned && state.admin) {
+    player.ownedTrails.push(trail.id);
+  }
+
+  player.trailId = trail.id;
+  saveState();
+  renderAll();
+  setStatus("שביל הוחלף", true, true, "Trail changed");
 }
 
 function renderAdminSkinOptions() {
@@ -1365,10 +1525,20 @@ function skinNameHtml(skin) {
   return bilingualHtml(skin.name, skin.englishName || skin.name);
 }
 
+function trailNameHtml(trail) {
+  return bilingualHtml(trail.name, trail.englishName || trail.name);
+}
+
 function skinCostText(skin) {
   return skin.cost === 0
     ? { he: "חינם", en: "Free" }
     : { he: `${skin.cost} נקודות חנות`, en: `${skin.cost} shop points` };
+}
+
+function trailCostText(trail) {
+  return trail.cost === 0
+    ? { he: "חינם", en: "Free" }
+    : { he: `${trail.cost} נקודות חנות`, en: `${trail.cost} shop points` };
 }
 
 function savePlayerName() {
@@ -1514,7 +1684,9 @@ function renamePlayer(oldName, newName) {
     newPlayer.best = Math.max(newPlayer.best, oldPlayer.best);
     newPlayer.points = Math.max(0, newPlayer.points + oldPlayer.points);
     newPlayer.ownedSkins = Array.from(new Set([...newPlayer.ownedSkins, ...oldPlayer.ownedSkins]));
+    newPlayer.ownedTrails = Array.from(new Set([...(newPlayer.ownedTrails || ["fire"]), ...(oldPlayer.ownedTrails || ["fire"])]));
     newPlayer.skinId = oldPlayer.skinId || newPlayer.skinId;
+    newPlayer.trailId = oldPlayer.trailId || newPlayer.trailId;
     newPlayer.baseColor = oldPlayer.baseColor || newPlayer.baseColor;
     newPlayer.skinColors = {
       ...(newPlayer.skinColors || {}),
@@ -1636,6 +1808,8 @@ function resetGame() {
   game.pace = 0;
   game.speed = 7;
   game.obstacles = [];
+  game.trailParticles = [];
+  game.trailTimer = 0;
   game.clouds = createClouds();
   game.dragon.vy = 0;
   game.dragon.onGround = true;
@@ -1747,6 +1921,7 @@ function updateGame(dt) {
     dragon.vy = 0;
     dragon.onGround = true;
   }
+  updateTrail(scale);
 
   spawnTimer -= dt;
   if (spawnTimer <= 0) {
@@ -1800,17 +1975,65 @@ function endGame() {
   setStatus(status.he, true, false, status.en);
 }
 
+function getTrailStyle(trailId) {
+  return getTrailById(trailId);
+}
+
+function updateTrail(scale) {
+  const player = getCurrentPlayer();
+  const palette = activePalette(player);
+  const style = getTrailStyle(player.trailId);
+
+  game.trailTimer += scale * 1.35;
+  while (game.trailTimer >= 1) {
+    game.trailTimer -= 1;
+    emitTrailParticle(style, palette);
+  }
+
+  game.trailParticles.forEach((particle) => {
+    particle.life -= scale;
+    particle.x -= (game.speed * 0.82 + particle.driftX) * scale;
+    particle.y += particle.driftY * scale;
+    particle.spin += particle.spinSpeed * scale;
+    particle.size += particle.grow * scale;
+  });
+  game.trailParticles = game.trailParticles.filter((particle) => particle.life > 0).slice(-MAX_TRAIL_PARTICLES);
+}
+
+function emitTrailParticle(style, palette) {
+  const dragon = game.dragon;
+  const life = randomBetween(28, 46);
+  const yJitter = randomBetween(-style.spread, style.spread);
+  const xJitter = randomBetween(-18, 8);
+  game.trailParticles.push({
+    kind: style.kind,
+    x: dragon.x + 8 + xJitter,
+    y: dragon.y + style.yOffset + yJitter,
+    size: randomBetween(Math.max(6, style.size - 5), style.size + 5),
+    color: style.color || palette.body,
+    accent: style.accent || palette.belly,
+    life,
+    totalLife: life,
+    driftX: randomBetween(0, 3),
+    driftY: randomBetween(-2, 2) / 6,
+    spin: randomBetween(0, 628) / 100,
+    spinSpeed: randomBetween(-16, 16) / 100,
+    grow: randomBetween(-8, 8) / 18,
+  });
+}
+
 function spawnObstacle() {
-  const typeRoll = Math.random();
-  const type = typeRoll < 0.36 ? "crystal" : typeRoll < 0.68 ? "tower" : "log";
-  const width = type === "tower" ? randomBetween(32, 45) : type === "crystal" ? randomBetween(26, 42) : randomBetween(44, 64);
-  const height = type === "tower" ? randomBetween(58, 84) : type === "crystal" ? randomBetween(42, 68) : randomBetween(28, 40);
+  const obstacleType = OBSTACLE_TYPES[randomBetween(0, OBSTACLE_TYPES.length - 1)];
+  const width = randomBetween(obstacleType.minWidth, obstacleType.maxWidth);
+  const height = randomBetween(obstacleType.minHeight, obstacleType.maxHeight);
   game.obstacles.push({
-    type,
+    type: obstacleType.type,
     x: view.width + 28,
     y: game.groundY - height,
     width,
     height,
+    hitInsetX: obstacleType.hitInsetX,
+    hitInsetTop: obstacleType.hitInsetTop,
   });
 }
 
@@ -1821,11 +2044,13 @@ function collides(dragon, obstacle) {
     width: dragon.width - 26,
     height: dragon.height - 14,
   };
+  const hitInsetX = obstacle.hitInsetX ?? 5;
+  const hitInsetTop = obstacle.hitInsetTop ?? 4;
   const obstacleBox = {
-    x: obstacle.x + 5,
-    y: obstacle.y + 4,
-    width: obstacle.width - 10,
-    height: obstacle.height - 6,
+    x: obstacle.x + hitInsetX,
+    y: obstacle.y + hitInsetTop,
+    width: obstacle.width - hitInsetX * 2,
+    height: obstacle.height - hitInsetTop - 2,
   };
   return (
     dragonBox.x < obstacleBox.x + obstacleBox.width &&
@@ -1838,6 +2063,7 @@ function collides(dragon, obstacle) {
 function draw() {
   ctx.clearRect(0, 0, view.width, view.height);
   drawBackground();
+  drawTrail();
   drawObstacles();
   drawDragon();
   drawForeground();
@@ -1893,12 +2119,189 @@ function drawForeground() {
   }
 }
 
+function drawTrail() {
+  game.trailParticles.forEach((particle) => {
+    const alpha = Math.max(0, Math.min(1, particle.life / particle.totalLife));
+    drawTrailParticle(particle, alpha);
+  });
+}
+
+function drawTrailParticle(particle, alpha) {
+  const size = Math.max(2, particle.size);
+  ctx.save();
+  ctx.globalAlpha = alpha * 0.86;
+  ctx.translate(particle.x, particle.y);
+  ctx.rotate(particle.spin);
+
+  if (particle.kind === "fire" || particle.kind === "ember") {
+    ctx.fillStyle = particle.color;
+    ctx.beginPath();
+    ctx.moveTo(0, -size);
+    ctx.bezierCurveTo(size * 0.9, -size * 0.15, size * 0.5, size * 0.85, 0, size);
+    ctx.bezierCurveTo(-size * 0.9, size * 0.2, -size * 0.45, -size * 0.45, 0, -size);
+    ctx.fill();
+    ctx.fillStyle = particle.accent;
+    ctx.beginPath();
+    ctx.arc(0, size * 0.18, size * 0.32, 0, Math.PI * 2);
+    ctx.fill();
+  } else if (particle.kind === "heart") {
+    ctx.fillStyle = particle.color;
+    ctx.beginPath();
+    ctx.moveTo(0, size * 0.5);
+    ctx.bezierCurveTo(-size * 1.1, -size * 0.2, -size * 0.35, -size * 1.1, 0, -size * 0.38);
+    ctx.bezierCurveTo(size * 0.35, -size * 1.1, size * 1.1, -size * 0.2, 0, size * 0.5);
+    ctx.fill();
+  } else if (particle.kind === "sparkle" || particle.kind === "gem") {
+    ctx.fillStyle = particle.color;
+    ctx.beginPath();
+    ctx.moveTo(0, -size);
+    ctx.lineTo(size * 0.28, -size * 0.28);
+    ctx.lineTo(size, 0);
+    ctx.lineTo(size * 0.28, size * 0.28);
+    ctx.lineTo(0, size);
+    ctx.lineTo(-size * 0.28, size * 0.28);
+    ctx.lineTo(-size, 0);
+    ctx.lineTo(-size * 0.28, -size * 0.28);
+    ctx.closePath();
+    ctx.fill();
+  } else if (particle.kind === "leaf" || particle.kind === "feather" || particle.kind === "forest") {
+    ctx.fillStyle = particle.color;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, size * 0.35, size, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = particle.accent;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(0, -size * 0.72);
+    ctx.lineTo(0, size * 0.72);
+    ctx.stroke();
+  } else if (particle.kind === "snow") {
+    ctx.strokeStyle = particle.accent;
+    ctx.lineWidth = 2;
+    for (let i = 0; i < 3; i += 1) {
+      ctx.rotate(Math.PI / 3);
+      ctx.beginPath();
+      ctx.moveTo(-size * 0.75, 0);
+      ctx.lineTo(size * 0.75, 0);
+      ctx.stroke();
+    }
+  } else if (particle.kind === "moon") {
+    ctx.fillStyle = particle.color;
+    ctx.beginPath();
+    ctx.arc(0, 0, size * 0.72, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#f8faf7";
+    ctx.beginPath();
+    ctx.arc(size * 0.32, -size * 0.12, size * 0.68, 0, Math.PI * 2);
+    ctx.fill();
+  } else if (particle.kind === "stripe") {
+    ctx.strokeStyle = particle.color;
+    ctx.lineWidth = 5;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(-size, -size * 0.35);
+    ctx.lineTo(size, size * 0.35);
+    ctx.moveTo(-size * 0.5, size * 0.5);
+    ctx.lineTo(size * 0.7, -size * 0.6);
+    ctx.stroke();
+  } else if (particle.kind === "hoof") {
+    ctx.strokeStyle = particle.color;
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.arc(0, 0, size * 0.62, 0.2, Math.PI - 0.2);
+    ctx.stroke();
+  } else if (particle.kind === "dust" || particle.kind === "smoke") {
+    ctx.fillStyle = particle.color;
+    ctx.beginPath();
+    ctx.arc(0, 0, size * 0.75, 0, Math.PI * 2);
+    ctx.arc(size * 0.55, size * 0.08, size * 0.46, 0, Math.PI * 2);
+    ctx.arc(-size * 0.48, size * 0.12, size * 0.42, 0, Math.PI * 2);
+    ctx.fill();
+  } else if (particle.kind === "wave" || particle.kind === "ribbon") {
+    ctx.strokeStyle = particle.color;
+    ctx.lineWidth = 5;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(-size, 0);
+    ctx.bezierCurveTo(-size * 0.45, -size, size * 0.45, size, size, 0);
+    ctx.stroke();
+  } else if (particle.kind === "number") {
+    ctx.fillStyle = particle.color;
+    ctx.font = `900 ${size * 1.35}px Arial`;
+    ctx.fillText("67", -size * 0.7, size * 0.45);
+  } else if (particle.kind === "pulse") {
+    ctx.strokeStyle = particle.color;
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.arc(0, 0, size * 0.72, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.fillStyle = particle.accent;
+    ctx.beginPath();
+    ctx.arc(0, 0, size * 0.25, 0, Math.PI * 2);
+    ctx.fill();
+  } else if (particle.kind === "coffee") {
+    ctx.fillStyle = particle.color;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, size * 0.72, size * 0.46, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = particle.accent;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(size * 0.58, 0, size * 0.34, -Math.PI / 2, Math.PI / 2);
+    ctx.stroke();
+  } else if (particle.kind === "cactus") {
+    ctx.strokeStyle = particle.color;
+    ctx.lineWidth = 5;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(0, size * 0.8);
+    ctx.lineTo(0, -size * 0.8);
+    ctx.moveTo(0, -size * 0.2);
+    ctx.lineTo(size * 0.48, -size * 0.48);
+    ctx.moveTo(0, size * 0.15);
+    ctx.lineTo(-size * 0.45, -size * 0.05);
+    ctx.stroke();
+  } else if (particle.kind === "pepper") {
+    ctx.fillStyle = particle.color;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, size * 0.44, size * 0.92, 0.45, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = particle.accent;
+    ctx.fillRect(-size * 0.12, -size, size * 0.24, size * 0.28);
+  } else if (particle.kind === "rainbow") {
+    ["#ef4444", "#facc15", "#22c55e", "#38bdf8", "#a855f7"].forEach((color, index) => {
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(0, 0, size * (0.3 + index * 0.14), Math.PI, 0);
+      ctx.stroke();
+    });
+  } else {
+    ctx.fillStyle = particle.color;
+    ctx.beginPath();
+    ctx.arc(0, 0, size * 0.58, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  ctx.restore();
+}
+
 function drawObstacles() {
   game.obstacles.forEach((obstacle) => {
     if (obstacle.type === "crystal") {
       drawCrystal(obstacle);
     } else if (obstacle.type === "tower") {
       drawTower(obstacle);
+    } else if (obstacle.type === "flame") {
+      drawFlameObstacle(obstacle);
+    } else if (obstacle.type === "spikes") {
+      drawSpikes(obstacle);
+    } else if (obstacle.type === "boulder") {
+      drawBoulder(obstacle);
+    } else if (obstacle.type === "portal") {
+      drawPortal(obstacle);
+    } else if (obstacle.type === "bone") {
+      drawBone(obstacle);
     } else {
       drawLog(obstacle);
     }
@@ -1948,6 +2351,100 @@ function drawLog(obstacle) {
   ctx.beginPath();
   ctx.ellipse(obstacle.x + obstacle.width - 8, obstacle.y + obstacle.height / 2, 7, obstacle.height / 2 - 5, 0, 0, Math.PI * 2);
   ctx.fill();
+}
+
+function drawFlameObstacle(obstacle) {
+  const x = obstacle.x + obstacle.width / 2;
+  const y = obstacle.y;
+  const h = obstacle.height;
+  const w = obstacle.width;
+  ctx.fillStyle = "#ef4444";
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.bezierCurveTo(x + w * 0.7, y + h * 0.36, x + w * 0.42, y + h * 0.9, x, y + h);
+  ctx.bezierCurveTo(x - w * 0.7, y + h * 0.82, x - w * 0.34, y + h * 0.3, x, y);
+  ctx.fill();
+
+  ctx.fillStyle = "#facc15";
+  ctx.beginPath();
+  ctx.moveTo(x, y + h * 0.24);
+  ctx.bezierCurveTo(x + w * 0.34, y + h * 0.52, x + w * 0.18, y + h * 0.82, x, y + h * 0.9);
+  ctx.bezierCurveTo(x - w * 0.35, y + h * 0.72, x - w * 0.16, y + h * 0.46, x, y + h * 0.24);
+  ctx.fill();
+}
+
+function drawSpikes(obstacle) {
+  ctx.fillStyle = "#334155";
+  const spikeCount = 4;
+  const spikeWidth = obstacle.width / spikeCount;
+  for (let i = 0; i < spikeCount; i += 1) {
+    const x = obstacle.x + i * spikeWidth;
+    ctx.beginPath();
+    ctx.moveTo(x, obstacle.y + obstacle.height);
+    ctx.lineTo(x + spikeWidth / 2, obstacle.y);
+    ctx.lineTo(x + spikeWidth, obstacle.y + obstacle.height);
+    ctx.closePath();
+    ctx.fill();
+  }
+  ctx.fillStyle = "#94a3b8";
+  ctx.fillRect(obstacle.x, obstacle.y + obstacle.height - 5, obstacle.width, 5);
+}
+
+function drawBoulder(obstacle) {
+  ctx.fillStyle = "#475569";
+  ctx.beginPath();
+  ctx.ellipse(obstacle.x + obstacle.width / 2, obstacle.y + obstacle.height / 2, obstacle.width / 2, obstacle.height / 2, -0.12, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = "rgba(255,255,255,0.22)";
+  ctx.beginPath();
+  ctx.arc(obstacle.x + obstacle.width * 0.36, obstacle.y + obstacle.height * 0.32, 7, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = "#1f2937";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(obstacle.x + obstacle.width * 0.2, obstacle.y + obstacle.height * 0.62);
+  ctx.lineTo(obstacle.x + obstacle.width * 0.55, obstacle.y + obstacle.height * 0.48);
+  ctx.lineTo(obstacle.x + obstacle.width * 0.78, obstacle.y + obstacle.height * 0.66);
+  ctx.stroke();
+}
+
+function drawPortal(obstacle) {
+  const x = obstacle.x + obstacle.width / 2;
+  const y = obstacle.y + obstacle.height / 2;
+  ctx.strokeStyle = "#7c3aed";
+  ctx.lineWidth = 7;
+  ctx.beginPath();
+  ctx.ellipse(x, y, obstacle.width * 0.36, obstacle.height * 0.42, 0, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.strokeStyle = "#22d3ee";
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.ellipse(x, y, obstacle.width * 0.24, obstacle.height * 0.3, 0, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.fillStyle = "rgba(34,211,238,0.24)";
+  ctx.beginPath();
+  ctx.ellipse(x, y, obstacle.width * 0.22, obstacle.height * 0.28, 0, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function drawBone(obstacle) {
+  ctx.fillStyle = "#f8fafc";
+  ctx.strokeStyle = "#cbd5e1";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.roundRect(obstacle.x + 8, obstacle.y + obstacle.height * 0.38, obstacle.width - 16, obstacle.height * 0.24, 7);
+  ctx.fill();
+  ctx.stroke();
+  [
+    [obstacle.x + 8, obstacle.y + obstacle.height * 0.38],
+    [obstacle.x + obstacle.width - 8, obstacle.y + obstacle.height * 0.38],
+  ].forEach(([x, y]) => {
+    ctx.beginPath();
+    ctx.arc(x, y, 8, 0, Math.PI * 2);
+    ctx.arc(x, y + obstacle.height * 0.24, 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+  });
 }
 
 function drawDragon() {

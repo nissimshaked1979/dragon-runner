@@ -124,7 +124,8 @@ h1 {
 }
 
 .field > span,
-.color-tools > span {
+.color-tools > span,
+.shop-section-head p {
   color: var(--muted);
   font-size: 0.82rem;
   font-weight: 700;
@@ -619,6 +620,26 @@ tbody tr.current {
   padding: 14px;
 }
 
+.shop-section-head {
+  display: grid;
+  gap: 4px;
+  padding: 16px 14px 0;
+  border-top: 1px solid #ecf0ec;
+}
+
+.shop-section-head h3,
+.shop-section-head p {
+  margin: 0;
+}
+
+.shop-section-head h3 {
+  font-size: 1.06rem;
+}
+
+.trail-grid {
+  padding-top: 10px;
+}
+
 .skin-card {
   display: grid;
   gap: 10px;
@@ -648,6 +669,11 @@ tbody tr.current {
   width: 132px;
   height: 74px;
   transform: translate(-50%, -50%);
+}
+
+.trail-preview svg {
+  width: 150px;
+  height: 86px;
 }
 
 .skin-meta {
