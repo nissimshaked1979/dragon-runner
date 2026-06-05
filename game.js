@@ -1,4 +1,5 @@
 const STORAGE_KEY = "dragonRunnerStateV1";
+const DEVICE_ID_KEY = "dragonRunnerDeviceId";
 const DEFAULT_PLAYER_NAME = "שחקן בלי שם";
 const ADMIN_PIN = "גלעדשקדהמלך20";
 const ADMIN_REVEAL_HOLD_MS = 10000;
@@ -668,6 +669,7 @@ const elements = {
 const ctx = elements.canvas.getContext("2d");
 const duelCtx = elements.duelCanvas.getContext("2d");
 
+const deviceId = getOrCreateDeviceId();
 let state = loadState();
 let adminPanelVisible = state.admin;
 let statusTimer = 0;
@@ -778,6 +780,7 @@ function loadState() {
     admin: false,
     jumpSoundEnabled: true,
     players: {},
+    currentPlayersByDevice: {},
     playerReports: [],
     creatorMessages: [],
     hiddenAdminMissionInfo: [],
@@ -789,11 +792,16 @@ function loadState() {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return withDefaultPlayer(fallback);
     const parsed = JSON.parse(raw);
+    const currentPlayersByDevice =
+      parsed.currentPlayersByDevice && typeof parsed.currentPlayersByDevice === "object" ? parsed.currentPlayersByDevice : {};
+    const deviceCurrentPlayer = currentPlayersByDevice[deviceId];
+    const legacyCurrentPlayer = parsed.currentPlayer && parsed.currentPlayer !== DEFAULT_PLAYER_NAME ? parsed.currentPlayer : "";
     const merged = {
-      currentPlayer: normalizeName(parsed.currentPlayer || DEFAULT_PLAYER_NAME),
+      currentPlayer: normalizeName(deviceCurrentPlayer || legacyCurrentPlayer || DEFAULT_PLAYER_NAME),
       admin: false,
       jumpSoundEnabled: parsed.jumpSoundEnabled !== false,
       players: parsed.players && typeof parsed.players === "object" ? parsed.players : {},
+      currentPlayersByDevice,
       playerReports: Array.isArray(parsed.playerReports) ? parsed.playerReports : [],
       creatorMessages: Array.isArray(parsed.creatorMessages) ? parsed.creatorMessages : [],
       hiddenAdminMissionInfo: Array.isArray(parsed.hiddenAdminMissionInfo) ? parsed.hiddenAdminMissionInfo : [],
@@ -810,6 +818,14 @@ function withDefaultPlayer(nextState) {
   const name = normalizeName(nextState.currentPlayer || DEFAULT_PLAYER_NAME);
   nextState.currentPlayer = name;
   nextState.jumpSoundEnabled = nextState.jumpSoundEnabled !== false;
+  nextState.currentPlayersByDevice =
+    nextState.currentPlayersByDevice && typeof nextState.currentPlayersByDevice === "object"
+      ? Object.fromEntries(
+          Object.entries(nextState.currentPlayersByDevice)
+            .map(([id, playerName]) => [String(id || "").trim(), normalizeName(playerName)])
+            .filter(([id, playerName]) => id && playerName !== DEFAULT_PLAYER_NAME)
+        )
+      : {};
   const legacyFreeTrailShop = Number(nextState.trailShopVersion || 1) < TRAIL_SHOP_VERSION;
   nextState.trailShopVersion = TRAIL_SHOP_VERSION;
   if (!nextState.players[name]) {
@@ -887,13 +903,37 @@ function withDefaultPlayer(nextState) {
 
 function saveState() {
   try {
+    state.currentPlayersByDevice = state.currentPlayersByDevice && typeof state.currentPlayersByDevice === "object" ? state.currentPlayersByDevice : {};
+    if (state.currentPlayer === DEFAULT_PLAYER_NAME) {
+      delete state.currentPlayersByDevice[deviceId];
+    } else {
+      state.currentPlayersByDevice[deviceId] = state.currentPlayer;
+    }
+
     const persistedState = {
       ...state,
+      currentPlayer: DEFAULT_PLAYER_NAME,
       admin: false,
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(persistedState));
   } catch {
     setStatus("שמירה מקומית לא זמינה", true, true, "Local save unavailable");
+  }
+}
+
+function getOrCreateDeviceId() {
+  try {
+    const existing = localStorage.getItem(DEVICE_ID_KEY);
+    if (existing) return existing;
+
+    const id =
+      window.crypto && typeof window.crypto.randomUUID === "function"
+        ? window.crypto.randomUUID()
+        : `device-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    localStorage.setItem(DEVICE_ID_KEY, id);
+    return id;
+  } catch {
+    return `device-${Math.random().toString(36).slice(2)}`;
   }
 }
 
