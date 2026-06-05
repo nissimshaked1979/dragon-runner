@@ -8,6 +8,9 @@
   </head>
   <body>
     <div id="screenBanner" class="screen-banner hidden" aria-live="polite"></div>
+    <button id="openHowToPlayBtn" class="side-help-button" type="button" aria-haspopup="dialog">
+      <span class="bilingual-label"><span>איך משחקים</span><span class="label-en">How To Play</span></span>
+    </button>
     <div class="app">
       <header class="topbar">
         <div class="player-strip" aria-label="פרטי שחקן">
@@ -290,6 +293,44 @@
             </thead>
             <tbody id="leaderboardBody"></tbody>
           </table>
+        </div>
+      </section>
+    </div>
+
+    <div id="howToPlayModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="howToPlayTitle">
+      <section class="shop-modal-window how-to-play-window" aria-labelledby="howToPlayTitle">
+        <div class="panel-head">
+          <h2 id="howToPlayTitle"><span class="bilingual-label"><span>איך משחקים</span><span class="label-en">How To Play</span></span></h2>
+          <div class="modal-head-actions">
+            <span><span class="bilingual-label"><span>מדריך קצר</span><span class="label-en">Quick Guide</span></span></span>
+            <button id="closeHowToPlayBtn" class="close-shop-button" type="button" title="סגירה" aria-label="סגירה">×</button>
+          </div>
+        </div>
+        <div class="how-to-play-body">
+          <article class="how-to-play-item">
+            <strong><span class="bilingual-label"><span>המטרה</span><span class="label-en">Goal</span></span></strong>
+            <p><span class="bilingual-label"><span>לרוץ כמה שיותר רחוק בלי להיתקע במכשולים.</span><span class="label-en">Run as far as you can without hitting obstacles.</span></span></p>
+          </article>
+          <article class="how-to-play-item">
+            <strong><span class="bilingual-label"><span>קפיצה</span><span class="label-en">Jump</span></span></strong>
+            <p><span class="bilingual-label"><span>במחשב לוחצים רווח, חץ למעלה או W. בטלפון מסובבים לרוחב ונוגעים במסך המשחק.</span><span class="label-en">On computer press Space, Up, or W. On phone rotate sideways and tap the game screen.</span></span></p>
+          </article>
+          <article class="how-to-play-item">
+            <strong><span class="bilingual-label"><span>שיא משחק</span><span class="label-en">Best Run</span></span></strong>
+            <p><span class="bilingual-label"><span>שיא משחק הוא הניקוד הכי גבוה שהגעת אליו בריצה אחת.</span><span class="label-en">Best Run is your highest score in one run.</span></span></p>
+          </article>
+          <article class="how-to-play-item">
+            <strong><span class="bilingual-label"><span>נקודות חנות</span><span class="label-en">Shop Points</span></span></strong>
+            <p><span class="bilingual-label"><span>נקודות חנות קונים סקינים ושבילים. בריצה רגילה מקבלים נקודות אחרי ההתחלה, ובדו קרב מקבלים נקודות רק אם מנצחים את הבוט.</span><span class="label-en">Shop Points buy skins and trails. In regular runs points start after the opening, and in duel you get points only by beating the bot.</span></span></p>
+          </article>
+          <article class="how-to-play-item">
+            <strong><span class="bilingual-label"><span>סקינים ושבילים</span><span class="label-en">Skins And Trails</span></span></strong>
+            <p><span class="bilingual-label"><span>סקינים מחליפים את החיה. שבילים מוסיפים אפקט מאחוריה. אפשר לקנות אותם בחנויות עם נקודות חנות.</span><span class="label-en">Skins change the animal. Trails add an effect behind it. Buy them in the shops with shop points.</span></span></p>
+          </article>
+          <article class="how-to-play-item">
+            <strong><span class="bilingual-label"><span>לוח שיאים</span><span class="label-en">Leaderboard</span></span></strong>
+            <p><span class="bilingual-label"><span>לוח השיאים מסדר שחקנים לפי שיא המשחק שלהם, ומראה גם נקודות חנות וסקין פעיל.</span><span class="label-en">The leaderboard ranks players by Best Run and also shows shop points and active skin.</span></span></p>
+          </article>
         </div>
       </section>
     </div>

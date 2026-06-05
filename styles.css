@@ -54,6 +54,37 @@ body {
   pointer-events: none;
 }
 
+.side-help-button {
+  position: fixed;
+  z-index: 18;
+  inset-inline-start: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  min-width: 92px;
+  max-width: 112px;
+  min-height: 86px;
+  padding: 10px 8px;
+  border: 2px solid #1d2732;
+  border-radius: 8px;
+  background: #f4c45b;
+  color: #18212b;
+  box-shadow: 5px 5px 0 #18212b;
+  font-weight: 950;
+  text-align: center;
+}
+
+.side-help-button .label-en {
+  color: rgba(24, 33, 43, 0.72);
+}
+
+.side-help-button:hover,
+.side-help-button:focus-visible {
+  transform: translateY(-50%) translateX(-2px);
+  background: #ffe08a;
+}
+
 button,
 input,
 select {
@@ -540,6 +571,12 @@ h1 {
   max-height: min(640px, calc(100vh - 36px));
 }
 
+.how-to-play-window {
+  width: min(760px, calc(100% - 18px));
+  min-height: auto;
+  max-height: min(760px, calc(100vh - 36px));
+}
+
 .leaderboard-modal-window {
   min-height: auto;
   max-height: min(760px, calc(100vh - 36px));
@@ -555,6 +592,35 @@ h1 {
   width: min(1060px, calc(100% - 18px));
   min-height: auto;
   max-height: min(760px, calc(100vh - 36px));
+}
+
+.how-to-play-body {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 16px;
+}
+
+.how-to-play-item {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #d9e0da;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.how-to-play-item strong {
+  color: #12382b;
+  font-size: 1rem;
+}
+
+.how-to-play-item p {
+  color: #334155;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.35;
 }
 
 .shop-modal-window > .panel-head {
@@ -1119,6 +1185,20 @@ tbody tr.current {
     padding-top: 10px;
   }
 
+  .side-help-button {
+    top: auto;
+    bottom: 14px;
+    inset-inline-start: 10px;
+    min-width: 86px;
+    min-height: 64px;
+    transform: none;
+  }
+
+  .side-help-button:hover,
+  .side-help-button:focus-visible {
+    transform: translateY(-2px);
+  }
+
   .topbar {
     align-items: stretch;
     flex-direction: column;
@@ -1159,6 +1239,7 @@ tbody tr.current {
 
   .workspace,
   .daily-mission-grid,
+  .how-to-play-body,
   .duel-mode-select,
   .skin-grid,
   .duel-toolbar {
@@ -1240,6 +1321,23 @@ tbody tr.current {
   .game-status {
     font-size: 1rem;
     padding: 10px 14px;
+  }
+
+  .side-help-button {
+    top: 50%;
+    bottom: auto;
+    inset-inline-start: 8px;
+    min-width: 74px;
+    min-height: 48px;
+    padding: 6px;
+    transform: translateY(-50%);
+    box-shadow: 3px 3px 0 #18212b;
+    font-size: 0.72rem;
+  }
+
+  .side-help-button:hover,
+  .side-help-button:focus-visible {
+    transform: translateY(-50%) translateX(-1px);
   }
 }
 

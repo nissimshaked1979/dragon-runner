@@ -596,6 +596,9 @@ const elements = {
   pauseBtn: document.querySelector("#pauseBtn"),
   canvas: document.querySelector("#gameCanvas"),
   gameStatus: document.querySelector("#gameStatus"),
+  openHowToPlayBtn: document.querySelector("#openHowToPlayBtn"),
+  howToPlayModal: document.querySelector("#howToPlayModal"),
+  closeHowToPlayBtn: document.querySelector("#closeHowToPlayBtn"),
   leaderboardBody: document.querySelector("#leaderboardBody"),
   leaderboardCount: document.querySelector("#leaderboardCount"),
   openLeaderboardBtn: document.querySelector("#openLeaderboardBtn"),
@@ -2806,6 +2809,16 @@ function openTrailShop() {
 function closeTrailShop() {
   elements.trailShopModal.classList.add("hidden");
   elements.openTrailShopBtn.focus();
+}
+
+function openHowToPlay() {
+  elements.howToPlayModal.classList.remove("hidden");
+  elements.closeHowToPlayBtn.focus();
+}
+
+function closeHowToPlay() {
+  elements.howToPlayModal.classList.add("hidden");
+  elements.openHowToPlayBtn.focus();
 }
 
 function openLeaderboard() {
@@ -5271,6 +5284,11 @@ elements.closeTrailShopBtn.addEventListener("click", closeTrailShop);
 elements.trailShopModal.addEventListener("click", (event) => {
   if (event.target === elements.trailShopModal) closeTrailShop();
 });
+elements.openHowToPlayBtn.addEventListener("click", openHowToPlay);
+elements.closeHowToPlayBtn.addEventListener("click", closeHowToPlay);
+elements.howToPlayModal.addEventListener("click", (event) => {
+  if (event.target === elements.howToPlayModal) closeHowToPlay();
+});
 elements.openLeaderboardBtn.addEventListener("click", openLeaderboard);
 elements.closeLeaderboardBtn.addEventListener("click", closeLeaderboard);
 elements.leaderboardModal.addEventListener("click", (event) => {
@@ -5377,6 +5395,13 @@ document.addEventListener("keydown", (event) => {
     if (event.code === "Escape") {
       event.preventDefault();
       closeTrailShop();
+    }
+    return;
+  }
+  if (!elements.howToPlayModal.classList.contains("hidden")) {
+    if (event.code === "Escape") {
+      event.preventDefault();
+      closeHowToPlay();
     }
     return;
   }
