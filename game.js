@@ -1,5 +1,6 @@
 const STORAGE_KEY = "dragonRunnerStateV1";
 const DEVICE_ID_KEY = "dragonRunnerDeviceId";
+const CURRENT_PLAYER_DEVICE_MAP_VERSION = 2;
 const DEFAULT_PLAYER_NAME = "שחקן בלי שם";
 const ADMIN_PIN = "גלעדשקדהמלך20";
 const ADMIN_REVEAL_HOLD_MS = 10000;
@@ -789,22 +790,26 @@ function loadState() {
     hiddenAdminMissionInfo: [],
     screenBanner: { text: "", expiresAt: 0 },
     trailShopVersion: TRAIL_SHOP_VERSION,
+    currentPlayersByDeviceVersion: CURRENT_PLAYER_DEVICE_MAP_VERSION,
   };
 
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return withDefaultPlayer(fallback);
     const parsed = JSON.parse(raw);
+    const trustedDeviceMap = Number(parsed.currentPlayersByDeviceVersion) === CURRENT_PLAYER_DEVICE_MAP_VERSION;
     const currentPlayersByDevice =
-      parsed.currentPlayersByDevice && typeof parsed.currentPlayersByDevice === "object" ? parsed.currentPlayersByDevice : {};
+      trustedDeviceMap && parsed.currentPlayersByDevice && typeof parsed.currentPlayersByDevice === "object"
+        ? parsed.currentPlayersByDevice
+        : {};
     const deviceCurrentPlayer = currentPlayersByDevice[deviceId];
-    const legacyCurrentPlayer = parsed.currentPlayer && parsed.currentPlayer !== DEFAULT_PLAYER_NAME ? parsed.currentPlayer : "";
     const merged = {
-      currentPlayer: normalizeName(deviceCurrentPlayer || legacyCurrentPlayer || DEFAULT_PLAYER_NAME),
+      currentPlayer: normalizeName(deviceCurrentPlayer || DEFAULT_PLAYER_NAME),
       admin: false,
       jumpSoundEnabled: parsed.jumpSoundEnabled !== false,
       players: parsed.players && typeof parsed.players === "object" ? parsed.players : {},
       currentPlayersByDevice,
+      currentPlayersByDeviceVersion: CURRENT_PLAYER_DEVICE_MAP_VERSION,
       playerReports: Array.isArray(parsed.playerReports) ? parsed.playerReports : [],
       creatorMessages: Array.isArray(parsed.creatorMessages) ? parsed.creatorMessages : [],
       hiddenAdminMissionInfo: Array.isArray(parsed.hiddenAdminMissionInfo) ? parsed.hiddenAdminMissionInfo : [],
@@ -821,6 +826,7 @@ function withDefaultPlayer(nextState) {
   const name = normalizeName(nextState.currentPlayer || DEFAULT_PLAYER_NAME);
   nextState.currentPlayer = name;
   nextState.jumpSoundEnabled = nextState.jumpSoundEnabled !== false;
+  nextState.currentPlayersByDeviceVersion = CURRENT_PLAYER_DEVICE_MAP_VERSION;
   nextState.currentPlayersByDevice =
     nextState.currentPlayersByDevice && typeof nextState.currentPlayersByDevice === "object"
       ? Object.fromEntries(
@@ -916,6 +922,7 @@ function saveState() {
     const persistedState = {
       ...state,
       currentPlayer: DEFAULT_PLAYER_NAME,
+      currentPlayersByDeviceVersion: CURRENT_PLAYER_DEVICE_MAP_VERSION,
       admin: false,
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(persistedState));
