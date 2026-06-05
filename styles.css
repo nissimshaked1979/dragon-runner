@@ -339,7 +339,9 @@ h1 {
   height: min(46vw, 360px);
   min-height: 260px;
   max-height: 390px;
-  touch-action: manipulation;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
 .game-status {
@@ -731,7 +733,9 @@ h1 {
   border: 2px solid #1d2732;
   border-radius: 8px;
   background: #b9eff7;
-  touch-action: manipulation;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
 .setting-row {
@@ -1171,6 +1175,71 @@ tbody tr.current {
 
   .duel-mode-image {
     min-height: 230px;
+  }
+}
+
+@media (max-width: 950px) and (orientation: landscape) {
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  .app {
+    width: 100vw;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  .topbar,
+  .workspace {
+    display: none;
+  }
+
+  main {
+    min-height: 100vh;
+  }
+
+  .stage-band {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: 100vh;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .hud {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    padding: 8px 10px;
+  }
+
+  .hud-metric span {
+    font-size: 0.62rem;
+  }
+
+  .hud-metric strong {
+    font-size: 1.05rem;
+  }
+
+  .hud-actions {
+    display: none;
+  }
+
+  .canvas-wrap {
+    min-height: 0;
+  }
+
+  #gameCanvas {
+    height: 100%;
+    min-height: 0;
+    max-height: none;
+  }
+
+  .game-status {
+    font-size: 1rem;
+    padding: 10px 14px;
   }
 }
 

@@ -2240,6 +2240,11 @@ function handleDuelPointer(event) {
   jumpDuelPlayer(lane);
 }
 
+function handleDuelTouch(event) {
+  event.preventDefault();
+  handleDuelPointer(event.touches[0] || event);
+}
+
 function tickDuel(time) {
   if (!duel.running) return;
   const dt = Math.min(34, time - duelLastTime || 16);
@@ -3085,6 +3090,11 @@ function jumpOrStart() {
     startGame();
   }
   jumpDragon();
+}
+
+function handleGameTouch(event) {
+  event.preventDefault();
+  jumpOrStart();
 }
 
 function getJumpAudioContext() {
@@ -5233,6 +5243,7 @@ elements.duelModeSelect.querySelectorAll("[data-duel-mode]").forEach((button) =>
   button.addEventListener("click", () => selectDuelMode(button.dataset.duelMode));
 });
 elements.duelCanvas.addEventListener("pointerdown", handleDuelPointer);
+elements.duelCanvas.addEventListener("touchstart", handleDuelTouch, { passive: false });
 elements.duelModal.addEventListener("click", (event) => {
   if (event.target === elements.duelModal) closeDuel();
 });
@@ -5263,6 +5274,7 @@ elements.jumpSoundToggle.addEventListener("change", () => {
 elements.playBtn.addEventListener("click", jumpOrStart);
 elements.pauseBtn.addEventListener("click", togglePause);
 elements.canvas.addEventListener("pointerdown", jumpOrStart);
+elements.canvas.addEventListener("touchstart", handleGameTouch, { passive: false });
 elements.adminLoginBtn.addEventListener("click", handleAdminLogin);
 elements.adminPin.addEventListener("keydown", (event) => {
   if (event.key === "Enter") handleAdminLogin();
