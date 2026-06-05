@@ -1146,7 +1146,7 @@ function renderScreenBanner() {
 
 function renderAll() {
   const player = getCurrentPlayer();
-  elements.playerName.value = state.currentPlayer;
+  elements.playerName.value = state.currentPlayer === "שחקן" ? "" : state.currentPlayer;
   elements.scoreValue.textContent = Math.floor(game.score).toString();
   elements.bestValue.textContent = player.best.toString();
   elements.pointsValue.textContent = player.points.toString();
