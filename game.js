@@ -585,7 +585,6 @@ const elements = {
   screenBanner: document.querySelector("#screenBanner"),
   playerName: document.querySelector("#playerName"),
   renameCurrentBtn: document.querySelector("#renameCurrentBtn"),
-  switchPlayerBtn: document.querySelector("#switchPlayerBtn"),
   scoreValue: document.querySelector("#scoreValue"),
   bestValue: document.querySelector("#bestValue"),
   pointsValue: document.querySelector("#pointsValue"),
@@ -595,7 +594,6 @@ const elements = {
   pauseBtn: document.querySelector("#pauseBtn"),
   canvas: document.querySelector("#gameCanvas"),
   gameStatus: document.querySelector("#gameStatus"),
-  leaderboardCurrent: document.querySelector("#leaderboardCurrent"),
   leaderboardBody: document.querySelector("#leaderboardBody"),
   leaderboardCount: document.querySelector("#leaderboardCount"),
   openLeaderboardBtn: document.querySelector("#openLeaderboardBtn"),
@@ -1343,26 +1341,13 @@ function hideAdminMissionInfo(slot) {
 function renderLeaderboard() {
   const players = Object.values(state.players).sort((a, b) => {
     if (b.best !== a.best) return b.best - a.best;
-    if (b.points !== a.points) return b.points - a.points;
-    if (a.name === state.currentPlayer && b.name !== state.currentPlayer) return -1;
-    if (b.name === state.currentPlayer && a.name !== state.currentPlayer) return 1;
     return a.name.localeCompare(b.name, "he");
   });
 
   if (!players.length) {
-    elements.leaderboardCurrent.innerHTML = "";
     elements.leaderboardBody.innerHTML = `<tr><td colspan="6">${bilingualHtml("אין שחקנים עדיין", "No players yet")}</td></tr>`;
     return;
   }
-
-  const currentPlayer = getCurrentPlayer();
-  const currentRank = Math.max(1, players.findIndex((player) => player.name === state.currentPlayer) + 1);
-  elements.leaderboardCurrent.innerHTML = `
-    <strong>${bilingualHtml(`השחקן שלך: מקום ${currentRank}`, `Your player: rank ${currentRank}`)}</strong>
-    <span>${bilingualHtml(`שם: ${currentPlayer.name}`, `Name: ${currentPlayer.name}`)}</span>
-    <span>${bilingualHtml(`שיא: ${currentPlayer.best}`, `Best: ${currentPlayer.best}`)}</span>
-    <span>${bilingualHtml(`נקודות חנות: ${currentPlayer.points}`, `Shop points: ${currentPlayer.points}`)}</span>
-  `;
 
   elements.leaderboardBody.innerHTML = players
     .map((player, index) => {
@@ -2754,29 +2739,6 @@ function savePlayerName() {
     return;
   }
   renamePlayer(state.currentPlayer, name);
-}
-
-function switchPlayerFromName() {
-  const name = normalizeName(elements.playerName.value);
-  if (name === state.currentPlayer) {
-    setStatus("אתה כבר בשחקן הזה", true, true, "You are already using this player");
-    return;
-  }
-
-  const existed = Boolean(state.players[name]);
-  if (game.running && !game.over) {
-    resetGame();
-  }
-  state.currentPlayer = name;
-  ensurePlayer(name);
-  saveState();
-  renderAll();
-  setStatus(
-    existed ? `עברת לשחקן ${name}` : `נוצר שחקן חדש: ${name}`,
-    true,
-    true,
-    existed ? `Switched to ${name}` : `New player created: ${name}`
-  );
 }
 
 function openShop() {
@@ -5245,7 +5207,6 @@ function handleAdminRevealKeyup(event) {
 }
 
 elements.renameCurrentBtn.addEventListener("click", renameCurrentPlayer);
-elements.switchPlayerBtn.addEventListener("click", switchPlayerFromName);
 elements.playerName.addEventListener("keydown", (event) => {
   if (event.key === "Enter") savePlayerName();
 });
