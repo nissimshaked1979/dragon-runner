@@ -4,6 +4,7 @@ const ADMIN_REVEAL_HOLD_MS = 10000;
 const ADMIN_SECRET_INPUT_MAX = 40;
 const SCORE_GAIN_PER_TICK = 0.25;
 const SHOP_POINTS_GRACE_SCORE = 42;
+const OBSTACLE_RETRY_DELAY_MS = 120;
 const SKIN_VISUAL_SCALE = 1.12;
 const MAX_TRAIL_PARTICLES = 90;
 const TRAIL_SHOP_VERSION = 2;
@@ -3182,8 +3183,12 @@ function updateGame(dt) {
 
   spawnTimer -= dt;
   if (spawnTimer <= 0) {
-    spawnObstacle();
-    spawnTimer = Math.max(500, randomBetween(900, 1450) - game.pace * 0.75);
+    if (canSpawnObstacle()) {
+      spawnObstacle();
+      spawnTimer = getNextObstacleDelay();
+    } else {
+      spawnTimer = OBSTACLE_RETRY_DELAY_MS;
+    }
   }
 
   game.obstacles.forEach((obstacle) => {
@@ -3298,6 +3303,29 @@ function spawnObstacle() {
     hitInsetX: obstacleType.hitInsetX,
     hitInsetTop: obstacleType.hitInsetTop,
   });
+}
+
+function getNextObstacleDelay() {
+  const pressure = Math.min(460, game.pace * 0.42);
+  const minimumDelay = game.score < 260 ? 820 : game.score < 550 ? 680 : 560;
+  return Math.max(minimumDelay, randomBetween(1050, 1550) - pressure);
+}
+
+function getMinimumObstacleGap() {
+  const baseGap = game.score < 260 ? 500 : game.score < 550 ? 430 : 360;
+  const responsiveLimit = Math.max(320, view.width * 0.52);
+  return Math.round(Math.min(baseGap, responsiveLimit));
+}
+
+function canSpawnObstacle() {
+  const lastObstacle = game.obstacles
+    .filter((obstacle) => obstacle.x + obstacle.width > game.dragon.x)
+    .sort((a, b) => b.x - a.x)[0];
+  if (!lastObstacle) return true;
+
+  const nextObstacleX = view.width + 28;
+  const gap = nextObstacleX - (lastObstacle.x + lastObstacle.width);
+  return gap >= getMinimumObstacleGap();
 }
 
 function collides(dragon, obstacle) {
