@@ -710,6 +710,7 @@ let duelLastTime = 0;
 const DUEL_WIDTH = 960;
 const DUEL_HEIGHT = 430;
 const DUEL_BOT_SHOP_POINTS_PER_SECOND = 5;
+const DUEL_BOT_SHOP_POINTS_MAX = 200;
 const DUEL_OBSTACLE_HEIGHT_LIMITS = {
   crystal: { min: 34, max: 54 },
   tower: { min: 40, max: 56 },
@@ -2390,7 +2391,8 @@ function endDuel() {
   const [playerOne, playerTwo] = duel.players;
   if (playerOne.alive && !playerTwo.alive) {
     if (duel.mode === "bot") {
-      const reward = Math.max(DUEL_BOT_SHOP_POINTS_PER_SECOND, Math.floor((duel.elapsedMs / 1000) * DUEL_BOT_SHOP_POINTS_PER_SECOND));
+      const uncappedReward = Math.max(DUEL_BOT_SHOP_POINTS_PER_SECOND, Math.floor((duel.elapsedMs / 1000) * DUEL_BOT_SHOP_POINTS_PER_SECOND));
+      const reward = Math.min(DUEL_BOT_SHOP_POINTS_MAX, uncappedReward);
       const player = getCurrentPlayer();
       player.points += reward;
       saveState();
