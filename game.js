@@ -3306,14 +3306,14 @@ function spawnObstacle() {
 }
 
 function getNextObstacleDelay() {
-  const pressure = Math.min(460, game.pace * 0.42);
-  const minimumDelay = game.score < 260 ? 820 : game.score < 550 ? 680 : 560;
-  return Math.max(minimumDelay, randomBetween(1050, 1550) - pressure);
+  const pressure = Math.min(430, game.pace * 0.5);
+  const minimumDelay = game.score < 260 ? 680 : game.score < 550 ? 620 : 540;
+  return Math.max(minimumDelay, randomBetween(980, 1420) - pressure);
 }
 
 function getMinimumObstacleGap() {
-  const baseGap = game.score < 260 ? 500 : game.score < 550 ? 430 : 360;
-  const responsiveLimit = Math.max(320, view.width * 0.52);
+  const baseGap = game.score < 260 ? 390 : game.score < 550 ? 350 : 320;
+  const responsiveLimit = Math.max(280, view.width * 0.44);
   return Math.round(Math.min(baseGap, responsiveLimit));
 }
 
