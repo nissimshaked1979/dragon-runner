@@ -709,6 +709,7 @@ let duelLastTime = 0;
 
 const DUEL_WIDTH = 960;
 const DUEL_HEIGHT = 430;
+const DUEL_BOT_SHOP_POINTS_PER_SECOND = 5;
 const DUEL_OBSTACLE_HEIGHT_LIMITS = {
   crystal: { min: 34, max: 54 },
   tower: { min: 40, max: 56 },
@@ -725,6 +726,7 @@ const duel = {
   running: false,
   over: false,
   score: 0,
+  elapsedMs: 0,
   pace: 0,
   speed: 6.6,
   spawnTimer: 700,
@@ -2153,6 +2155,7 @@ function resetDuelRound() {
   duel.running = false;
   duel.over = false;
   duel.score = 0;
+  duel.elapsedMs = 0;
   duel.pace = 0;
   duel.speed = 6.6;
   duel.spawnTimer = 650;
@@ -2250,6 +2253,7 @@ function updateDuel(dt) {
   const scale = dt / 16.67;
   const scoreDelta = scale * 0.26;
   duel.score += scoreDelta;
+  duel.elapsedMs += dt;
   duel.pace += scale;
   duel.speed = Math.min(13.5, 6.6 + duel.pace / 340);
 
@@ -2385,7 +2389,16 @@ function endDuel() {
 
   const [playerOne, playerTwo] = duel.players;
   if (playerOne.alive && !playerTwo.alive) {
-    setDuelStatus(duel.mode === "bot" ? "ניצחת את הבוט" : "שחקן 1 ניצח", duel.mode === "bot" ? "You beat the bot" : "Player 1 wins");
+    if (duel.mode === "bot") {
+      const reward = Math.max(DUEL_BOT_SHOP_POINTS_PER_SECOND, Math.floor((duel.elapsedMs / 1000) * DUEL_BOT_SHOP_POINTS_PER_SECOND));
+      const player = getCurrentPlayer();
+      player.points += reward;
+      saveState();
+      renderAll();
+      setDuelStatus(`ניצחת את הבוט וקיבלת ${reward} נקודות חנות`, `You beat the bot and got ${reward} shop points`);
+    } else {
+      setDuelStatus("שחקן 1 ניצח", "Player 1 wins");
+    }
   } else if (playerTwo.alive && !playerOne.alive) {
     setDuelStatus(duel.mode === "bot" ? "הבוט ניצח" : "שחקן 2 ניצח", duel.mode === "bot" ? "Bot wins" : "Player 2 wins");
   } else {
