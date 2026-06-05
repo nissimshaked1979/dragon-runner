@@ -1,4 +1,5 @@
 const STORAGE_KEY = "dragonRunnerStateV1";
+const DEFAULT_PLAYER_NAME = "שחקן בלי שם";
 const ADMIN_PIN = "גלעדשקדהמלך20";
 const ADMIN_REVEAL_HOLD_MS = 10000;
 const ADMIN_SECRET_INPUT_MAX = 40;
@@ -773,7 +774,7 @@ const duel = {
 
 function loadState() {
   const fallback = {
-    currentPlayer: "שחקן",
+    currentPlayer: DEFAULT_PLAYER_NAME,
     admin: false,
     jumpSoundEnabled: true,
     players: {},
@@ -789,7 +790,7 @@ function loadState() {
     if (!raw) return withDefaultPlayer(fallback);
     const parsed = JSON.parse(raw);
     const merged = {
-      currentPlayer: normalizeName(parsed.currentPlayer || "שחקן"),
+      currentPlayer: normalizeName(parsed.currentPlayer || DEFAULT_PLAYER_NAME),
       admin: false,
       jumpSoundEnabled: parsed.jumpSoundEnabled !== false,
       players: parsed.players && typeof parsed.players === "object" ? parsed.players : {},
@@ -806,7 +807,7 @@ function loadState() {
 }
 
 function withDefaultPlayer(nextState) {
-  const name = normalizeName(nextState.currentPlayer || "שחקן");
+  const name = normalizeName(nextState.currentPlayer || DEFAULT_PLAYER_NAME);
   nextState.currentPlayer = name;
   nextState.jumpSoundEnabled = nextState.jumpSoundEnabled !== false;
   const legacyFreeTrailShop = Number(nextState.trailShopVersion || 1) < TRAIL_SHOP_VERSION;
@@ -900,7 +901,7 @@ function normalizeName(value) {
   const name = String(value || "")
     .trim()
     .replace(/\s+/g, " ");
-  return name || "שחקן";
+  return name || DEFAULT_PLAYER_NAME;
 }
 
 function createPlayer(name) {
@@ -1146,7 +1147,7 @@ function renderScreenBanner() {
 
 function renderAll() {
   const player = getCurrentPlayer();
-  elements.playerName.value = state.currentPlayer === "שחקן" ? "" : state.currentPlayer;
+  elements.playerName.value = state.currentPlayer;
   elements.scoreValue.textContent = Math.floor(game.score).toString();
   elements.bestValue.textContent = player.best.toString();
   elements.pointsValue.textContent = player.points.toString();
